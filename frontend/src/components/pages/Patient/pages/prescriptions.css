@@ -1,0 +1,404 @@
+.prescriptions-page-container {
+  padding: 40px;
+  background: var(--bg);
+  min-height: 100vh;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.prescriptions-list-view .page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.prescriptions-list-view h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 8px 0;
+}
+
+.prescriptions-list-view p {
+  color: var(--text-muted);
+  font-size: 15px;
+}
+
+.header-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Consultation Grid */
+.consultation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.modern-consultation-card {
+  background: var(--bg-card);
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.modern-consultation-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--primary);
+}
+
+.card-tag {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: var(--bg-subtle);
+  padding: 4px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom-left-radius: 12px;
+}
+
+.card-main-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.doc-avatar {
+  width: 50px;
+  height: 50px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-main-info h3 {
+  font-size: 17px;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+  color: var(--text);
+}
+
+.specialty-text {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.card-footer-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.card-footer-info span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.view-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Detail View Styles */
+.prescription-detail-view {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.detail-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.back-action-btn, .download-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.back-action-btn {
+  background: var(--bg-subtle);
+  color: var(--text-body);
+}
+
+.download-action-btn {
+  background: var(--success);
+  color: white;
+}
+
+/* Prescription Document */
+.prescription-document-container {
+  background: white;
+  color: #1a202c;
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  padding: 60px;
+  min-height: 800px;
+  position: relative;
+  border: 1px solid #e2e8f0;
+}
+
+.prescription-letterhead {
+  margin-bottom: 40px;
+}
+
+.brand-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #2563eb;
+}
+
+.brand-logo span {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.clinic-info {
+  text-align: right;
+  font-size: 12px;
+  color: #718096;
+}
+
+.clinic-info p { margin: 2px 0; }
+
+.header-divider {
+  height: 4px;
+  background: #2563eb;
+  margin-bottom: 30px;
+  border-radius: 2px;
+}
+
+.doc-pat-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+.info-block label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #a0aec0;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.info-block h4 {
+  font-size: 18px;
+  margin: 0 0 2px 0;
+  color: #1a202c;
+}
+
+.info-block p {
+  font-size: 14px;
+  color: #4a5568;
+  margin: 0;
+}
+
+.prescription-content {
+  margin-bottom: 60px;
+}
+
+.clinical-section {
+  margin-bottom: 40px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #2d3748;
+  border-bottom: 1px solid #edf2f7;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.diagnosis-box, .advice-box {
+  padding: 15px;
+  background: #f7fafc;
+  border-left: 4px solid #cbd5e0;
+  border-radius: 4px;
+}
+
+.diagnosis-box p, .advice-box p {
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0;
+  color: #2d3748;
+}
+
+.modern-med-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.modern-med-table th {
+  text-align: left;
+  padding: 12px;
+  background: #f1f5f9;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.modern-med-table td {
+  padding: 12px;
+  border-bottom: 1px solid #edf2f7;
+  font-size: 14px;
+}
+
+.prescription-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-top: 1px solid #edf2f7;
+  padding-top: 30px;
+  margin-top: auto;
+}
+
+.footer-left p {
+  font-size: 11px;
+  color: #718096;
+  margin: 2px 0;
+}
+
+.digital-seal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #10b981;
+  opacity: 0.6;
+  border: 2px solid #10b981;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.digital-seal span {
+  font-size: 10px;
+  font-weight: 800;
+  margin-top: 4px;
+}
+
+/* Modal Overrides */
+.download-confirm-modal {
+  background: var(--bg-card);
+  padding: 40px;
+  border-radius: 24px;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+}
+
+.modal-icon-header {
+  width: 64px;
+  height: 64px;
+  background: var(--success-soft-bg);
+  color: var(--success);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.download-confirm-modal h3 {
+  font-size: 20px;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.download-confirm-modal p {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin-bottom: 30px;
+}
+
+.modal-actions-btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.modal-actions-btns button {
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.modal-actions-btns .cancel-btn {
+  background: var(--bg-subtle);
+  color: var(--text-body);
+}
+
+.modal-actions-btns .confirm-btn {
+  background: var(--primary);
+  color: white;
+}
+
+.loading-state, .empty-prescriptions {
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--text-muted);
+}
+
+.empty-prescriptions h3 {
+  color: var(--text);
+  margin: 15px 0 8px 0;
+}

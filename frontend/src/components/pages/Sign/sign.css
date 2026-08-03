@@ -1,0 +1,79 @@
+@import '../auth.css';
+
+.login-page {
+  overflow: hidden;
+}
+
+.auth-sidebar {
+  padding: 40px;
+  gap: 20px;
+}
+
+.auth-img {
+  width: 62%;
+}
+
+.auth-main {
+  padding: 24px 32px;
+  overflow: hidden;
+}
+
+.auth-card-signup {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 24px 40px;
+}
+
+.auth-card-signup h1 {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.auth-card-signup .auth-subtitle {
+  font-size: 14px;
+  margin-bottom: 14px;
+}
+
+.auth-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 14px;
+}
+
+.auth-card-signup .auth-field {
+  margin-bottom: 10px;
+}
+
+.auth-card-signup .auth-field label {
+  margin-bottom: 4px;
+  font-size: 13px;
+}
+
+.auth-card-signup .auth-field input,
+.auth-card-signup .auth-field select {
+  padding: 9px 12px;
+  font-size: 14px;
+  border-radius: 10px;
+}
+
+.auth-card-signup .auth-btn {
+  padding: 11px;
+  font-size: 15px;
+  margin-top: 2px;
+}
+
+.auth-card-signup .auth-switch {
+  margin-top: 12px;
+  font-size: 13px;
+}
+
+@media (max-width: 520px) {
+  .auth-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .login-page {
+    overflow-y: auto;
+  }
+}

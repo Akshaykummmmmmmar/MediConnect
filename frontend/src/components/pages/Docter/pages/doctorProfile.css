@@ -1,0 +1,99 @@
+.doctorProfile-page {
+  padding: 40px;
+  background: var(--bg);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+.doctorProfile-card {
+  background: var(--bg-card);
+  width: 100%;
+  max-width: 800px;
+  border-radius: 20px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.doctorProfile-header {
+  background: var(--primary-soft);
+  padding: 40px 30px;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  border-bottom: 1px solid var(--border);
+}
+
+.doctor-avatar {
+  width: 100px;
+  height: 100px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow);
+  color: var(--primary);
+}
+
+.doctor-basic h2 {
+  font-size: 28px;
+  color: var(--primary);
+  margin: 0 0 5px 0;
+  font-weight: 700;
+}
+
+.doctor-basic p {
+  color: var(--text-muted);
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.doctor-details {
+  padding: 40px 30px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+.profile-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--bg-subtle);
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.profile-field-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.profile-field-value {
+  font-size: 16px;
+  color: var(--text);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+@media (max-width: 600px) {
+  .doctor-details {
+    grid-template-columns: 1fr;
+  }
+  
+  .doctorProfile-header {
+    flex-direction: column;
+    text-align: center;
+  }
+}

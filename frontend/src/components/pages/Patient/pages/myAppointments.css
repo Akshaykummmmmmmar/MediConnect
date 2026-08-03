@@ -1,0 +1,319 @@
+.myappointments-page-container {
+  padding: 40px;
+  background: var(--bg);
+  min-height: 100vh;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.page-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 8px 0;
+}
+
+.page-header p {
+  color: var(--text-muted);
+  font-size: 15px;
+}
+
+.header-icon {
+  background: var(--primary-soft);
+  color: var(--primary);
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.appointments-card {
+  background: var(--bg-card);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.custom-table thead {
+  background: var(--bg-subtle);
+  border-bottom: 1px solid var(--border);
+}
+
+.custom-table th {
+  padding: 18px 24px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.custom-table td {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.table-row {
+  transition: background 0.2s;
+}
+
+.table-row:hover {
+  background: var(--bg-hover);
+}
+
+.table-row:last-child td {
+  border-bottom: none;
+}
+
+/* Doctor Info Cell */
+.doctor-info-cell {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.avatar-placeholder {
+  width: 40px;
+  height: 40px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.doctor-name {
+  display: block;
+  font-weight: 600;
+  color: var(--text);
+  font-size: 15px;
+}
+
+.doctor-specialty {
+  display: block;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Datetime Cell */
+.datetime-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.date-text, .time-text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text-body);
+}
+
+.date-text svg, .time-text svg {
+  color: var(--primary);
+}
+
+/* Status Badge */
+.status-badge {
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.status-badge.confirmed {
+  background: var(--success-soft-bg);
+  color: var(--success-soft-text);
+}
+
+/* Action Buttons */
+.cancel-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--danger-soft-bg);
+  background: var(--danger-soft-bg);
+  color: var(--danger-soft-text);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cancel-action-btn:hover {
+  background: var(--danger);
+  color: white;
+  border-color: var(--danger);
+}
+
+.text-right {
+  text-align: right;
+}
+
+.loading-state, .empty-appointments {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+}
+
+.empty-icon {
+  margin-bottom: 15px;
+  color: var(--border-strong);
+}
+
+.empty-appointments h3 {
+  color: var(--text);
+  margin: 0 0 8px 0;
+}
+
+/* Modern Modal Overrides */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modern-modal {
+  background: var(--bg-card);
+  width: 100%;
+  max-width: 400px;
+  border-radius: 20px;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+  animation: modalIn 0.3s ease-out;
+}
+
+@keyframes modalIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.modal-header-visual {
+  height: 120px;
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.warning-icon-circle {
+  width: 64px;
+  height: 64px;
+  background: white;
+  color: var(--danger);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.2);
+}
+
+.modal-body {
+  padding: 30px;
+  text-align: center;
+}
+
+.modal-body h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 12px 0;
+}
+
+.modal-body p {
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.modal-footer {
+  padding: 20px 30px 30px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.modal-footer button {
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.secondary-btn {
+  background: var(--bg-subtle);
+  color: var(--text-body);
+}
+
+.secondary-btn:hover {
+  background: var(--bg-hover);
+}
+
+.danger-btn {
+  background: var(--danger);
+  color: white;
+}
+
+.danger-btn:hover {
+  background: var(--danger-hover);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0,0,0,0.1);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
