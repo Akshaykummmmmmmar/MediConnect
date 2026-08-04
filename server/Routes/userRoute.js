@@ -391,10 +391,7 @@ router.patch('/user/profile', checkToken(['admin', 'doctor', 'patient']), async 
   }
 });
 
-router.get(
-  '/doctors/count',
-  checkToken(['admin', 'doctor', 'patient']),
-  async (req, res) => {
+router.get('/doctors/count', async (req, res) => {
     try {
       const doctorCount = await Doctor.countDocuments();
       const patientCount = await User.countDocuments({ role: 'patient' });

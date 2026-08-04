@@ -111,12 +111,14 @@ const DoctorDash = () => {
                   </td>
                   <td>
                     <button
+                      type="button"
                       className="action-icon-btn delete"
                       onClick={() => {
                          setSelectedDoctorId(item._id);
                          openModal(true);
                       }}
                       title="Delete Doctor"
+                      aria-label="Delete Doctor"
                     >
                       <Trash2 size={18} />
                     </button>

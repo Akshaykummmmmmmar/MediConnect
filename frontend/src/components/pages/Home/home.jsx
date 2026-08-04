@@ -1,4 +1,6 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import axios from '../../../utils/axios';
 import {
   Stethoscope,
   ShieldCheck,
@@ -6,10 +8,50 @@ import {
   Users,
   CalendarCheck,
   ClipboardList,
+  LayoutDashboard,
+  LockKeyhole,
+  HeartPulse,
+  Clock3,
+  CheckCircle2,
+  Bell,
 } from 'lucide-react';
 import './home.css';
 
+const dashboardPathFor = role => {
+  switch (role) {
+    case 'admin':
+      return '/admin';
+    case 'doctor':
+      return '/doctor';
+    case 'patient':
+      return '/patient';
+    default:
+      return '/login';
+  }
+};
+
+const formatStat = value => (typeof value === 'number' ? value.toLocaleString() : value);
+
 const Home = () => {
+  const [stats, setStats] = useState({ doctors: 120, patients: '50K', appointments: 25 });
+  const role = localStorage.getItem('role');
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await axios.get('/doctors/count');
+        setStats({
+          doctors: res.data.doctors || 0,
+          patients: res.data.patients || 0,
+          appointments: res.data.appointments || 0,
+        });
+      } catch {
+        /* keep defaults on error */
+      }
+    };
+    fetchStats();
+  }, []);
+
   return (
     <div className="home-page">
       <nav className="home-navbar">
@@ -24,12 +66,21 @@ const Home = () => {
           <Link to="/services" className="home-link">
             Services
           </Link>
-          <Link to="/login" className="home-link home-link-login">
-            Login
-          </Link>
-          <Link to="/signUp" className="home-link home-link-signup">
-            Sign Up
-          </Link>
+          {role ? (
+            <Link to={dashboardPathFor(role)} className="home-link home-link-login">
+              <LayoutDashboard size={16} />
+              Dashboard
+            </Link>
+          ) : (
+            <>
+              <Link to="/login" className="home-link home-link-login">
+                Login
+              </Link>
+              <Link to="/signUp" className="home-link home-link-signup">
+                Sign Up
+              </Link>
+            </>
+          )}
         </div>
       </nav>
 
@@ -57,25 +108,46 @@ const Home = () => {
           </div>
           <div className="home-stats">
             <div className="home-stat">
-              <h3>25+</h3>
-              <span>Departments</span>
-            </div>
-            <div className="home-stat">
-              <h3>120+</h3>
+              <h3>{formatStat(stats.doctors)}+</h3>
               <span>Doctors</span>
             </div>
             <div className="home-stat">
-              <h3>50K+</h3>
+              <h3>{formatStat(stats.patients)}+</h3>
               <span>Patients</span>
+            </div>
+            <div className="home-stat">
+              <h3>{formatStat(stats.appointments)}+</h3>
+              <span>Appointments</span>
             </div>
           </div>
         </div>
         <div className="home-hero-image">
-          <img
-            src="/Gemini_Generated_Image_ite56bite56bite5.png"
-            alt="Hospital management illustration"
-          />
+          <div className="home-platform-preview" aria-label="MediConnect dashboard preview">
+            <div className="preview-topbar">
+              <div className="preview-brand"><HeartPulse size={18} /> MediConnect</div>
+              <Bell size={17} />
+            </div>
+            <div className="preview-content">
+              <div className="preview-welcome"><span>Good morning</span><strong>Your care, at a glance.</strong></div>
+              <div className="preview-metrics">
+                <div><span>Today</span><strong>12</strong><small>Appointments</small></div>
+                <div><span>Records</span><strong>48</strong><small>Updated securely</small></div>
+              </div>
+              <div className="preview-appointment">
+                <div className="preview-avatar">DR</div>
+                <div><strong>Dr. Priya Sharma</strong><span>Cardiology · 10:30 AM</span></div>
+                <CheckCircle2 size={20} />
+              </div>
+              <div className="preview-bars" aria-hidden="true"><i /><i /><i /><i /><i /><i /><i /></div>
+            </div>
+          </div>
         </div>
+      </section>
+
+      <section className="home-trust-strip" aria-label="MediConnect benefits">
+        <div><LockKeyhole size={20} /><span><strong>Secure by design</strong> Protected health information</span></div>
+        <div><HeartPulse size={20} /><span><strong>Built for care teams</strong> One connected workspace</span></div>
+        <div><Clock3 size={20} /><span><strong>Always in sync</strong> Faster, clearer coordination</span></div>
       </section>
 
       <section className="home-features">
@@ -108,6 +180,12 @@ const Home = () => {
           </p>
         </div>
       </section>
+
+      <footer className="home-footer">
+        <div className="home-footer-brand"><Stethoscope size={19} /> MediConnect</div>
+        <p>Connected care, made simpler.</p>
+        <div className="home-footer-links"><Link to="/about">About</Link><Link to="/services">Services</Link><Link to="/login">Sign in</Link></div>
+      </footer>
     </div>
   );
 };

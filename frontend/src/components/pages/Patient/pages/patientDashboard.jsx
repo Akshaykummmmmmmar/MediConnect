@@ -119,7 +119,7 @@ const PatientsDashboard = () => {
                     <h4>Dr. {appt.doctor?.user?.name || 'Doctor'}</h4>
                     <div className="appt-meta">
                       <span><Clock size={14} /> {appt.time}</span>
-                      <span className="status-badge upcoming">Confirmed</span>
+                      <span className="status-badge status-upcoming">Confirmed</span>
                     </div>
                   </div>
                   <CheckCircle2 className="appt-check" size={20} />

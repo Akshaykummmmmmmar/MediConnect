@@ -9,10 +9,11 @@ body {
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background: var(--bg);
   color: var(--text);
   -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
 }
 
 :root {
@@ -51,6 +52,9 @@ body {
   --sidebar-active-border: #4f9cf5;
   --sidebar-divider: rgba(255, 255, 255, 0.08);
   --sidebar-muted: #93a5bd;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
 }
 
 [data-theme='dark'] {
@@ -89,4 +93,184 @@ body {
   --sidebar-active-border: #60a5fa;
   --sidebar-divider: rgba(255, 255, 255, 0.08);
   --sidebar-muted: #7c8da6;
+}
+
+/* Shared status badges */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-completed,
+.status-active,
+.status-available {
+  background: var(--success-soft-bg);
+  color: var(--success-soft-text);
+}
+
+.status-confirmed,
+.status-upcoming {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.status-pending,
+.status-no-show {
+  background: var(--warning-soft-bg);
+  color: var(--warning-soft-text);
+}
+
+.status-cancelled,
+.status-inactive,
+.status-unavailable {
+  background: var(--danger-soft-bg);
+  color: var(--danger-soft-text);
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--primary) 30%, transparent);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--primary-soft);
+  color: var(--text);
+}
+
+/* Shared dashboard polish.  These selectors are intentionally scoped to the
+   authenticated layout so public pages keep their own visual identity. */
+.admin-main :is(.adminDashboard-container, .doctorDashboard-container, .patientsDashboard-container) {
+  max-width: 1320px;
+  padding: 44px clamp(20px, 4vw, 56px) 56px;
+}
+
+.admin-main .dashboard-header {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 28px;
+  padding: 28px 30px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(circle at 100% 0, color-mix(in srgb, var(--primary) 15%, transparent), transparent 34%),
+    var(--bg-card);
+  box-shadow: var(--shadow);
+}
+
+.admin-main .dashboard-header::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), #2dd4bf);
+}
+
+.admin-main .dashboard-header h1 {
+  font-size: clamp(1.65rem, 2.7vw, 2.15rem);
+  letter-spacing: -0.045em;
+}
+
+.admin-main .dashboard-header p {
+  max-width: 58ch;
+}
+
+.admin-main .header-badge {
+  padding: 8px 12px;
+  border: 1px solid color-mix(in srgb, var(--primary) 18%, var(--border));
+  border-radius: 999px;
+}
+
+.admin-main .stats-cards {
+  gap: 18px;
+  margin-bottom: 26px;
+}
+
+.admin-main .stat-card {
+  min-height: 118px;
+  padding: 22px;
+  border-radius: var(--radius-md);
+  box-shadow: none;
+}
+
+.admin-main .stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 30px rgba(15, 23, 42, 0.10);
+}
+
+.admin-main .stat-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 15px;
+}
+
+.admin-main .stat-info h3 {
+  font-size: 1.65rem;
+  letter-spacing: -0.035em;
+}
+
+.admin-main :is(.recent-activities-section, .upcoming-appointments-section, .quick-actions-section) {
+  border-radius: var(--radius-md);
+  box-shadow: none;
+}
+
+.admin-main .section-header h2,
+.admin-main .quick-actions-section h2 {
+  letter-spacing: -0.02em;
+}
+
+.admin-main :is(.activity-item, .appointment-item) {
+  border: 1px solid transparent;
+  border-radius: 14px;
+}
+
+.admin-main :is(.activity-item, .appointment-item):hover {
+  border-color: var(--border);
+}
+
+.admin-main .action-btn {
+  min-height: 48px;
+  border-radius: 12px;
+}
+
+.admin-main .action-btn.primary {
+  background: linear-gradient(135deg, var(--primary), #0f85d9);
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--primary) 25%, transparent);
+}
+
+.admin-main .action-btn.primary:hover {
+  box-shadow: 0 12px 22px color-mix(in srgb, var(--primary) 34%, transparent);
+}
+
+@media (max-width: 720px) {
+  .admin-main :is(.adminDashboard-container, .doctorDashboard-container, .patientsDashboard-container) {
+    padding: 20px 16px 36px;
+  }
+
+  .admin-main .dashboard-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
+    padding: 22px;
+  }
+
+  .admin-main .dashboard-content-grid {
+    gap: 18px;
+  }
+
+  .admin-main :is(.recent-activities-section, .upcoming-appointments-section, .quick-actions-section) {
+    padding: 20px;
+  }
 }

@@ -223,11 +223,6 @@
   font-weight: 600;
 }
 
-.status-badge.upcoming {
-  background: var(--success-soft-bg);
-  color: var(--success-soft-text);
-}
-
 .appt-check {
   color: var(--success);
   opacity: 0.6;
