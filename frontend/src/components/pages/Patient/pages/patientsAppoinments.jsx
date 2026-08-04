@@ -37,12 +37,8 @@ const BookAppointments = () => {
   )];
 
   const filteredDoctors = (doctorsList || []).filter(d => {
-    const matchesSearch =
-      !search ||
-      (d.user?.name || '').toLowerCase().includes(search.toLowerCase()) ||
-      (d.specialization || '').toLowerCase().includes(search.toLowerCase());
     const matchesSpeciality = !speciality || d.specialization === speciality;
-    return matchesSearch && matchesSpeciality;
+    return matchesSpeciality;
   });
 
   const selectedDoctor = doctorsList.find(d => d._id === appointment.doctor);
@@ -109,9 +105,10 @@ const BookAppointments = () => {
     }
   };
 
-  const getList = async () => {
+  const getList = async (searchTerm = '') => {
     try {
-      const response = await axios.get('/doctors/get');
+      const query = searchTerm ? `?search=${encodeURIComponent(searchTerm)}&page=1&limit=50` : '?page=1&limit=50';
+      const response = await axios.get(`/doctors/get${query}`);
       setDoctorList(response.data.items || response.data || []);
     } catch (e) {
       console.error('Error fetching doctors:', e);
@@ -119,8 +116,23 @@ const BookAppointments = () => {
   };
 
   useEffect(() => {
-    getList();
+    getList('');
   }, []);
+
+  useEffect(() => {
+    const debounceTimer = setTimeout(() => {
+      getList(search.trim());
+    }, 300);
+    return () => clearTimeout(debounceTimer);
+  }, [search]);
+
+  useEffect(() => {
+    if (appointment.doctor && !doctorsList.some(d => d._id === appointment.doctor)) {
+      setAppointment({ doctor: '', date: '', slot: '' });
+      setBookedSlots({});
+      setAvailableTimes([]);
+    }
+  }, [doctorsList]);
 
   useEffect(() => {
     getSlots();

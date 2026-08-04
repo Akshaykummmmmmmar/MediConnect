@@ -148,36 +148,6 @@
   text-transform: uppercase;
 }
 
-.status-badge.confirmed {
-  background: var(--success-soft-bg);
-  color: var(--success-soft-text);
-}
-
-.status-badge.status-completed {
-  background: var(--success-soft-bg);
-  color: var(--success-soft-text);
-}
-
-.status-badge.status-confirmed {
-  background: var(--primary-soft);
-  color: var(--primary);
-}
-
-.status-badge.status-cancelled {
-  background: var(--danger-soft-bg);
-  color: var(--danger-soft-text);
-}
-
-.status-badge.status-no-show {
-  background: var(--warning-soft-bg);
-  color: var(--warning-soft-text);
-}
-
-.status-badge.status-pending {
-  background: var(--warning-soft-bg);
-  color: var(--warning-soft-text);
-}
-
 .action-btns-group {
   display: inline-flex;
   gap: 8px;

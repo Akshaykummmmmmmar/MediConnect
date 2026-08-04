@@ -99,26 +99,6 @@
   border-bottom: none;
 }
 
-/* Status Badges */
-.status-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.status-available {
-  background: var(--success-soft-bg);
-  color: var(--success-soft-text);
-}
-
-.status-unavailable {
-  background: #fee2e2;
-  color: #ef4444;
-}
-
 .rating-badge {
   display: inline-flex;
   align-items: center;

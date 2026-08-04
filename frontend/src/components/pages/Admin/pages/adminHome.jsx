@@ -9,15 +9,61 @@ import {
   ArrowRight,
   Shield,
   Stethoscope,
-  Plus
+  Plus,
+  UserPlus,
+  ClipboardList,
+  CreditCard,
+  Star,
 } from 'lucide-react';
 import './adminHome.css';
+
+const activityIcon = action => {
+  switch (action) {
+    case 'REGISTERED':
+    case 'LOGIN':
+    case 'EMAIL_VERIFIED':
+    case 'ADMIN_CREATED':
+      return <UserPlus size={20} />;
+    case 'DOCTOR_ADDED':
+    case 'DOCTOR_UPDATED':
+    case 'DOCTOR_DELETED':
+      return <Stethoscope size={20} />;
+    case 'APPOINTMENT_BOOKED':
+    case 'APPOINTMENT_CANCELLED':
+    case 'APPOINTMENT_STATUS_UPDATED':
+      return <Calendar size={20} />;
+    case 'PAYMENT_MADE':
+    case 'INVOICE_CREATED':
+      return <CreditCard size={20} />;
+    case 'MEDICAL_RECORD_ADDED':
+      return <ClipboardList size={20} />;
+    case 'RATING_SUBMITTED':
+      return <Star size={20} />;
+    case 'MEDICINE_ADDED':
+      return <Plus size={20} />;
+    default:
+      return <Activity size={20} />;
+  }
+};
+
+const formatTime = timestamp => {
+  const date = new Date(timestamp);
+  const now = new Date();
+  const diffMs = now - date;
+  const mins = Math.floor(diffMs / 60000);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  return date.toLocaleDateString();
+};
 
 const AdminHome = () => {
   const navigate = useNavigate();
   const [doctorCount, setDoctorCount] = useState(0);
   const [patientCount, setPatientCount] = useState(0);
   const [appointmentCount, setAppointmentCount] = useState(0);
+  const [activities, setActivities] = useState([]);
 
   const onDoctorClick = () => navigate('doctor/dash');
   const onPatientClick = () => navigate('patient/dash');
@@ -34,8 +80,18 @@ const AdminHome = () => {
     }
   };
 
+  const getActivities = async () => {
+    try {
+      const response = await axios.get('/activity-logs?page=1&limit=4');
+      setActivities(response.data.items || []);
+    } catch (e) {
+      toast.error(e.response?.data?.message || e.message);
+    }
+  };
+
   useEffect(() => {
     getCount();
+    getActivities();
   }, []);
 
   return (
@@ -95,43 +151,27 @@ const AdminHome = () => {
           </div>
           
           <div className="activities-list">
-            <div className="activity-item">
-              <div className="activity-icon-box">
-                <Stethoscope size={20} />
-              </div>
-              <div className="activity-details">
-                <h4>Dr. John Doe approved today</h4>
-                <div className="activity-meta">
-                  <span>System Activity</span>
-                  <span className="status-badge upcoming">Success</span>
+            {activities.length === 0 && (
+              <div className="activity-item">
+                <div className="activity-details">
+                  <h4>No recent activity yet</h4>
                 </div>
               </div>
-            </div>
-
-            <div className="activity-item">
-              <div className="activity-icon-box">
-                <Calendar size={20} />
-              </div>
-              <div className="activity-details">
-                <h4>Patient Jane Smith booked an appointment</h4>
-                <div className="activity-meta">
-                  <span>Appointment</span>
-                  <span className="status-badge upcoming">New</span>
+            )}
+            {activities.map((activity, idx) => (
+              <div className="activity-item" key={activity._id || idx}>
+                <div className="activity-icon-box">{activityIcon(activity.action)}</div>
+                <div className="activity-details">
+                  <h4>
+                    {activity.details || `${activity.action.replaceAll('_', ' ')}`}
+                  </h4>
+                  <div className="activity-meta">
+                    <span>{activity.user?.name || activity.role || 'System'}</span>
+                    <span>{formatTime(activity.createdAt)}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            <div className="activity-item">
-              <div className="activity-icon-box">
-                <Activity size={20} />
-              </div>
-              <div className="activity-details">
-                <h4>New doctor request pending approval</h4>
-                <div className="activity-meta">
-                  <span>Pending</span>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 

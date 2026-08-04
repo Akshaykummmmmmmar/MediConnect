@@ -120,27 +120,33 @@ const Appointment = () => {
                 <td>
                   {['Pending', 'Booked'].includes(item.status) && (
                     <button
+                      type="button"
                       className="action-icon-btn confirm"
                       onClick={() => updateStatus(item._id, 'Confirmed')}
                       title="Confirm"
+                      aria-label="Confirm appointment"
                     >
                       <CheckCircle2 size={16} />
                     </button>
                   )}
                   {['Confirmed'].includes(item.status) && (
                     <button
+                      type="button"
                       className="action-icon-btn noshow"
                       onClick={() => updateStatus(item._id, 'No-show')}
                       title="No-show"
+                      aria-label="Mark as no-show"
                     >
                       <UserX size={16} />
                     </button>
                   )}
                   {['Pending', 'Confirmed', 'Booked'].includes(item.status) && (
                     <button
+                      type="button"
                       className="action-icon-btn cancel"
                       onClick={() => updateStatus(item._id, 'Cancelled')}
                       title="Cancel"
+                      aria-label="Cancel appointment"
                     >
                       <XCircle size={16} />
                     </button>
