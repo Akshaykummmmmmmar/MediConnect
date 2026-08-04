@@ -38,12 +38,22 @@ const AppointmentToday = () => {
     if (!doctorId) return toast.error('Doctor not found');
 
     try {
-      const response = await axios.get(`/doctor/${doctorId}`);
+      const response = await axios.get(`/doctor/${doctorId}?limit=200`);
       const today = new Date().toISOString().split('T')[0];
-      const todayAppointments = response.data.filter(
+      const todayAppointments = (response.data.items || []).filter(
         item => item.date && item.date.split('T')[0] === today
       );
       setAppointments(todayAppointments);
+    } catch (e) {
+      toast.error(e.response?.data?.message || e.message);
+    }
+  };
+
+  const confirmAppointment = async id => {
+    try {
+      await axios.patch(`/appointment/${id}/status`, { status: 'Confirmed' });
+      toast.success('Appointment confirmed');
+      getAppointments();
     } catch (e) {
       toast.error(e.response?.data?.message || e.message);
     }
@@ -69,7 +79,7 @@ const AppointmentToday = () => {
         followUp: prescription.followUp,
       };
       
-      const response = await axios.post('/post/prescriptions', data);
+      await axios.post('/post/prescriptions', data);
       await axios.patch(`/appointment/${appointmentId}`, {
         status: 'Completed',
       });
@@ -86,7 +96,22 @@ const AppointmentToday = () => {
   };
 
   const completed = appointments.filter(a => a.status === 'Completed').length;
-  const pending = appointments.filter(a => a.status === 'Pending').length;
+  const pending = appointments.filter(a => ['Pending', 'Booked'].includes(a.status)).length;
+
+  const statusClass = status => {
+    switch (status) {
+      case 'Completed':
+        return 'status-completed';
+      case 'Confirmed':
+        return 'status-confirmed';
+      case 'Cancelled':
+        return 'status-cancelled';
+      case 'No-show':
+        return 'status-no-show';
+      default:
+        return 'status-pending';
+    }
+  };
 
   useEffect(() => {
     getAppointments();
@@ -143,22 +168,33 @@ const AppointmentToday = () => {
                     <td>{item.age} yrs</td>
                     <td>{item.time}</td>
                     <td>
-                      <span className={`status-badge ${item.status === 'Completed' ? 'status-completed' : 'status-pending'}`}>
+                      <span className={`status-badge ${statusClass(item.status)}`}>
                         {item.status}
                       </span>
                     </td>
                     <td>
-                      <button
-                        className="prescription-btn"
-                        onClick={() => onBtnClick(item)}
-                        disabled={item.status === 'Completed'}
-                      >
-                        {item.status === 'Completed' ? (
-                          <><CheckCircle2 size={16} /> Added</>
-                        ) : (
-                          <><ClipboardPlus size={16} /> Add Prescription</>
+                      <div style={{ display: 'inline-flex', gap: '8px' }}>
+                        {['Pending', 'Booked'].includes(item.status) && (
+                          <button
+                            className="confirm-slot-btn"
+                            onClick={() => confirmAppointment(item._id)}
+                            title="Confirm appointment"
+                          >
+                            <CheckCircle2 size={16} /> Confirm
+                          </button>
                         )}
-                      </button>
+                        <button
+                          className="prescription-btn"
+                          onClick={() => onBtnClick(item)}
+                          disabled={item.status === 'Completed'}
+                        >
+                          {item.status === 'Completed' ? (
+                            <><CheckCircle2 size={16} /> Added</>
+                          ) : (
+                            <><ClipboardPlus size={16} /> Add Prescription</>
+                          )}
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}

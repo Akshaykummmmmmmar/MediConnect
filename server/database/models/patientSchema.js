@@ -9,6 +9,9 @@ const patientSchema = new mongoose.Schema({
   age: Number,
   bloodGroup: String,
   medicalHistory: String,
+  allergies: {
+    type: String,
+  },
 });
 
 const Patient = mongoose.model('Patient', patientSchema);

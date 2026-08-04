@@ -5,6 +5,7 @@ import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import axios from '../../../utils/axios';
+import { validateRegister } from '../../../utils/validation';
 import './sign.css';
 
 const Sign = () => {
@@ -86,9 +87,18 @@ const Sign = () => {
       toast.error("Passwords don't match", { autoClose: 1000 });
       return;
     }
+    const errors = validateRegister(newUser);
+    if (errors.length > 0) {
+      toast.error(errors[0], { autoClose: 1500 });
+      return;
+    }
     try {
-      await axios.post('/signUp/register', newUser);
-      navigate('/login');
+      const res = await axios.post('/signUp/register', newUser);
+      toast.success(res.data.message || 'OTP sent to your email');
+      setTimeout(
+        () => navigate(`/verify-otp?email=${encodeURIComponent(res.data.email)}`),
+        1200
+      );
     } catch (e) {
       toast.error(e.response?.data?.message || e.message);
     }

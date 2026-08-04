@@ -1,6 +1,7 @@
 import { Outlet, NavLink } from 'react-router-dom';
 import Logout from '../../LogoutBtn/logout';
 import ThemeToggle from '../../ThemeToggle/themeToggle';
+import NotificationBell from '../../NotificationBell/notificationBell';
 import {
   LayoutDashboard,
   Building2,
@@ -8,6 +9,9 @@ import {
   Users,
   CalendarCheck,
   Pill,
+  BarChart3,
+  ScrollText,
+  Receipt,
   Activity,
 } from 'lucide-react';
 import './admin.css';
@@ -20,6 +24,9 @@ const Admin = () => {
     { to: 'patient/dash', end: true, icon: Users, label: 'Patients' },
     { to: 'appointment/dash', end: true, icon: CalendarCheck, label: 'Appointments' },
     { to: 'medicines/dash', end: true, icon: Pill, label: 'Medicines' },
+    { to: 'analytics/dash', end: true, icon: BarChart3, label: 'Analytics' },
+    { to: 'invoices/dash', end: true, icon: Receipt, label: 'Invoices' },
+    { to: 'logs/dash', end: true, icon: ScrollText, label: 'Activity Logs' },
   ];
 
   return (
@@ -56,6 +63,7 @@ const Admin = () => {
         </div>
 
         <div className="sidebar-bottom">
+          <NotificationBell />
           <ThemeToggle />
           <Logout />
         </div>

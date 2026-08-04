@@ -3,8 +3,56 @@ const Appointment = require('../database/models/appointmentSchema');
 const Doctor = require('../database/models/docterSchema');
 const User = require('../database/models/userSchema');
 const checkToken = require('../middleware/checkToken');
+const { sendNotification, logActivity } = require('../helpers');
 
 const router = express.Router();
+
+const to12Hour = timeStr => {
+  if (!timeStr) return '';
+  const [h, m] = timeStr.split(':').map(Number);
+  const period = h < 12 ? 'AM' : 'PM';
+  const hour12 = h % 12 === 0 ? 12 : h % 12;
+  return `${String(hour12).padStart(2, '0')}:${String(m).padStart(2, '0')} ${period}`;
+};
+
+const getTimesForDoctor = doctor => {
+  const start = doctor?.availability?.startTime || '09:00';
+  const end = doctor?.availability?.endTime || '16:00';
+  const slotMinutes = doctor?.availability?.slotDuration || 60;
+
+  const [sh, sm] = start.split(':').map(Number);
+  const [eh, em] = end.split(':').map(Number);
+  const times = [];
+  let cursor = sh * 60 + sm;
+  const endMinutes = eh * 60 + em;
+  while (cursor < endMinutes) {
+    const h = Math.floor(cursor / 60);
+    const m = cursor % 60;
+    times.push(to12Hour(`${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`));
+    cursor += slotMinutes;
+  }
+  return times;
+};
+
+const isDoctorWorkingOnDate = (doctor, dateStr) => {
+  const workingDays = doctor?.availability?.workingDays || [1, 2, 3, 4, 5, 6];
+  const day = new Date(dateStr).getDay();
+  return workingDays.includes(day);
+};
+
+const paginate = (array, page = 1, limit = 10) => {
+  const p = Number(page) || 1;
+  const l = Number(limit) || 10;
+  const start = (p - 1) * l;
+  const items = array.slice(start, start + l);
+  return {
+    items,
+    total: array.length,
+    page: p,
+    limit: l,
+    totalPages: Math.ceil(array.length / l) || 1,
+  };
+};
 
 router.post(
   '/book/appointment',
@@ -13,33 +61,41 @@ router.post(
     try {
       const { doctorId, patientId, date, time } = req.body;
 
-      const today = new Date();
-
-      const availableDates = Array.from({ length: 7 }, (_, i) => {
-        const d = new Date();
-        d.setDate(today.getDate() + i);
-        return d.toISOString().split('T')[0];
-      });
-
-      const availableTimes = [
-        '09:00 AM',
-        '10:00 AM',
-        '11:00 AM',
-        '02:00 PM',
-        '03:00 PM',
-      ];
-
-      if (!availableDates.includes(date)) {
+      if (!doctorId || !patientId || !date || !time) {
         return res.json({
           success: false,
-          message: 'Invalid appointment date',
+          message: 'All fields are required',
         });
       }
 
-      if (!availableTimes.includes(time)) {
+      const doctor = await Doctor.findById(doctorId);
+      if (!doctor) {
+        return res.json({ success: false, message: 'Doctor not found' });
+      }
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const selectedDate = new Date(date);
+      selectedDate.setHours(0, 0, 0, 0);
+      const diffDays = Math.round((selectedDate - today) / 86400000);
+      if (diffDays < 0 || diffDays > 6) {
         return res.json({
           success: false,
-          message: 'Invalid appointment time',
+          message: 'You can only book within the next 7 days',
+        });
+      }
+
+      if (!isDoctorWorkingOnDate(doctor, date)) {
+        return res.json({
+          success: false,
+          message: 'Doctor is not available on this day',
+        });
+      }
+
+      if (!getTimesForDoctor(doctor).includes(time)) {
+        return res.json({
+          success: false,
+          message: 'Invalid appointment time for this doctor',
         });
       }
 
@@ -47,6 +103,7 @@ router.post(
         doctor: doctorId,
         date: date,
         time: time,
+        status: { $in: ['Pending', 'Confirmed', 'Booked'] },
       });
 
       if (booked) {
@@ -56,18 +113,51 @@ router.post(
         });
       }
 
+      const patient = await User.findById(patientId);
+      if (!patient) {
+        return res.json({ success: false, message: 'Patient not found' });
+      }
+
       const appointment = new Appointment({
         doctor: doctorId,
         patient: patientId,
         date: date,
         time: time,
+        status: 'Pending',
       });
 
       await appointment.save();
 
+      await sendNotification({
+        user: patientId,
+        title: 'Appointment Booked',
+        message: `Your appointment with Dr. ${doctor.user ? '' : ''}${doctor.specialization || 'Doctor'} is pending confirmation on ${date} at ${time}.`,
+        type: 'appointment',
+        relatedId: appointment._id,
+      });
+
+      const doctorUser = await User.findById(doctor.user);
+      if (doctorUser) {
+        await sendNotification({
+          user: doctorUser._id,
+          title: 'New Appointment Request',
+          message: `${patient.name} requested an appointment on ${date} at ${time}.`,
+          type: 'appointment',
+          relatedId: appointment._id,
+        });
+      }
+
+      await logActivity({
+        user: patientId,
+        role: 'patient',
+        action: 'APPOINTMENT_BOOKED',
+        details: `${patient.name} booked an appointment for ${date} at ${time}`,
+      });
+
       res.json({
         success: true,
         message: 'Appointment booked successfully',
+        appointment,
       });
     } catch (e) {
       return res.status(500).json({
@@ -78,62 +168,108 @@ router.post(
   }
 );
 
+router.get(
+  '/book/appointment-slots',
+  checkToken(['patient', 'admin']),
+  async (req, res) => {
+    try {
+      const { doctorId } = req.query;
+
+      const today = new Date();
+      const availableDates = Array.from({ length: 7 }, (_, i) => {
+        const d = new Date();
+        d.setDate(today.getDate() + i);
+        return d.toISOString().split('T')[0];
+      });
+
+      if (!doctorId) {
+        return res.json({
+          dates: availableDates,
+          times: [
+            '09:00 AM',
+            '10:00 AM',
+            '11:00 AM',
+            '02:00 PM',
+            '03:00 PM',
+          ],
+          booked: {},
+          workingDays: [1, 2, 3, 4, 5, 6],
+        });
+      }
+
+      const doctor = await Doctor.findById(doctorId);
+      if (!doctor) {
+        return res.status(404).json({ message: 'Doctor not found' });
+      }
+
+      const times = getTimesForDoctor(doctor);
+
+      const bookedAppointments = await Appointment.find({
+        doctor: doctorId,
+        date: { $in: availableDates },
+        status: { $in: ['Pending', 'Confirmed', 'Booked'] },
+      });
+
+      const booked = {};
+      availableDates.forEach(date => {
+        const dayBooked = bookedAppointments
+          .filter(a => a.date === date)
+          .map(a => a.time);
+        booked[date] = isDoctorWorkingOnDate(doctor, date)
+          ? dayBooked
+          : [...times];
+      });
+
+      res.json({
+        dates: availableDates,
+        times,
+        booked,
+        workingDays: doctor.availability?.workingDays || [1, 2, 3, 4, 5, 6],
+      });
+    } catch (e) {
+      return res.status(500).json({ message: e.message });
+    }
+  }
+);
+
 router.get('/get/all/appointments', async (req, res) => {
   try {
-    const getAppointments = await Appointment.find()
-      .populate('patient', 'name email')
+    const { page, limit, status } = req.query;
+    const filter = {};
+    if (status && status !== 'All') filter.status = status;
+
+    const allAppointments = await Appointment.find(filter)
+      .populate('patient', 'name email contactNumber')
       .populate({
         path: 'doctor',
         populate: {
           path: 'user',
           select: 'name email',
         },
-      });
-    return res.status(200).json(getAppointments);
+      })
+      .sort({ createdAt: -1 });
+
+    const result = paginate(allAppointments, page, limit);
+    return res.status(200).json(result);
   } catch (e) {
     return res.status(500).json({ message: e.message });
   }
 });
 
-router.get(
-  '/book/appointment-slots',
-  checkToken(['patient', 'admin']),
-  (req, res) => {
-    const availableDates = [
-      '2026-03-18',
-      '2026-03-19',
-      '2026-03-20',
-      '2026-03-21',
-      '2026-03-22',
-      '2026-03-23',
-      '2026-03-24',
-      '2026-03-25',
-      '2026-03-26',
-    ];
-
-    const availableTimes = [
-      '09:00 AM',
-      '10:00 AM',
-      '11:00 AM',
-      '02:00 PM',
-      '03:00 PM',
-    ];
-
-    res.json({
-      dates: availableDates,
-      times: availableTimes,
-    });
-  }
-);
-
 router.get('/doctor/:id', async (req, res) => {
   try {
     const doctorId = req.params.id;
-    const appointments = await Appointment.find({ doctor: doctorId })
-      .populate('patient', 'name email')
-      .sort({ date: 1 });
+    const { page, limit, status } = req.query;
 
-    res.status(200).json(appointments);
+    const filter = { doctor: doctorId };
+    if (status && status !== 'All') filter.status = status;
+
+    const appointments = await Appointment.find(filter)
+      .populate('patient', 'name email age contactNumber')
+      .sort({ date: 1, time: 1 });
+
+    const result = paginate(appointments, page, limit);
+    res.status(200).json(result);
   } catch (e) {
     return res.status(500).json({ message: e.message });
   }
@@ -141,24 +277,118 @@ router.get('/doctor/:id', async (req, res) => {
 
 router.get('/patient/:id', async (req, res) => {
   try {
-    const appointments = await Appointment.find({
-      patient: req.params.id,
-    }).populate({
-      path: 'doctor',
-      populate: {
-        path: 'user',
-      },
-    });
+    const { page, limit, status } = req.query;
+    const filter = { patient: req.params.id };
+    if (status && status !== 'All') filter.status = status;
 
-    res.json(appointments);
+    const appointments = await Appointment.find(filter)
+      .populate({
+        path: 'doctor',
+        populate: {
+          path: 'user',
+        },
+      })
+      .sort({ date: 1, time: 1 });
+
+    const result = paginate(appointments, page, limit);
+    res.json(result);
   } catch (e) {
     res.status(500).json({ message: e.message });
   }
 });
 
 router.delete('/cancel/:id', checkToken(['patient']), async (req, res) => {
-  await Appointment.findByIdAndDelete(req.params.id);
-  res.json({ message: 'Appointment cancelled' });
+  try {
+    const appointment = await Appointment.findByIdAndDelete(req.params.id);
+    if (!appointment) return res.status(404).json({ message: 'Appointment not found' });
+
+    const patient = await User.findById(appointment.patient);
+    if (patient) {
+      await sendNotification({
+        user: appointment.patient,
+        title: 'Appointment Cancelled',
+        message: `Your appointment on ${appointment.date} at ${appointment.time} has been cancelled.`,
+        type: 'appointment',
+        relatedId: appointment._id,
+      });
+    }
+
+    const doctor = await Doctor.findById(appointment.doctor).populate('user');
+    if (doctor?.user?._id) {
+      await sendNotification({
+        user: doctor.user._id,
+        title: 'Appointment Cancelled',
+        message: `A patient cancelled their appointment on ${appointment.date} at ${appointment.time}.`,
+        type: 'appointment',
+        relatedId: appointment._id,
+      });
+    }
+
+    await logActivity({
+      user: appointment.patient,
+      role: 'patient',
+      action: 'APPOINTMENT_CANCELLED',
+      details: `Appointment on ${appointment.date} at ${appointment.time} was cancelled`,
+    });
+
+    res.json({ message: 'Appointment cancelled' });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+});
+
+router.patch('/appointment/:id/status', async (req, res) => {
+  try {
+    const { status } = req.body;
+    const validStatuses = ['Pending', 'Confirmed', 'Completed', 'Cancelled', 'No-show'];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ message: 'Invalid appointment status' });
+    }
+
+    const appointment = await Appointment.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true }
+    );
+
+    if (!appointment) return res.status(404).json({ message: 'Appointment not found' });
+
+    const patient = await User.findById(appointment.patient);
+    const doctor = await Doctor.findById(appointment.doctor).populate('user');
+
+    if (status === 'Confirmed') {
+      if (patient) {
+        await sendNotification({
+          user: patient._id,
+          title: 'Appointment Confirmed',
+          message: `Your appointment on ${appointment.date} at ${appointment.time} has been confirmed.`,
+          type: 'appointment',
+          relatedId: appointment._id,
+        });
+      }
+    } else if (status === 'No-show') {
+      if (patient) {
+        await sendNotification({
+          user: patient._id,
+          title: 'Marked as No-show',
+          message: `Your appointment on ${appointment.date} at ${appointment.time} was marked as no-show.`,
+          type: 'appointment',
+          relatedId: appointment._id,
+        });
+      }
+    }
+
+    await logActivity({
+      user: doctor?.user?._id || req.headers.authorization?.split(' ')[0],
+      role: 'doctor',
+      action: 'APPOINTMENT_STATUS_UPDATED',
+      details: `Appointment ${req.params.id} marked as ${status}`,
+    });
+
+    return res.json(appointment);
+  } catch (e) {
+    return res.status(500).json({ message: e.message });
+  }
 });
 
 router.patch('/appointment/:id', async (req, res) => {
@@ -168,6 +398,19 @@ router.patch('/appointment/:id', async (req, res) => {
       { status: 'Completed' },
       { new: true }
     );
+
+    if (!appointment) return res.status(404).json({ message: 'Appointment not found' });
+
+    const patient = await User.findById(appointment.patient);
+    if (patient) {
+      await sendNotification({
+        user: patient._id,
+        title: 'Consultation Completed',
+        message: `Your consultation on ${appointment.date} has been completed. You can now view your prescription.`,
+        type: 'appointment',
+        relatedId: appointment._id,
+      });
+    }
 
     return res.json(appointment);
   } catch (e) {

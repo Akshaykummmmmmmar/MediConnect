@@ -40,6 +40,26 @@
   transform: translateY(-2px);
 }
 
+.admin-export-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-card);
+  color: var(--primary);
+  border: 1px solid var(--border);
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.admin-export-btn:hover {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+}
+
 .medicine-summary-cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

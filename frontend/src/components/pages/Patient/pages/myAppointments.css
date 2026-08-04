@@ -153,6 +153,124 @@
   color: var(--success-soft-text);
 }
 
+.status-badge.status-completed {
+  background: var(--success-soft-bg);
+  color: var(--success-soft-text);
+}
+
+.status-badge.status-confirmed {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.status-badge.status-cancelled {
+  background: var(--danger-soft-bg);
+  color: var(--danger-soft-text);
+}
+
+.status-badge.status-no-show {
+  background: var(--warning-soft-bg);
+  color: var(--warning-soft-text);
+}
+
+.status-badge.status-pending {
+  background: var(--warning-soft-bg);
+  color: var(--warning-soft-text);
+}
+
+.action-btns-group {
+  display: inline-flex;
+  gap: 8px;
+}
+
+.rate-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--primary-soft);
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.rate-action-btn:hover {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.rating-stars {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 14px 0;
+}
+
+.rating-star {
+  color: var(--border-strong);
+  cursor: pointer;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.rating-star.filled {
+  color: var(--warning);
+}
+
+.rating-star:hover {
+  transform: scale(1.15);
+}
+
+.review-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-card);
+  color: var(--text-body);
+  font-family: inherit;
+  font-size: 14px;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.review-input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.rating-circle {
+  background: var(--warning-soft-bg) !important;
+  color: var(--warning) !important;
+}
+
+.rating-submit-btn {
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+}
+
+.rating-submit-btn:hover {
+  background: var(--primary-hover) !important;
+}
+
+.list-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 8px 4px 0;
+}
+
+.list-total-text {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
 /* Action Buttons */
 .cancel-action-btn {
   display: inline-flex;
