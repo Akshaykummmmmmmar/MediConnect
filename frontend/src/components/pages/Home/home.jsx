@@ -9,6 +9,11 @@ import {
   CalendarCheck,
   ClipboardList,
   LayoutDashboard,
+  LockKeyhole,
+  HeartPulse,
+  Clock3,
+  CheckCircle2,
+  Bell,
 } from 'lucide-react';
 import './home.css';
 
@@ -25,8 +30,10 @@ const dashboardPathFor = role => {
   }
 };
 
+const formatStat = value => (typeof value === 'number' ? value.toLocaleString() : value);
+
 const Home = () => {
-  const [stats, setStats] = useState({ doctors: '120+', patients: '50K+', appointments: '25+' });
+  const [stats, setStats] = useState({ doctors: 120, patients: '50K', appointments: 25 });
   const role = localStorage.getItem('role');
 
   useEffect(() => {
@@ -101,25 +108,46 @@ const Home = () => {
           </div>
           <div className="home-stats">
             <div className="home-stat">
-              <h3>{stats.doctors}+</h3>
+              <h3>{formatStat(stats.doctors)}+</h3>
               <span>Doctors</span>
             </div>
             <div className="home-stat">
-              <h3>{stats.patients}+</h3>
+              <h3>{formatStat(stats.patients)}+</h3>
               <span>Patients</span>
             </div>
             <div className="home-stat">
-              <h3>{stats.appointments}+</h3>
+              <h3>{formatStat(stats.appointments)}+</h3>
               <span>Appointments</span>
             </div>
           </div>
         </div>
         <div className="home-hero-image">
-          <img
-            src="/Gemini_Generated_Image_ite56bite56bite5.png"
-            alt="Hospital management illustration"
-          />
+          <div className="home-platform-preview" aria-label="MediConnect dashboard preview">
+            <div className="preview-topbar">
+              <div className="preview-brand"><HeartPulse size={18} /> MediConnect</div>
+              <Bell size={17} />
+            </div>
+            <div className="preview-content">
+              <div className="preview-welcome"><span>Good morning</span><strong>Your care, at a glance.</strong></div>
+              <div className="preview-metrics">
+                <div><span>Today</span><strong>12</strong><small>Appointments</small></div>
+                <div><span>Records</span><strong>48</strong><small>Updated securely</small></div>
+              </div>
+              <div className="preview-appointment">
+                <div className="preview-avatar">DR</div>
+                <div><strong>Dr. Priya Sharma</strong><span>Cardiology · 10:30 AM</span></div>
+                <CheckCircle2 size={20} />
+              </div>
+              <div className="preview-bars" aria-hidden="true"><i /><i /><i /><i /><i /><i /><i /></div>
+            </div>
+          </div>
         </div>
+      </section>
+
+      <section className="home-trust-strip" aria-label="MediConnect benefits">
+        <div><LockKeyhole size={20} /><span><strong>Secure by design</strong> Protected health information</span></div>
+        <div><HeartPulse size={20} /><span><strong>Built for care teams</strong> One connected workspace</span></div>
+        <div><Clock3 size={20} /><span><strong>Always in sync</strong> Faster, clearer coordination</span></div>
       </section>
 
       <section className="home-features">
@@ -152,6 +180,12 @@ const Home = () => {
           </p>
         </div>
       </section>
+
+      <footer className="home-footer">
+        <div className="home-footer-brand"><Stethoscope size={19} /> MediConnect</div>
+        <p>Connected care, made simpler.</p>
+        <div className="home-footer-links"><Link to="/about">About</Link><Link to="/services">Services</Link><Link to="/login">Sign in</Link></div>
+      </footer>
     </div>
   );
 };
