@@ -1,11 +1,13 @@
 import { Outlet, NavLink } from 'react-router-dom';
 import Logout from '../../LogoutBtn/logout';
 import ThemeToggle from '../../ThemeToggle/themeToggle';
+import NotificationBell from '../../NotificationBell/notificationBell';
 import {
   LayoutDashboard,
   CalendarCheck,
   CalendarClock,
   UserCircle,
+  Clock3,
   Activity,
 } from 'lucide-react';
 import './docter.css';
@@ -15,6 +17,7 @@ const Doctor = () => {
     { to: '/doctor', end: true, icon: LayoutDashboard, label: 'Dashboard' },
     { to: 'doctor/appointments/', end: true, icon: CalendarCheck, label: 'Appointments' },
     { to: 'doctor/appointment/today', end: true, icon: CalendarClock, label: "Today's Appointments" },
+    { to: 'doctor/availability/dash', end: true, icon: Clock3, label: 'My Availability' },
     { to: 'doctor/profile/dash', end: true, icon: UserCircle, label: 'Profile' },
   ];
 
@@ -52,6 +55,7 @@ const Doctor = () => {
         </div>
 
         <div className="sidebar-bottom">
+          <NotificationBell />
           <ThemeToggle />
           <Logout />
         </div>

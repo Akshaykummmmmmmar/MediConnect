@@ -95,3 +95,137 @@
   background: var(--primary-soft);
   color: var(--primary);
 }
+
+.status-confirmed {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.status-cancelled {
+  background: var(--danger-soft-bg);
+  color: var(--danger-soft-text);
+}
+
+.status-no-show {
+  background: var(--warning-soft-bg);
+  color: var(--warning-soft-text);
+}
+
+.confirm-slot-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--primary-soft);
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.confirm-slot-btn:hover {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.noshow-slot-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--warning-soft-bg);
+  background: var(--warning-soft-bg);
+  color: var(--warning-soft-text);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.noshow-slot-btn:hover {
+  background: var(--warning);
+  color: white;
+  border-color: var(--warning);
+}
+
+.delete-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.delete-modal-card {
+  background: var(--bg-card);
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+
+.modal-icon-warning {
+  color: var(--primary);
+  margin-bottom: 16px;
+}
+
+.delete-modal-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 10px 0;
+}
+
+.delete-modal-card p {
+  color: var(--text-muted);
+  font-size: 15px;
+  margin: 0 0 24px 0;
+}
+
+.modal-actions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.modal-btn-cancel {
+  background: var(--bg-subtle);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.modal-btn-cancel:hover {
+  background: var(--bg-hover);
+}
+
+.modal-btn-confirm {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.modal-btn-confirm:hover {
+  background: var(--primary-hover);
+}

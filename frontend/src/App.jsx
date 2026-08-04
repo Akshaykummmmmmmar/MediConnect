@@ -24,6 +24,15 @@ import Prescriptions from './components/pages/Patient/pages/prescriptions';
 import ViewMedicine from './components/pages/Admin/pages/viewMedicine';
 import AddMedicine from './components/pages/Admin/pages/addMedicine';
 import AddDoctor from './components/pages/Admin/pages/addDoctor';
+import AnalyticsHome from './components/pages/Admin/pages/analyticsHome';
+import InvoiceHome from './components/pages/Admin/pages/invoiceHome';
+import LogsHome from './components/pages/Admin/pages/logsHome';
+import DoctorAvailability from './components/pages/Docter/pages/doctorAvailability';
+import MedicalRecords from './components/pages/Patient/pages/medicalRecords';
+import PatientInvoices from './components/pages/Patient/pages/patientInvoices';
+import VerifyOtp from './components/pages/VerifyOtp/verifyOtp';
+import ForgotPassword from './components/pages/ForgotPassword/forgotPassword';
+import ResetPassword from './components/pages/ResetPassword/resetPassword';
 import PrivateRoute from './components/PrivateRoute/privateRoute';
 import './App.css';
 
@@ -36,6 +45,9 @@ const App = () => {
         <Route path="/services" element={<Services />} />
         <Route path="/signUP" element={<Sign />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/verify-otp" element={<VerifyOtp />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         <Route element={<PrivateRoute />}>
           <Route path="/admin" element={<Admin />}>
@@ -45,6 +57,9 @@ const App = () => {
             <Route path="patient/dash" element={<Patients />} />
             <Route path="appointment/dash" element={<Appointment />} />
             <Route path="medicines/dash" element={<ViewMedicine />} />
+            <Route path="analytics/dash" element={<AnalyticsHome />} />
+            <Route path="invoices/dash" element={<InvoiceHome />} />
+            <Route path="logs/dash" element={<LogsHome />} />
             <Route path="/admin/addMedicine" element={<AddMedicine />} />
             <Route path="/admin/add/doctor" element={<AddDoctor />} />
           </Route>
@@ -59,6 +74,7 @@ const App = () => {
               element={<AppointmentToday />}
             />
             <Route path="doctor/profile/dash" element={<DoctorProfile />} />
+            <Route path="doctor/availability/dash" element={<DoctorAvailability />} />
           </Route>
           <Route path="/patient" element={<Patient />}>
             <Route index element={<PatientsDashboard />} />
@@ -75,6 +91,8 @@ const App = () => {
               element={<Prescriptions />}
             />
             <Route path="patient/profile/dash" element={<PatientProfile />} />
+            <Route path="patient/records/dash" element={<MedicalRecords />} />
+            <Route path="patient/invoices/dash" element={<PatientInvoices />} />
           </Route>
         </Route>
       </Routes>

@@ -1,16 +1,21 @@
 import { useEffect, useState } from 'react';
 import axios from '../../../../utils/axios';
 import { ToastContainer, toast } from 'react-toastify';
-import { Users } from 'lucide-react';
+import { Users, Download } from 'lucide-react';
+import Pagination from '../../../Pagination/pagination';
+import { exportCsv } from '../../../../utils/exportCsv';
 import './patientHome.css';
 
 const Patients = () => {
   const [patients, setPatients] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   
   const getPatients = async () => {
     try {
-      const response = await axios.get('/get/patients');
-      setPatients(response.data);
+      const response = await axios.get(`/get/patients?page=${page}&limit=10`);
+      setPatients(response.data.items || []);
+      setTotalPages(response.data.totalPages || 1);
     } catch (e) {
       toast.error(e.response?.data?.message || 'Failed to fetch patients');
     }
@@ -18,7 +23,7 @@ const Patients = () => {
 
   useEffect(() => {
     getPatients();
-  }, []);
+  }, [page]);
 
   return (
     <div className="admin-page-container">
@@ -28,6 +33,17 @@ const Patients = () => {
           <Users size={28} style={{ color: 'var(--primary)' }} />
           <h2>Patients Directory</h2>
         </div>
+        <button
+          className="admin-export-btn"
+          onClick={() =>
+            exportCsv('/export/patients.csv', 'patients.csv').catch(e =>
+              toast.error(e.response?.data?.message || 'Export failed')
+            )
+          }
+        >
+          <Download size={18} />
+          Export CSV
+        </button>
       </div>
 
       <div className="admin-table-container">
@@ -48,7 +64,7 @@ const Patients = () => {
           <tbody>
             {patients.map((item, index) => (
               <tr key={item._id}>
-                <td>{index + 1}</td>
+                <td>{(page - 1) * 10 + index + 1}</td>
                 <td><strong>{item.name}</strong></td>
                 <td>{item.age} yrs</td>
                 <td>{item.gender}</td>
@@ -66,6 +82,8 @@ const Patients = () => {
             No patients found in the directory.
           </div>
         )}
+
+        <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
       </div>
     </div>
   );

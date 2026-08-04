@@ -1,0 +1,96 @@
+.invoice-home-container {
+  padding: 24px;
+}
+
+.filter-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.filter-chip {
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.filter-chip:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.filter-chip.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+.cell-with-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mark-paid-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  background: var(--success);
+  color: white;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+
+.mark-paid-btn:hover {
+  background: var(--success-hover);
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-completed {
+  background: var(--success-soft-bg);
+  color: var(--success-soft-text);
+}
+
+.status-pending {
+  background: var(--warning-soft-bg);
+  color: var(--warning-soft-text);
+}
+
+.empty-invoices {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+}
+
+.empty-invoices h3 {
+  color: var(--text);
+  margin: 14px 0 8px;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+}

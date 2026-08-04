@@ -1,0 +1,246 @@
+.patient-invoices-container {
+  padding: 24px;
+}
+
+.invoice-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.invoice-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.invoice-card:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow);
+}
+
+.invoice-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.invoice-number {
+  font-weight: 700;
+  color: var(--primary);
+  font-size: 13px;
+}
+
+.invoice-card-body {
+  margin-top: 12px;
+}
+
+.invoice-meta-row {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.invoice-meta-row span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.invoice-amount {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-top: 8px;
+}
+
+.invoice-card-actions {
+  margin-top: 12px;
+}
+
+.invoice-view-btn {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: var(--primary);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s ease;
+}
+
+.invoice-view-btn:hover {
+  background: var(--primary-hover);
+}
+
+.invoice-modal {
+  width: 100%;
+  max-width: 520px;
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: var(--shadow-lg);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.invoice-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.invoice-modal-header h2 {
+  margin: 0;
+  font-size: 18px;
+  color: var(--text);
+}
+
+.invoice-close-btn {
+  background: var(--bg-hover);
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.invoice-print-area {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.invoice-brand {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 12px;
+}
+
+.invoice-meta-grid {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.invoice-meta-grid p {
+  margin: 4px 0;
+  font-size: 13px;
+  color: var(--text-body);
+}
+
+.invoice-items-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.invoice-items-table th,
+.invoice-items-table td {
+  padding: 8px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+.invoice-items-table tfoot td {
+  font-weight: 600;
+}
+
+.invoice-total-row td {
+  font-weight: 700;
+  color: var(--primary);
+  font-size: 15px;
+}
+
+.pay-box {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.pay-box select {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-card);
+  color: var(--text-body);
+  font-family: inherit;
+}
+
+.pay-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  background: var(--success);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s ease;
+}
+
+.pay-btn:hover {
+  background: var(--success-hover);
+}
+
+.paid-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 10px;
+  border-radius: 8px;
+  background: var(--success-soft-bg);
+  color: var(--success-soft-text);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.invoice-download-btn {
+  margin-top: 14px;
+  width: 100%;
+  padding: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-card);
+  color: var(--text-body);
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.invoice-download-btn:hover {
+  background: var(--bg-hover);
+}
+
+.empty-invoices {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+}
+
+.empty-invoices h3 {
+  color: var(--text);
+  margin: 14px 0 8px;
+}

@@ -1,0 +1,140 @@
+.doctor-availability-container {
+  padding: 24px;
+  max-width: 760px;
+}
+
+.availability-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 26px;
+}
+
+.availability-section {
+  margin-bottom: 28px;
+}
+
+.availability-section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.availability-section-title h3 {
+  margin: 0;
+  font-size: 16px;
+  color: var(--text);
+}
+
+.availability-section-title svg {
+  color: var(--primary);
+}
+
+.day-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.day-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-subtle);
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.day-chip input {
+  display: none;
+}
+
+.day-chip:hover {
+  border-color: var(--primary);
+}
+
+.day-chip.active {
+  background: var(--primary-soft);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.time-inputs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 14px;
+}
+
+.time-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.time-field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-body);
+}
+
+.time-field input,
+.time-field select {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-card);
+  color: var(--text-body);
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.time-field input:focus,
+.time-field select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.availability-hint {
+  margin: 14px 0 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.save-availability-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  background: var(--primary);
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+
+.save-availability-btn:hover:not(:disabled) {
+  background: var(--primary-hover);
+}
+
+.save-availability-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+}

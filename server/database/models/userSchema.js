@@ -39,6 +39,22 @@ const userSchema = mongoose.Schema(
     specialization: {
       type: String,
     },
+    otp: {
+      type: String,
+    },
+    otpExpires: {
+      type: Date,
+    },
+    isVerified: {
+      type: Boolean,
+      default: true,
+    },
+    resetPasswordToken: {
+      type: String,
+    },
+    resetPasswordExpires: {
+      type: Date,
+    },
   },
   { timestamps: true }
 );

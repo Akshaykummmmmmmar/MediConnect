@@ -2,17 +2,24 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../../../../utils/axios';
 import { ToastContainer, toast } from 'react-toastify';
-import { Pill, Plus } from 'lucide-react';
+import { Pill, Plus, Download } from 'lucide-react';
+import Pagination from '../../../Pagination/pagination';
+import { exportCsv } from '../../../../utils/exportCsv';
 import './viewMedicine.css';
 
 const ViewMedicine = () => {
   const navigate = useNavigate();
   const [medicines, setMedicines] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [total, setTotal] = useState(0);
 
   const getMedicines = async () => {
     try {
-      const response = await axios.get('/get/medicines/');
-      setMedicines(response.data);
+      const response = await axios.get(`/get/medicines/?page=${page}&limit=10`);
+      setMedicines(response.data.items || []);
+      setTotalPages(response.data.totalPages || 1);
+      setTotal(response.data.total || 0);
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to fetch medicines');
     }
@@ -20,7 +27,7 @@ const ViewMedicine = () => {
 
   useEffect(() => {
     getMedicines();
-  }, []);
+  }, [page]);
 
   return (
     <div className="admin-page-container">
@@ -30,19 +37,32 @@ const ViewMedicine = () => {
           <Pill size={28} style={{ color: 'var(--primary)' }} />
           <h2>Medicine Management</h2>
         </div>
-        <button
-          className="admin-add-btn"
-          onClick={() => navigate('/admin/addMedicine')}
-        >
-          <Plus size={18} />
-          Add Medicine
-        </button>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <button
+            className="admin-export-btn"
+            onClick={() =>
+              exportCsv('/export/medicines.csv', 'medicines.csv').catch(e =>
+                toast.error(e.response?.data?.message || 'Export failed')
+              )
+            }
+          >
+            <Download size={18} />
+            Export CSV
+          </button>
+          <button
+            className="admin-add-btn"
+            onClick={() => navigate('/admin/addMedicine')}
+          >
+            <Plus size={18} />
+            Add Medicine
+          </button>
+        </div>
       </div>
 
       <div className="medicine-summary-cards">
         <div className="med-summary-card">
           <h3>Total Medicines</h3>
-          <p>{medicines.length}</p>
+          <p>{total}</p>
         </div>
         <div className="med-summary-card">
           <h3>Low Stock (Est.)</h3>
@@ -84,6 +104,8 @@ const ViewMedicine = () => {
             No medicines found in the inventory.
           </div>
         )}
+
+        <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
       </div>
     </div>
   );

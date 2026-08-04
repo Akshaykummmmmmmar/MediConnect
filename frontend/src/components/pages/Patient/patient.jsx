@@ -1,12 +1,15 @@
 import { Outlet, NavLink } from 'react-router-dom';
 import Logout from '../../LogoutBtn/logout';
 import ThemeToggle from '../../ThemeToggle/themeToggle';
+import NotificationBell from '../../NotificationBell/notificationBell';
 import {
   LayoutDashboard,
   CalendarPlus,
   CalendarCheck,
   FileText,
   UserCircle,
+  FolderOpen,
+  Receipt,
   Activity,
 } from 'lucide-react';
 import './patient.css';
@@ -17,6 +20,8 @@ const Patient = () => {
     { to: 'patient/appointments/dash', end: true, icon: CalendarPlus, label: 'Appointments' },
     { to: 'patient/myappointments/dash', end: true, icon: CalendarCheck, label: 'My Appointments' },
     { to: 'patient/prescriptions/dash', end: true, icon: FileText, label: 'Prescriptions' },
+    { to: 'patient/records/dash', end: true, icon: FolderOpen, label: 'Medical Records' },
+    { to: 'patient/invoices/dash', end: true, icon: Receipt, label: 'Invoices' },
     { to: 'patient/profile/dash', end: true, icon: UserCircle, label: 'Profile' },
   ];
 
@@ -54,6 +59,7 @@ const Patient = () => {
         </div>
 
         <div className="sidebar-bottom">
+          <NotificationBell />
           <ThemeToggle />
           <Logout />
         </div>

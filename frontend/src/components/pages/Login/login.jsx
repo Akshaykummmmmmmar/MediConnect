@@ -39,6 +39,12 @@ const Login = () => {
     try {
       const response = await axios.post('/login', user);
 
+      if (response.data.needsOtp) {
+        toast.info('Please verify your email first');
+        navigate(`/verify-otp?email=${encodeURIComponent(response.data.email)}`);
+        return;
+      }
+
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('userId', response.data._id);
       localStorage.setItem('userEmail', response.data.email);
@@ -134,6 +140,9 @@ const Login = () => {
           <button className="auth-btn" onClick={onLoginClick}>
             Login
           </button>
+          <p className="auth-switch">
+            Forgot password? <Link to="/forgot-password">Reset it</Link>
+          </p>
           <p className="auth-switch">
             Don't have an account?
             <Link to="/signUp">Sign Up</Link>

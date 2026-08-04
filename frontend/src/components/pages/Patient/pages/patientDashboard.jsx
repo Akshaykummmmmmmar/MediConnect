@@ -25,15 +25,15 @@ const PatientsDashboard = () => {
     try {
       setLoading(true);
       // Fetch appointments to get count and upcoming
-      const apptRes = await axios.get(`/patient/${patientId}`);
-      const appointments = apptRes.data || [];
+      const apptRes = await axios.get(`/patient/${patientId}?limit=5`);
+      const appointments = apptRes.data?.items || [];
       
       // Fetch prescriptions to get count
       const prescRes = await axios.get(`/get/prescriptions/patients/${patientId}`);
       const prescriptions = prescRes.data || [];
 
       setStats({
-        appointments: appointments.length,
+        appointments: apptRes.data?.total ?? appointments.length,
         prescriptions: prescriptions.length
       });
 

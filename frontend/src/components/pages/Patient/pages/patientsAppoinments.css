@@ -124,6 +124,15 @@
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
 }
 
+.slot-chip.disabled {
+  background: var(--bg-hover);
+  color: var(--text-muted);
+  border-color: var(--border);
+  cursor: not-allowed;
+  opacity: 0.6;
+  text-decoration: line-through;
+}
+
 .slot-check {
   color: white;
 }
@@ -132,6 +141,91 @@
   color: var(--text-muted);
   font-size: 14px;
   font-style: italic;
+}
+
+.booking-search-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.booking-search-input {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-card);
+  color: var(--text-muted);
+}
+
+.booking-search-input:focus-within {
+  border-color: var(--primary);
+}
+
+.booking-search-input input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 10px 0;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text-body);
+}
+
+.booking-speciality-filter {
+  width: 180px !important;
+  flex-shrink: 0;
+}
+
+.selected-doctor-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--primary);
+  border-radius: 10px;
+  background: var(--primary-soft);
+}
+
+.selected-doctor-card strong {
+  display: block;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.selected-doctor-card span {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.selected-doctor-meta {
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.selected-doctor-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-body);
+  font-weight: 600;
+  font-size: 13px;
+}
+
+@media (max-width: 640px) {
+  .booking-search-row {
+    flex-direction: column;
+  }
+  .booking-speciality-filter {
+    width: 100% !important;
+  }
 }
 
 .confirm-booking-btn {
