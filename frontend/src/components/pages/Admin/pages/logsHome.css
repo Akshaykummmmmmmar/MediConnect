@@ -1,5 +1,5 @@
 .logs-home-container {
-  padding: 24px;
+  min-height: 100vh;
 }
 
 .cell-with-icon {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import axios from '../../../../utils/axios';
 import { Calendar, CheckCircle2, UserX, XCircle, Download } from 'lucide-react';
 import Pagination from '../../../Pagination/pagination';
@@ -58,7 +58,6 @@ const Appointment = () => {
 
   return (
     <div className="admin-page-container">
-      <ToastContainer />
       <div className="admin-page-header">
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <Calendar size={28} style={{ color: 'var(--primary)' }} />

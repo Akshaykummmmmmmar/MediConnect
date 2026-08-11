@@ -1,5 +1,5 @@
 import { CircleArrowLeft, Stethoscope, ShieldCheck } from 'lucide-react';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useRef } from 'react';
 import { Link } from 'react-router-dom';
@@ -106,7 +106,6 @@ const Sign = () => {
 
   return (
     <div className="login-page">
-      <ToastContainer />
       <CircleArrowLeft className="auth-back" onClick={onArrowClick} />
 
       <div className="auth-sidebar">

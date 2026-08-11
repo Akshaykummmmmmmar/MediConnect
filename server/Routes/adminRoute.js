@@ -26,6 +26,13 @@ const paginate = (array, page = 1, limit = 10) => {
   };
 };
 
+/**
+ * @swagger
+ * /addAdmin:
+ *   post:
+ *     summary: Create a new admin (admin only)
+ *     tags: [Admin]
+ */
 router.post('/addAdmin', checkToken(['admin']), async (req, res) => {
   try {
     const { name, email, password, confirmPassword, contactNumber } = req.body;
@@ -73,6 +80,13 @@ router.post('/addAdmin', checkToken(['admin']), async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /adddoctor:
+ *   post:
+ *     summary: Add a new doctor (admin only)
+ *     tags: [Admin]
+ */
 router.post('/adddoctor', checkToken(['admin']), async (req, res) => {
   try {
     const {
@@ -125,7 +139,7 @@ router.post('/adddoctor', checkToken(['admin']), async (req, res) => {
     });
 
     await logActivity({
-      user: req.headers.authorization ? undefined : undefined,
+      user: req.user?.id || user._id,
       role: 'admin',
       action: 'DOCTOR_ADDED',
       details: `Doctor ${name} (${specialization}) was added`,
@@ -154,6 +168,13 @@ router.post('/adddoctor', checkToken(['admin']), async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /doctor/update/{id}:
+ *   patch:
+ *     summary: Update doctor profile or availability
+ *     tags: [Admin]
+ */
 router.patch('/doctor/update/:id', checkToken(['admin', 'doctor']), async (req, res) => {
   try {
     const { id } = req.params;
@@ -188,7 +209,8 @@ router.patch('/doctor/update/:id', checkToken(['admin', 'doctor']), async (req, 
     await doctor.save();
 
     await logActivity({
-      role: 'doctor',
+      user: req.user?.id,
+      role: req.user?.role || 'doctor',
       action: 'DOCTOR_UPDATED',
       details: `Doctor ${doctor.specialization || ''} profile was updated`,
     });
@@ -199,17 +221,32 @@ router.patch('/doctor/update/:id', checkToken(['admin', 'doctor']), async (req, 
   }
 });
 
+/**
+ * @swagger
+ * /add/medicine:
+ *   post:
+ *     summary: Add a medicine to inventory (admin only)
+ *     tags: [Inventory]
+ */
 router.post('/add/medicine', checkToken(['admin']), async (req, res) => {
   try {
-    const { name, price } = req.body;
+    const { name, price, quantity, lowStockThreshold } = req.body;
     if (!name) return res.status(400).json({ message: 'Medicine name is required' });
     if (price === undefined || price === '' || Number(price) < 0) {
       return res.status(400).json({ message: 'Enter a valid price' });
     }
+    if (quantity !== undefined && Number(quantity) < 0) {
+      return res.status(400).json({ message: 'Enter a valid quantity' });
+    }
 
-    const addMedicine = await Medicine.create(req.body);
+    const payload = { ...req.body };
+    if (quantity === undefined || quantity === '') payload.quantity = 0;
+    if (lowStockThreshold === undefined || lowStockThreshold === '') payload.lowStockThreshold = 10;
+
+    const addMedicine = await Medicine.create(payload);
 
     await logActivity({
+      user: req.user?.id,
       role: 'admin',
       action: 'MEDICINE_ADDED',
       details: `Medicine ${name} was added to inventory`,
@@ -225,7 +262,64 @@ router.post('/add/medicine', checkToken(['admin']), async (req, res) => {
   }
 });
 
-router.get('/get/medicines/', async (req, res) => {
+/**
+ * @swagger
+ * /medicine/update/{id}:
+ *   patch:
+ *     summary: Update medicine details/stock (admin only)
+ *     tags: [Inventory]
+ */
+router.patch('/medicine/update/:id', checkToken(['admin']), async (req, res) => {
+  try {
+    const medicine = await Medicine.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!medicine) return res.status(404).json({ message: 'Medicine not found' });
+
+    await logActivity({
+      user: req.user?.id,
+      role: 'admin',
+      action: 'MEDICINE_UPDATED',
+      details: `Medicine ${medicine.name} was updated`,
+    });
+
+    res.status(200).json({ message: 'Medicine updated', data: medicine });
+  } catch (e) {
+    return res.status(500).json({ message: e.message });
+  }
+});
+
+/**
+ * @swagger
+ * /medicine/delete/{id}:
+ *   delete:
+ *     summary: Delete a medicine (admin only)
+ *     tags: [Inventory]
+ */
+router.delete('/medicine/delete/:id', checkToken(['admin']), async (req, res) => {
+  try {
+    const medicine = await Medicine.findByIdAndDelete(req.params.id);
+    if (!medicine) return res.status(404).json({ message: 'Medicine not found' });
+
+    await logActivity({
+      user: req.user?.id,
+      role: 'admin',
+      action: 'MEDICINE_DELETED',
+      details: `Medicine ${medicine.name} was removed`,
+    });
+
+    res.status(200).json({ message: 'Medicine deleted' });
+  } catch (e) {
+    return res.status(500).json({ message: e.message });
+  }
+});
+
+/**
+ * @swagger
+ * /get/medicines/:
+ *   get:
+ *     summary: List medicines with search & pagination (authenticated)
+ *     tags: [Inventory]
+ */
+router.get('/get/medicines/', checkToken(['admin', 'patient', 'doctor']), async (req, res) => {
   try {
     const { page, limit, search } = req.query;
     const filter = {};
@@ -243,6 +337,52 @@ router.get('/get/medicines/', async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /inventory/alerts:
+ *   get:
+ *     summary: Low-stock and expiring medicine alerts (admin only)
+ *     tags: [Inventory]
+ */
+router.get('/inventory/alerts', checkToken(['admin']), async (req, res) => {
+  try {
+    const allMedicines = await Medicine.find();
+
+    const lowStock = allMedicines.filter(
+      m => m.quantity <= m.lowStockThreshold
+    );
+
+    const in30Days = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+    const expiringSoon = allMedicines.filter(
+      m => m.expiryDate && new Date(m.expiryDate) <= in30Days
+    );
+
+    const expired = allMedicines.filter(
+      m => m.expiryDate && new Date(m.expiryDate) < new Date()
+    );
+
+    res.status(200).json({
+      lowStock,
+      expiringSoon,
+      expired,
+      counts: {
+        lowStock: lowStock.length,
+        expiringSoon: expiringSoon.length,
+        expired: expired.length,
+      },
+    });
+  } catch (e) {
+    return res.status(500).json({ message: e.message });
+  }
+});
+
+/**
+ * @swagger
+ * /doctors/get:
+ *   get:
+ *     summary: List doctors with search, department & rating filters
+ *     tags: [Admin]
+ */
 router.get(
   '/doctors/get',
   checkToken(['admin', 'patient', 'doctor']),
@@ -294,6 +434,13 @@ router.get(
   }
 );
 
+/**
+ * @swagger
+ * /doctor/delete/{id}:
+ *   delete:
+ *     summary: Delete a doctor and linked user (admin only)
+ *     tags: [Admin]
+ */
 router.delete('/doctor/delete/:id', checkToken(['admin']), async (req, res) => {
   try {
     const { id } = req.params;
@@ -304,6 +451,7 @@ router.delete('/doctor/delete/:id', checkToken(['admin']), async (req, res) => {
     await Doctor.findByIdAndDelete(id);
 
     await logActivity({
+      user: req.user?.id,
       role: 'admin',
       action: 'DOCTOR_DELETED',
       details: `Doctor ${doctor?.user?.name || id} was removed`,
@@ -315,17 +463,13 @@ router.delete('/doctor/delete/:id', checkToken(['admin']), async (req, res) => {
   }
 });
 
-router.get('/doctor/byUser/:userId', async (req, res) => {
-  try {
-    const doctor = await Doctor.findOne({ user: req.params.userId })
-      .populate('department', 'name');
-    if (!doctor) return res.status(404).json({ message: 'Doctor not found' });
-    res.json(doctor);
-  } catch (e) {
-    return res.status(500).json({ message: e.message });
-  }
-});
-
+/**
+ * @swagger
+ * /analytics/overview:
+ *   get:
+ *     summary: Dashboard analytics (admin only)
+ *     tags: [Analytics]
+ */
 router.get('/analytics/overview', checkToken(['admin']), async (req, res) => {
   try {
     const [doctors, patients, appointments, invoices, ratings] = await Promise.all([
@@ -390,6 +534,13 @@ router.get('/analytics/overview', checkToken(['admin']), async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /activity-logs:
+ *   get:
+ *     summary: Admin audit trail
+ *     tags: [Analytics]
+ */
 router.get('/activity-logs', checkToken(['admin']), async (req, res) => {
   try {
     const { page, limit } = req.query;

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import axios from '../../../../utils/axios';
 import {
   User,
@@ -62,7 +62,6 @@ const PatientProfile = () => {
 
   return (
     <div className="profile-page-wrapper">
-      <ToastContainer position="top-right" autoClose={3000} />
       <div className="profile-header-card">
         <div className="profile-banner"></div>
         <div className="profile-main-info">

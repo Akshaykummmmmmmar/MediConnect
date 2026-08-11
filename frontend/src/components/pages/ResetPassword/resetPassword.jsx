@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { CircleArrowLeft, Stethoscope, ShieldCheck, KeyRound } from 'lucide-react';
 import axios from '../../../utils/axios';
 import { isStrongPassword } from '../../../utils/validation';
@@ -34,7 +34,6 @@ const ResetPassword = () => {
 
   return (
     <div className="login-page">
-      <ToastContainer />
       <CircleArrowLeft className="auth-back" onClick={() => navigate('/')} />
 
       <div className="auth-sidebar">

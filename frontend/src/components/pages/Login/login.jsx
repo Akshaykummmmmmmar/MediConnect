@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { CircleArrowLeft, Stethoscope, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState, useRef } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import axios from '../../../utils/axios';
 import './login.css';
 
@@ -88,7 +88,6 @@ const Login = () => {
 
   return (
     <div className="login-page">
-      <ToastContainer />
       <CircleArrowLeft className="auth-back" onClick={onArrowClick} />
 
       <div className="auth-sidebar">

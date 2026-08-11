@@ -1,5 +1,6 @@
 const express = require('express');
 const crypto = require('crypto');
+require('dotenv').config();
 const User = require('../database/models/userSchema');
 const Doctor = require('../database/models/docterSchema');
 const Patient = require('../database/models/patientSchema');
@@ -14,11 +15,33 @@ const {
   isStrongPassword,
 } = require('../validation');
 const { logActivity } = require('../helpers');
+const { sendEmail, mailEnabled } = require('../emailer');
 
 const router = express.Router();
 
-const SECRET_KEY = 'gghfhergyfgreherhuerhue';
+const SECRET_KEY = process.env.JWT_SECRET || 'gghfhergyfgreherhuerhue';
 
+/**
+ * @swagger
+ * /signUp/register:
+ *   post:
+ *     summary: Register a new patient (creates User + Patient, sends OTP)
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [name, email, password, confirmPassword]
+ *             properties:
+ *               name: { type: string }
+ *               email: { type: string }
+ *               password: { type: string }
+ *               confirmPassword: { type: string }
+ *     responses:
+ *       200: { description: Registered successfully }
+ */
 router.post('/signUp/register', async (req, res) => {
   try {
     const {
@@ -76,17 +99,33 @@ router.post('/signUp/register', async (req, res) => {
       details: `${name} created a new account`,
     });
 
-    res.status(200).json({
+    await sendEmail({
+      to: email,
+      subject: 'MediConnect - Verify your email',
+      text: `Your OTP is ${otp}. It expires in 10 minutes.`,
+    });
+
+    const response = {
       message: 'User registered. Please verify your email with the OTP.',
       email,
-      otp,
-      note: 'OTP is returned here for demo purposes. In production it would be emailed.',
-    });
+    };
+    if (!mailEnabled) {
+      response.otp = otp;
+      response.note = 'OTP is returned here for demo purposes. In production it would be emailed.';
+    }
+    res.status(200).json(response);
   } catch (e) {
     return res.status(500).json({ message: e.message });
   }
 });
 
+/**
+ * @swagger
+ * /verify-otp:
+ *   post:
+ *     summary: Verify email with OTP
+ *     tags: [Auth]
+ */
 router.post('/verify-otp', async (req, res) => {
   try {
     const { email, otp } = req.body;
@@ -127,6 +166,13 @@ router.post('/verify-otp', async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /resend-otp:
+ *   post:
+ *     summary: Resend verification OTP
+ *     tags: [Auth]
+ */
 router.post('/resend-otp', async (req, res) => {
   try {
     const { email } = req.body;
@@ -140,12 +186,29 @@ router.post('/resend-otp', async (req, res) => {
     user.otpExpires = new Date(Date.now() + 10 * 60 * 1000);
     await user.save();
 
-    res.status(200).json({ message: 'New OTP sent', email, otp });
+    await sendEmail({
+      to: email,
+      subject: 'MediConnect - Your new OTP',
+      text: `Your new OTP is ${otp}. It expires in 10 minutes.`,
+    });
+
+    const response = { message: 'New OTP sent', email };
+    if (!mailEnabled) {
+      response.otp = otp;
+    }
+    res.status(200).json(response);
   } catch (e) {
     return res.status(500).json({ message: e.message });
   }
 });
 
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     summary: Login and receive a JWT
+ *     tags: [Auth]
+ */
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -172,7 +235,7 @@ router.post('/login', async (req, res) => {
     }
 
     const token = jwt.sign({ id: user._id, role: user.role }, SECRET_KEY, {
-      expiresIn: '7d',
+      expiresIn: process.env.JWT_EXPIRES_IN || '7d',
     });
 
     let doctorData = null;
@@ -209,6 +272,13 @@ router.post('/login', async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /forgot-password:
+ *   post:
+ *     summary: Request a password reset token
+ *     tags: [Auth]
+ */
 router.post('/forgot-password', async (req, res) => {
   try {
     const { email } = req.body;
@@ -233,17 +303,33 @@ router.post('/forgot-password', async (req, res) => {
       details: `${user.name} requested a password reset`,
     });
 
-    res.status(200).json({
-      message: 'Password reset link generated. Use the token below.',
-      resetToken: token,
-      email,
-      note: 'Token is returned here for demo purposes. In production it would be emailed.',
+    await sendEmail({
+      to: email,
+      subject: 'MediConnect - Password reset',
+      text: `Use this token to reset your password (valid 1 hour): ${token}`,
     });
+
+    const response = {
+      message: 'Password reset link generated. Use the token below.',
+      email,
+    };
+    if (!mailEnabled) {
+      response.resetToken = token;
+      response.note = 'Token is returned here for demo purposes. In production it would be emailed.';
+    }
+    res.status(200).json(response);
   } catch (e) {
     return res.status(500).json({ message: e.message });
   }
 });
 
+/**
+ * @swagger
+ * /reset-password:
+ *   post:
+ *     summary: Reset password with token
+ *     tags: [Auth]
+ */
 router.post('/reset-password', async (req, res) => {
   try {
     const { token, password, confirmPassword } = req.body;
@@ -281,6 +367,13 @@ router.post('/reset-password', async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /change-password:
+ *   patch:
+ *     summary: Change own password (authenticated)
+ *     tags: [Auth]
+ */
 router.patch('/change-password', checkToken(['admin', 'doctor', 'patient']), async (req, res) => {
   try {
     const { oldPassword, newPassword, confirmPassword } = req.body;
@@ -294,9 +387,7 @@ router.patch('/change-password', checkToken(['admin', 'doctor', 'patient']), asy
       return res.status(400).json({ message: "New passwords don't match" });
     }
 
-    const token = req.headers.authorization.split(' ')[1];
-    const decoded = jwt.verify(token, SECRET_KEY);
-    const user = await User.findById(decoded.id);
+    const user = await User.findById(req.user.id);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     const isMatch = await bcrypt.compare(oldPassword, user.password);
@@ -320,11 +411,16 @@ router.patch('/change-password', checkToken(['admin', 'doctor', 'patient']), asy
   }
 });
 
+/**
+ * @swagger
+ * /user/profile:
+ *   get:
+ *     summary: Get own profile
+ *     tags: [Users]
+ */
 router.get('/user/profile', checkToken(['admin', 'doctor', 'patient']), async (req, res) => {
   try {
-    const token = req.headers.authorization.split(' ')[1];
-    const decoded = jwt.verify(token, SECRET_KEY);
-    const user = await User.findById(decoded.id, '-password -otp -resetPasswordToken');
+    const user = await User.findById(req.user.id, '-password -otp -resetPasswordToken');
 
     let doctor = null;
     let patient = null;
@@ -343,11 +439,16 @@ router.get('/user/profile', checkToken(['admin', 'doctor', 'patient']), async (r
   }
 });
 
+/**
+ * @swagger
+ * /user/profile:
+ *   patch:
+ *     summary: Update own profile
+ *     tags: [Users]
+ */
 router.patch('/user/profile', checkToken(['admin', 'doctor', 'patient']), async (req, res) => {
   try {
-    const token = req.headers.authorization.split(' ')[1];
-    const decoded = jwt.verify(token, SECRET_KEY);
-    const user = await User.findById(decoded.id);
+    const user = await User.findById(req.user.id);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     const allowed = ['name', 'age', 'gender', 'address', 'contactNumber', 'emergencyContact'];
@@ -391,6 +492,30 @@ router.patch('/user/profile', checkToken(['admin', 'doctor', 'patient']), async 
   }
 });
 
+/**
+ * @swagger
+ * /doctor/byUser/{userId}:
+ *   get:
+ *     summary: Look up doctor by user id
+ *     tags: [Users]
+ */
+router.get('/doctor/byUser/:userId', checkToken(['admin', 'doctor', 'patient']), async (req, res) => {
+  try {
+    const doctor = await Doctor.findOne({ user: req.params.userId }).populate('department', 'name');
+    if (!doctor) return res.status(404).json({ message: 'Doctor not found' });
+    res.json(doctor);
+  } catch (e) {
+    return res.status(500).json({ message: e.message });
+  }
+});
+
+/**
+ * @swagger
+ * /doctors/count:
+ *   get:
+ *     summary: Public doctor/patient/appointment counts
+ *     tags: [Users]
+ */
 router.get('/doctors/count', async (req, res) => {
     try {
       const doctorCount = await Doctor.countDocuments();

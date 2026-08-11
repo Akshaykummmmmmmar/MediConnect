@@ -153,15 +153,15 @@ textarea:focus-visible {
 /* Shared dashboard polish.  These selectors are intentionally scoped to the
    authenticated layout so public pages keep their own visual identity. */
 .admin-main :is(.adminDashboard-container, .doctorDashboard-container, .patientsDashboard-container) {
-  max-width: 1320px;
-  padding: 44px clamp(20px, 4vw, 56px) 56px;
+  max-width: 1120px;
+  padding: 24px clamp(16px, 2vw, 32px) 32px;
 }
 
 .admin-main .dashboard-header {
   position: relative;
   overflow: hidden;
-  margin-bottom: 28px;
-  padding: 28px 30px;
+  margin-bottom: 18px;
+  padding: 18px 22px;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background:
@@ -179,7 +179,7 @@ textarea:focus-visible {
 }
 
 .admin-main .dashboard-header h1 {
-  font-size: clamp(1.65rem, 2.7vw, 2.15rem);
+  font-size: clamp(1.3rem, 2vw, 1.55rem);
   letter-spacing: -0.045em;
 }
 
@@ -194,13 +194,13 @@ textarea:focus-visible {
 }
 
 .admin-main .stats-cards {
-  gap: 18px;
-  margin-bottom: 26px;
+  gap: 16px;
+  margin-bottom: 20px;
 }
 
 .admin-main .stat-card {
-  min-height: 118px;
-  padding: 22px;
+  min-height: 96px;
+  padding: 16px 18px;
   border-radius: var(--radius-md);
   box-shadow: none;
 }
@@ -211,13 +211,13 @@ textarea:focus-visible {
 }
 
 .admin-main .stat-icon {
-  width: 52px;
-  height: 52px;
+  width: 44px;
+  height: 44px;
   border-radius: 15px;
 }
 
 .admin-main .stat-info h3 {
-  font-size: 1.65rem;
+  font-size: 1.25rem;
   letter-spacing: -0.035em;
 }
 
@@ -241,7 +241,7 @@ textarea:focus-visible {
 }
 
 .admin-main .action-btn {
-  min-height: 48px;
+  min-height: 40px;
   border-radius: 12px;
 }
 
@@ -252,6 +252,131 @@ textarea:focus-visible {
 
 .admin-main .action-btn.primary:hover {
   box-shadow: 0 12px 22px color-mix(in srgb, var(--primary) 34%, transparent);
+}
+
+/* ---- MediConnect 2.0 density pass: medium type + tighter section spacing ---- */
+
+/* Main page containers */
+.admin-main :is(
+  .admin-page-container,
+  .add-page-container,
+  .myappointments-page-container,
+  .prescriptions-page-container,
+  .booking-page-container,
+  .profile-page-wrapper,
+  .doctorProfile-page,
+  .analytics-container,
+  .invoice-home-container,
+  .logs-home-container,
+  .patient-invoices-container,
+  .medical-records-container,
+  .doctor-availability-container
+) {
+  padding: 24px clamp(16px, 2vw, 32px) 32px;
+  max-width: 1120px;
+}
+
+/* Page headers */
+.admin-main :is(.admin-page-header, .back-header, .page-header, .booking-header) {
+  margin-bottom: 18px;
+}
+
+.admin-main :is(
+  .admin-page-header h2,
+  .back-header h2,
+  .page-header h1,
+  .booking-header h1,
+  .prescriptions-list-view h1,
+  .doctor-basic h2
+) {
+  font-size: 20px;
+}
+
+.admin-main :is(.page-header p, .booking-header p, .prescriptions-list-view p) {
+  font-size: 13px;
+}
+
+/* Content grids & sections */
+.admin-main :is(.dashboard-content-grid, .booking-layout, .profile-content-grid) {
+  gap: 20px;
+}
+
+.admin-main :is(
+  .recent-activities-section,
+  .upcoming-appointments-section,
+  .quick-actions-section,
+  .appointments-card,
+  .add-form-card,
+  .modern-consultation-card,
+  .booking-steps-card,
+  .profile-info-section
+) {
+  padding: 20px;
+}
+
+.admin-main .booking-steps-card {
+  gap: 24px;
+}
+
+.admin-main :is(.section-header, .card-main-info) {
+  margin-bottom: 16px;
+}
+
+.admin-main :is(.section-header h2, .quick-actions-section h2, .section-title) {
+  font-size: 16px;
+}
+
+.admin-main .profile-header-card {
+  margin-bottom: 20px;
+}
+
+.admin-main .profile-main-info {
+  padding: 0 24px 20px;
+}
+
+/* Summary / stat cards */
+.admin-main :is(.stats-cards, .medicine-summary-cards, .summary-container) {
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.admin-main :is(.med-summary-card, .summary-card, .selected-doctor-card, .booking-summary-card) {
+  padding: 16px;
+}
+
+.admin-main :is(.summary-card p, .med-summary-card p, .invoice-amount) {
+  font-size: 20px;
+}
+
+.admin-main .availability-card {
+  padding: 18px;
+}
+
+.admin-main .availability-section {
+  margin-bottom: 20px;
+}
+
+.admin-main .doctorProfile-header {
+  padding: 24px 22px;
+}
+
+.admin-main .profile-banner {
+  height: 96px;
+}
+
+/* Tables */
+.admin-main :is(.admin-table th, .custom-table th) {
+  padding: 10px 14px;
+  font-size: 12px;
+}
+
+.admin-main :is(.admin-table td, .custom-table td) {
+  padding: 10px 14px;
+  font-size: 13px;
+}
+
+.admin-main :is(.admin-table-container, .appointments-card) {
+  border-radius: 12px;
 }
 
 @media (max-width: 720px) {

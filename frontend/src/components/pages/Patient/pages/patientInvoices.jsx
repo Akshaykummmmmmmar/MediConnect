@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import axios from '../../../../utils/axios';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import html2pdf from 'html2pdf.js-forked';
 import { Receipt, Calendar, User, CreditCard, CheckCircle2, Download } from 'lucide-react';
 import Pagination from '../../../Pagination/pagination';
+import { TableSkeleton } from '../../../ui/ui';
 import './patientInvoices.css';
 
 const PatientInvoices = () => {
@@ -59,7 +60,6 @@ const PatientInvoices = () => {
 
   return (
     <div className="patient-invoices-container">
-      <ToastContainer position="top-right" autoClose={3000} />
 
       <div className="page-header">
         <div>
@@ -73,7 +73,7 @@ const PatientInvoices = () => {
       </div>
 
       {loading ? (
-        <div className="loading-state">Loading invoices...</div>
+        <TableSkeleton rows={4} cols={1} />
       ) : invoices.length > 0 ? (
         <>
           <div className="invoice-grid">

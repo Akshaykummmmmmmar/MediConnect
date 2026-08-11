@@ -232,7 +232,7 @@ router.get(
   }
 );
 
-router.get('/get/all/appointments', async (req, res) => {
+router.get('/get/all/appointments', checkToken(['admin']), async (req, res) => {
   try {
     const { page, limit, status } = req.query;
     const filter = {};
@@ -256,7 +256,7 @@ router.get('/get/all/appointments', async (req, res) => {
   }
 });
 
-router.get('/doctor/:id', async (req, res) => {
+router.get('/doctor/:id', checkToken(['admin', 'doctor']), async (req, res) => {
   try {
     const doctorId = req.params.id;
     const { page, limit, status } = req.query;
@@ -275,7 +275,7 @@ router.get('/doctor/:id', async (req, res) => {
   }
 });
 
-router.get('/patient/:id', async (req, res) => {
+router.get('/patient/:id', checkToken(['patient', 'admin', 'doctor']), async (req, res) => {
   try {
     const { page, limit, status } = req.query;
     const filter = { patient: req.params.id };
@@ -337,7 +337,7 @@ router.delete('/cancel/:id', checkToken(['patient']), async (req, res) => {
   }
 });
 
-router.patch('/appointment/:id/status', async (req, res) => {
+router.patch('/appointment/:id/status', checkToken(['admin', 'doctor']), async (req, res) => {
   try {
     const { status } = req.body;
     const validStatuses = ['Pending', 'Confirmed', 'Completed', 'Cancelled', 'No-show'];
@@ -379,8 +379,8 @@ router.patch('/appointment/:id/status', async (req, res) => {
     }
 
     await logActivity({
-      user: doctor?.user?._id || req.headers.authorization?.split(' ')[0],
-      role: 'doctor',
+      user: req.user?.id || doctor?.user?._id,
+      role: req.user?.role || 'doctor',
       action: 'APPOINTMENT_STATUS_UPDATED',
       details: `Appointment ${req.params.id} marked as ${status}`,
     });
@@ -391,7 +391,7 @@ router.patch('/appointment/:id/status', async (req, res) => {
   }
 });
 
-router.patch('/appointment/:id', async (req, res) => {
+router.patch('/appointment/:id', checkToken(['admin', 'doctor']), async (req, res) => {
   try {
     const appointment = await Appointment.findByIdAndUpdate(
       req.params.id,

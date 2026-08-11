@@ -64,7 +64,7 @@ const PatientsDashboard = () => {
       </div>
 
       <div className="stats-cards">
-        <div className="stat-card" onClick={() => navigate('/patient/myappointments/dash')}>
+        <div className="stat-card" onClick={() => navigate('/patient/my-appointments')}>
           <div className="stat-icon appointment-icon">
             <Calendar size={24} />
           </div>
@@ -75,7 +75,7 @@ const PatientsDashboard = () => {
           <ArrowRight className="card-arrow" size={18} />
         </div>
 
-        <div className="stat-card" onClick={() => navigate('/patient/prescriptions/dash')}>
+        <div className="stat-card" onClick={() => navigate('/patient/prescriptions')}>
           <div className="stat-icon prescription-icon">
             <FileText size={24} />
           </div>
@@ -86,7 +86,7 @@ const PatientsDashboard = () => {
           <ArrowRight className="card-arrow" size={18} />
         </div>
 
-        <div className="stat-card" onClick={() => navigate('/patient/profile/dash')}>
+        <div className="stat-card" onClick={() => navigate('/patient/profile')}>
           <div className="stat-icon profile-icon">
             <User size={24} />
           </div>
@@ -102,7 +102,7 @@ const PatientsDashboard = () => {
         <div className="upcoming-appointments-section">
           <div className="section-header">
             <h2>Upcoming Appointments</h2>
-            <button onClick={() => navigate('/patient/myappointments/dash')}>View All</button>
+            <button onClick={() => navigate('/patient/my-appointments')}>View All</button>
           </div>
           
           <div className="appointments-list">
@@ -128,7 +128,7 @@ const PatientsDashboard = () => {
             ) : (
               <div className="empty-state">
                 <p>No upcoming appointments found.</p>
-                <button onClick={() => navigate('/patient/patient/appointments/dash')}>Book Now</button>
+                <button onClick={() => navigate('/patient/appointments')}>Book Now</button>
               </div>
             )}
           </div>
@@ -137,11 +137,11 @@ const PatientsDashboard = () => {
         <div className="quick-actions-section">
           <h2>Quick Actions</h2>
           <div className="actions-grid">
-            <button className="action-btn primary" onClick={() => navigate('/patient/patient/appointments/dash')}>
+            <button className="action-btn primary" onClick={() => navigate('/patient/appointments')}>
               <Calendar size={18} />
               Book Appointment
             </button>
-            <button className="action-btn secondary" onClick={() => navigate('/patient/prescriptions/dash')}>
+            <button className="action-btn secondary" onClick={() => navigate('/patient/prescriptions')}>
               <FileText size={18} />
               Recent Prescription
             </button>

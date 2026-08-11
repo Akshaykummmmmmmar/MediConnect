@@ -1,9 +1,5 @@
 .doctorDashboard-container {
-  padding: 40px;
-  background: var(--bg);
   min-height: 100vh;
-  max-width: 1200px;
-  margin: 0 auto;
 }
 
 .dashboard-header {

@@ -1,5 +1,5 @@
 import axios from '../../../../utils/axios';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Plus, Trash2, AlertTriangle, Star, Download } from 'lucide-react';
@@ -43,7 +43,6 @@ const DoctorDash = () => {
 
   return (
     <div className="admin-page-container">
-      <ToastContainer />
       
       <div className="admin-page-header">
         <h2>Doctors Management</h2>
@@ -61,7 +60,7 @@ const DoctorDash = () => {
           </button>
           <button
             className="admin-add-btn"
-            onClick={() => navigate('/admin/add/doctor')}
+            onClick={() => navigate('/admin/doctors/add')}
           >
             <Plus size={18} />
             Add Doctor

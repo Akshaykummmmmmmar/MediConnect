@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import axios from '../../../../utils/axios';
 import { Calendar, CheckCircle2, ClipboardPlus, FileQuestion } from 'lucide-react';
 import './appointmentToday.css';
@@ -66,6 +66,7 @@ const AppointmentToday = () => {
       const data = {
         patient: selectedAppointment.patient?._id,
         doctor: doctorId,
+        appointment: appointmentId,
         findings: prescription.findings,
         diagnosis: prescription.diagnosis,
         medicines: [
@@ -119,7 +120,6 @@ const AppointmentToday = () => {
 
   return (
     <div className="doctorDashboard-container">
-      <ToastContainer />
       
       {openMain && (
         <>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import axios from '../../../../utils/axios';
 import { ScrollText, User, Clock } from 'lucide-react';
 import Pagination from '../../../Pagination/pagination';
@@ -40,7 +40,6 @@ const LogsHome = () => {
 
   return (
     <div className="logs-home-container">
-      <ToastContainer position="top-right" autoClose={3000} />
 
       <div className="dashboard-header">
         <div>

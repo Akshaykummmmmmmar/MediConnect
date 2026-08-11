@@ -1,6 +1,6 @@
 import axios from '../../../../utils/axios';
 import { useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { Building2 } from 'lucide-react';
 import './departmentHome.css';
 
@@ -22,7 +22,6 @@ const Department = () => {
 
   return (
     <div className="admin-page-container">
-      <ToastContainer />
       <div className="admin-page-header">
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <Building2 size={28} style={{ color: 'var(--primary)' }} />

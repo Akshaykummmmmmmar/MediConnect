@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../../../../utils/axios';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { 
   Users, 
   Activity, 
@@ -65,9 +65,9 @@ const AdminHome = () => {
   const [appointmentCount, setAppointmentCount] = useState(0);
   const [activities, setActivities] = useState([]);
 
-  const onDoctorClick = () => navigate('doctor/dash');
-  const onPatientClick = () => navigate('patient/dash');
-  const onAppoinmentClick = () => navigate('appointment/dash');
+  const onDoctorClick = () => navigate('doctors');
+  const onPatientClick = () => navigate('patients');
+  const onAppoinmentClick = () => navigate('appointments');
 
   const getCount = async () => {
     try {
@@ -96,7 +96,6 @@ const AdminHome = () => {
 
   return (
     <div className="adminDashboard-container">
-      <ToastContainer />
       <div className="dashboard-header">
         <div>
           <h1>Welcome, Admin!</h1>
@@ -147,7 +146,7 @@ const AdminHome = () => {
         <div className="recent-activities-section">
           <div className="section-header">
             <h2>Recent Activities</h2>
-            <button onClick={() => navigate('appointment/dash')}>View All</button>
+            <button onClick={() => navigate('appointments')}>View All</button>
           </div>
           
           <div className="activities-list">
@@ -178,11 +177,11 @@ const AdminHome = () => {
         <div className="quick-actions-section">
           <h2>Quick Actions</h2>
           <div className="actions-grid">
-            <button className="action-btn primary" onClick={() => navigate('add/doctor')}>
+            <button className="action-btn primary" onClick={() => navigate('doctors/add')}>
               <Plus size={18} />
               Add New Doctor
             </button>
-            <button className="action-btn secondary" onClick={() => navigate('add/medicine')}>
+            <button className="action-btn secondary" onClick={() => navigate('medicines/add')}>
               <Plus size={18} />
               Add Medicine
             </button>

@@ -1,47 +1,73 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../../../../utils/axios';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { 
   Users, 
-  Activity, 
   Calendar,
   ArrowRight,
   Stethoscope,
   CheckCircle2,
-  Clock
+  Clock,
+  CalendarClock,
+  Star
 } from 'lucide-react';
 import './doctorDashboard.css';
 
 const DoctorDashboard = () => {
   const navigate = useNavigate();
   const [patientCount, setPatientCount] = useState(0);
+  const [appointmentCount, setAppointmentCount] = useState(0);
+  const [todayCount, setTodayCount] = useState(0);
+  const [avgRating, setAvgRating] = useState(0);
+  const [recent, setRecent] = useState([]);
+  const [loading, setLoading] = useState(true);
   const name = localStorage.getItem('name');
+  const doctorId = localStorage.getItem('doctorId');
 
   const onAppoinmentClick = () => {
-    navigate('doctor/appointments');
+    navigate('/doctor/appointments');
   };
 
-  const getCount = async () => {
+  const getDashboardData = async () => {
     try {
-      const response = await axios.get('/doctors/count');
-      setPatientCount(response.data.patients);
+      setLoading(true);
+      const [countRes, apptRes] = await Promise.all([
+        axios.get('/doctors/count'),
+        axios.get(`/doctor/${doctorId}?limit=5`),
+      ]);
+      setPatientCount(countRes.data.patients);
+
+      const items = apptRes.data?.items || [];
+      setAppointmentCount(apptRes.data?.total ?? items.length);
+      setRecent(items);
+
+      const today = new Date().toISOString().split('T')[0];
+      setTodayCount(items.filter(a => a.date?.split('T')[0] === today).length);
+
+      try {
+        const rateRes = await axios.get(`/ratings/doctor/${doctorId}`);
+        setAvgRating(rateRes.data.average || 0);
+      } catch (e) {
+        setAvgRating(0);
+      }
     } catch (e) {
       if (e.response?.data?.message) {
         toast.error(e.response.data.message);
       } else {
         toast.error(e.message);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    getCount();
+    getDashboardData();
   }, []);
 
   return (
     <div className="doctorDashboard-container">
-      <ToastContainer />
       <div className="dashboard-header">
         <div>
           <h1>Welcome, Dr. {name}!</h1>
@@ -70,8 +96,30 @@ const DoctorDashboard = () => {
             <Calendar size={24} />
           </div>
           <div className="stat-info">
-            <h3>23</h3>
-            <p>Appointments</p>
+            <h3>{loading ? '…' : appointmentCount}</h3>
+            <p>Total Appointments</p>
+          </div>
+          <ArrowRight className="card-arrow" size={18} />
+        </div>
+
+        <div className="stat-card" onClick={() => navigate('/doctor/today')}>
+          <div className="stat-icon today-icon">
+            <CalendarClock size={24} />
+          </div>
+          <div className="stat-info">
+            <h3>{loading ? '…' : todayCount}</h3>
+            <p>Today</p>
+          </div>
+          <ArrowRight className="card-arrow" size={18} />
+        </div>
+
+        <div className="stat-card">
+          <div className="stat-icon rating-icon">
+            <Star size={24} />
+          </div>
+          <div className="stat-info">
+            <h3>{avgRating || '—'}</h3>
+            <p>Avg Rating</p>
           </div>
           <ArrowRight className="card-arrow" size={18} />
         </div>
@@ -80,46 +128,38 @@ const DoctorDashboard = () => {
       <div className="dashboard-content-grid">
         <div className="recent-activities-section">
           <div className="section-header">
-            <h2>Recent Messages & Activity</h2>
+            <h2>Recent Appointments</h2>
             <button onClick={onAppoinmentClick}>View All</button>
           </div>
           
           <div className="activities-list">
-            <div className="activity-item">
-              <div className="activity-icon-box">
-                <CheckCircle2 size={20} />
-              </div>
-              <div className="activity-details">
-                <h4>Dr. John Doe approved today</h4>
-                <div className="activity-meta">
-                  <span>System</span>
+            {loading ? (
+              <div className="activity-item">
+                <div className="activity-details">
+                  <h4>Loading appointments...</h4>
                 </div>
               </div>
-            </div>
-
-            <div className="activity-item">
-              <div className="activity-icon-box">
-                <Calendar size={20} />
-              </div>
-              <div className="activity-details">
-                <h4>Patient Jane Smith booked an appointment</h4>
-                <div className="activity-meta">
-                  <span>New Booking</span>
+            ) : recent.length === 0 ? (
+              <div className="activity-item">
+                <div className="activity-details">
+                  <h4>No appointments yet</h4>
                 </div>
               </div>
-            </div>
-
-            <div className="activity-item">
-              <div className="activity-icon-box">
-                <Activity size={20} />
-              </div>
-              <div className="activity-details">
-                <h4>New doctor request pending approval</h4>
-                <div className="activity-meta">
-                  <span>Action Required</span>
+            ) : (
+              recent.map(a => (
+                <div className="activity-item" key={a._id}>
+                  <div className="activity-icon-box">
+                    <CheckCircle2 size={20} />
+                  </div>
+                  <div className="activity-details">
+                    <h4>{a.patient?.name || 'Patient'} — {a.date} at {a.time}</h4>
+                    <div className="activity-meta">
+                      <span>{a.status}</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              ))
+            )}
           </div>
         </div>
 
@@ -129,6 +169,10 @@ const DoctorDashboard = () => {
             <button className="action-btn primary" onClick={onAppoinmentClick}>
               <Calendar size={18} />
               View Appointments
+            </button>
+            <button className="action-btn secondary" onClick={() => navigate('/doctor/today')}>
+              <Clock size={18} />
+              Today's Schedule
             </button>
             <button className="action-btn secondary" onClick={() => navigate('/doctor/profile')}>
               <Users size={18} />

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import axios from '../../../../utils/axios';
 import { ListCollapse, CheckCircle2, UserX } from 'lucide-react';
 import Pagination from '../../../Pagination/pagination';
@@ -55,7 +55,6 @@ const DoctorAppointments = () => {
 
   return (
     <div className="doctorDashboard-container">
-      <ToastContainer />
       
       <div className="dashboard-header">
         <div>

@@ -1,9 +1,5 @@
 .doctorDashboard-container {
-  padding: 40px;
-  background: var(--bg);
   min-height: 100vh;
-  max-width: 1200px;
-  margin: 0 auto;
 }
 
 /* Header Section */
@@ -49,7 +45,7 @@
 
 .stat-card {
   background: var(--bg-card);
-  padding: 24px;
+  min-height: 100vh;
   border-radius: 16px;
   box-shadow: var(--shadow);
   display: flex;
@@ -78,6 +74,8 @@
 
 .patient-icon { background: #e0f2fe; color: #0ea5e9; }
 .appointment-icon { background: #faf5ff; color: #a855f7; }
+.today-icon { background: #ecfdf5; color: #10b981; }
+.rating-icon { background: #fef9c3; color: #eab308; }
 
 .stat-info h3 {
   font-size: 26px;

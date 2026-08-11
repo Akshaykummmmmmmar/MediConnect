@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { CircleArrowLeft, Stethoscope, ShieldCheck, MailWarning } from 'lucide-react';
 import axios from '../../../utils/axios';
 import { isEmail } from '../../../utils/validation';
@@ -27,7 +27,6 @@ const ForgotPassword = () => {
 
   return (
     <div className="login-page">
-      <ToastContainer />
       <CircleArrowLeft className="auth-back" onClick={() => navigate('/')} />
 
       <div className="auth-sidebar">

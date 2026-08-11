@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from '../../../../utils/axios';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { 
   Calendar, 
   Clock, 
@@ -104,7 +104,6 @@ const MyAppointments = () => {
 
   return (
     <div className="myappointments-page-container">
-      <ToastContainer position="top-right" autoClose={3000} />
       
       <div className="page-header">
         <div>

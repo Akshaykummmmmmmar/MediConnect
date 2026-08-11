@@ -1,9 +1,5 @@
 .prescriptions-page-container {
-  padding: 40px;
-  background: var(--bg);
   min-height: 100vh;
-  max-width: 1200px;
-  margin: 0 auto;
 }
 
 .prescriptions-list-view .page-header {
@@ -46,7 +42,7 @@
 
 .modern-consultation-card {
   background: var(--bg-card);
-  padding: 24px;
+  min-height: 100vh;
   border-radius: 16px;
   box-shadow: var(--shadow);
   border: 1px solid var(--border);

@@ -1,5 +1,5 @@
 import axios from '../../../../utils/axios';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, UserPlus } from 'lucide-react';
@@ -79,7 +79,7 @@ const AddDoctor = () => {
         department: '',
         consultationFee: '',
       });
-      setTimeout(() => navigate('/admin/doctor/dash'), 1500);
+      setTimeout(() => navigate('/admin/doctors'), 1500);
     } catch (e) {
       toast.error(e.response?.data?.message || e.message);
     }
@@ -100,7 +100,6 @@ const AddDoctor = () => {
 
   return (
     <div className="add-page-container">
-      <ToastContainer />
       <div className="back-header">
         <button className="back-btn" onClick={() => navigate(-1)}>
           <ArrowLeft size={20} />

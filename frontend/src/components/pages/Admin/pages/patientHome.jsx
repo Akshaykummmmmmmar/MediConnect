@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from '../../../../utils/axios';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { Users, Download } from 'lucide-react';
 import Pagination from '../../../Pagination/pagination';
 import { exportCsv } from '../../../../utils/exportCsv';
@@ -27,7 +27,6 @@ const Patients = () => {
 
   return (
     <div className="admin-page-container">
-      <ToastContainer />
       <div className="admin-page-header">
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <Users size={28} style={{ color: 'var(--primary)' }} />

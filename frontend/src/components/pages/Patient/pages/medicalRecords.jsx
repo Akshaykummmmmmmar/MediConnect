@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from '../../../../utils/axios';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import {
   FolderOpen,
   Stethoscope,
@@ -48,7 +48,6 @@ const MedicalRecords = () => {
 
   return (
     <div className="medical-records-container">
-      <ToastContainer position="top-right" autoClose={3000} />
 
       <div className="page-header">
         <div>

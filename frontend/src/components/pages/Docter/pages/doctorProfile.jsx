@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import axios from '../../../../utils/axios';
 import { UserRound, Mail, Briefcase, IndianRupee, Star, Edit3, Save, X, Stethoscope, Lock } from 'lucide-react';
 import './doctorProfile.css';
@@ -108,7 +108,6 @@ const DoctorProfile = () => {
 
   return (
     <div className="doctorProfile-page">
-      <ToastContainer position="top-right" autoClose={3000} />
 
       {!profile ? (
         <div className="loading-state">Loading profile...</div>

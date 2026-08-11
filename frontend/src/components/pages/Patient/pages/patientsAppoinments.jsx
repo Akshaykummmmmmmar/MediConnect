@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from '../../../../utils/axios';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { 
   User, 
   Calendar as CalendarIcon, 
@@ -145,7 +145,6 @@ const BookAppointments = () => {
 
   return (
     <div className="booking-page-container">
-      <ToastContainer position="top-right" autoClose={3000} />
       
       <div className="booking-header">
         <h1>Book an Appointment</h1>

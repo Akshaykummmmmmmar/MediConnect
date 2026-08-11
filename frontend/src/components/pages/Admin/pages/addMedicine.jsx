@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axios from '../../../../utils/axios';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Pill } from 'lucide-react';
 import './addMedicine.css';
@@ -41,7 +41,7 @@ const AddMedicine = () => {
         expiryDate: '',
         price: ''
       });
-      setTimeout(() => navigate('/admin/viewMedicine'), 1500);
+      setTimeout(() => navigate('/admin/medicines'), 1500);
     } catch (e) {
       toast.error(e.response?.data?.message || e.message);
     }
@@ -49,7 +49,6 @@ const AddMedicine = () => {
 
   return (
     <div className="add-page-container">
-      <ToastContainer />
       <div className="back-header">
         <button className="back-btn" onClick={() => navigate(-1)}>
           <ArrowLeft size={20} />

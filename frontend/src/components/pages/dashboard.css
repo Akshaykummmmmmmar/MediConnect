@@ -118,6 +118,16 @@
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Standardize every page inside the main area: fill the full width with
+   uniform padding. Higher specificity than each page's own root rule so
+   per-page max-width centering (760px/900px/1200px...) is overridden. */
+.admin-main > div {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: clamp(20px, 2.5vw, 40px);
+}
+
 @media (max-width: 900px) {
   .admin-sidebar {
     position: sticky;

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import html2pdf from 'html2pdf.js-forked';
 import axios from '../../../../utils/axios';
 import { 
@@ -65,7 +65,6 @@ const Prescriptions = () => {
 
   return (
     <div className="prescriptions-page-container">
-      <ToastContainer position="top-right" />
       
       {!showDetail ? (
         <div className="prescriptions-list-view">

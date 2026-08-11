@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import axios from '../../../../utils/axios';
 import {
   Users,
@@ -40,7 +40,6 @@ const AnalyticsHome = () => {
 
   return (
     <div className="analytics-container">
-      <ToastContainer position="top-right" autoClose={3000} />
 
       <div className="dashboard-header">
         <div>
