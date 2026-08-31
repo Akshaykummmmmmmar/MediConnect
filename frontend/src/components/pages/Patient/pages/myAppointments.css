@@ -1,9 +1,5 @@
 .myappointments-page-container {
-  padding: 40px;
-  background: var(--bg);
   min-height: 100vh;
-  max-width: 1200px;
-  margin: 0 auto;
 }
 
 .page-header {
@@ -138,45 +134,7 @@
   color: var(--primary);
 }
 
-/* Status Badge */
-.status-badge {
-  display: inline-flex;
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.status-badge.confirmed {
-  background: var(--success-soft-bg);
-  color: var(--success-soft-text);
-}
-
-.status-badge.status-completed {
-  background: var(--success-soft-bg);
-  color: var(--success-soft-text);
-}
-
-.status-badge.status-confirmed {
-  background: var(--primary-soft);
-  color: var(--primary);
-}
-
-.status-badge.status-cancelled {
-  background: var(--danger-soft-bg);
-  color: var(--danger-soft-text);
-}
-
-.status-badge.status-no-show {
-  background: var(--warning-soft-bg);
-  color: var(--warning-soft-text);
-}
-
-.status-badge.status-pending {
-  background: var(--warning-soft-bg);
-  color: var(--warning-soft-text);
-}
+/* Status Badge - uses global .status-badge from index.css */
 
 .action-btns-group {
   display: inline-flex;

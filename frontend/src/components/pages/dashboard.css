@@ -14,14 +14,23 @@
   display: flex;
   flex-direction: column;
   z-index: 50;
-  box-shadow: 4px 0 20px rgba(15, 23, 42, 0.12);
+  box-shadow: 12px 0 32px rgba(15, 23, 42, 0.12);
+}
+
+/* The brand and navigation are wrapped together in the layout.  Give that
+   wrapper a bounded flex area so long menus scroll inside the sidebar. */
+.admin-sidebar > div:first-child {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
 }
 
 .sidebar-brand {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 22px 20px;
+  padding: 24px 20px;
   border-bottom: 1px solid var(--sidebar-divider);
 }
 
@@ -30,7 +39,7 @@
   height: 42px;
   flex-shrink: 0;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.12);
+  background: linear-gradient(135deg, rgba(124, 192, 255, 0.28), rgba(45, 212, 191, 0.16));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -57,7 +66,7 @@
 .menu-list {
   list-style: none;
   margin: 0;
-  padding: 16px 14px;
+  padding: 20px 14px;
   flex: 1;
   overflow-y: auto;
 }
@@ -85,7 +94,7 @@
 }
 
 .menu-list a.active {
-  background: var(--sidebar-active-bg);
+  background: linear-gradient(90deg, var(--sidebar-active-bg), rgba(124, 192, 255, 0.04));
   color: #ffffff;
   border-left-color: var(--sidebar-active-border);
   font-weight: 600;
@@ -107,4 +116,168 @@
   background: var(--bg);
   color: var(--text);
   transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+}
+
+/* Standardize every page inside the main area: fill the full width with
+   uniform padding. Higher specificity than each page's own root rule so
+   per-page max-width centering (760px/900px/1200px...) is overridden. */
+.admin-main > div {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: clamp(24px, 2.5vw, 32px);
+}
+
+@media (max-width: 900px) {
+  .admin-sidebar {
+    position: sticky;
+    top: 0;
+    width: 82px;
+    overflow: hidden;
+  }
+
+  .admin-sidebar > div:first-child {
+    width: 100%;
+  }
+
+  .sidebar-brand {
+    justify-content: center;
+    padding: 20px 12px;
+  }
+
+  .sidebar-brand > div,
+  .menu-list a span,
+  .sidebar-bottom .theme-toggle,
+  .sidebar-bottom .logout-btn {
+    font-size: 0;
+  }
+
+  .menu-list {
+    padding: 16px 10px;
+  }
+
+  .menu-list a {
+    justify-content: center;
+    padding: 13px;
+    border-left-width: 0;
+    border-radius: 12px;
+  }
+
+  .sidebar-bottom {
+    padding: 12px 10px;
+  }
+
+  .admin-main {
+    margin-left: 82px;
+    width: calc(100% - 82px);
+  }
+}
+
+@media (max-width: 540px) {
+  .admin-container {
+    flex-direction: column;
+  }
+
+  .admin-sidebar {
+    position: sticky;
+    width: 100%;
+    height: auto;
+    min-height: 70px;
+    flex-direction: row;
+    align-items: center;
+    overflow-x: auto;
+  }
+
+  .admin-sidebar > div:first-child {
+    width: auto;
+    min-height: auto;
+    flex: 0 0 auto;
+    flex-direction: row;
+  }
+
+  .sidebar-brand {
+    padding: 12px 14px;
+    border: 0;
+  }
+
+  .menu-list {
+    display: flex;
+    gap: 6px;
+    padding: 10px 4px;
+    overflow: visible;
+  }
+
+  .menu-list li {
+    margin: 0;
+  }
+
+  .menu-list a {
+    min-width: 44px;
+    padding: 11px;
+  }
+
+  .sidebar-bottom {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    padding: 8px 10px;
+    border-top: 1px solid var(--sidebar-divider);
+    border-left: none;
+    width: 100%;
+  }
+
+  .sidebar-bottom > * {
+    flex: 1;
+  }
+
+  .sidebar-bottom .theme-toggle span,
+  .sidebar-bottom .logout-btn span,
+  .sidebar-bottom .notification-bell-btn + * {
+    display: none;
+  }
+
+  .admin-main {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+/* ---- Shared utility classes (replaces common inline styles) ---- */
+.flex-row-center {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.flex-row {
+  display: flex;
+  gap: 10px;
+}
+
+.icon-primary {
+  color: var(--primary);
+}
+
+.icon-muted {
+  color: var(--text-muted);
+}
+
+.text-muted-sm {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.empty-state-placeholder {
+  padding: 40px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.loading-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  color: var(--text-muted);
 }

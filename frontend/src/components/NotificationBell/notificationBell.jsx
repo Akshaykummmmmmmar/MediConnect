@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import axios from '../../utils/axios';
+import { getSocket } from '../../utils/socket';
 import { Bell, CalendarCheck, FileText, CreditCard, Star, Info } from 'lucide-react';
 import './notificationBell.css';
 
@@ -45,7 +46,18 @@ const NotificationBell = () => {
   useEffect(() => {
     fetchData();
     const interval = setInterval(fetchData, 30000);
-    return () => clearInterval(interval);
+
+    const socket = getSocket();
+    const onNewNotification = notification => {
+      setItems(prev => [notification, ...prev].slice(0, 8));
+      setUnread(prev => prev + 1);
+    };
+    socket.on('notification:new', onNewNotification);
+
+    return () => {
+      clearInterval(interval);
+      socket.off('notification:new', onNewNotification);
+    };
   }, []);
 
   useEffect(() => {

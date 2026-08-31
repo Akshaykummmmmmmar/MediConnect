@@ -54,6 +54,7 @@
 .auth-card-signup .auth-field select {
   padding: 9px 12px;
   font-size: 14px;
+  font-family: inherit;
   border-radius: 10px;
 }
 

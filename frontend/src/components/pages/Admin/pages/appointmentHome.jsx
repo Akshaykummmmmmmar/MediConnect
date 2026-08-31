@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import notify from '../../../../utils/toast';
 import axios from '../../../../utils/axios';
 import { Calendar, CheckCircle2, UserX, XCircle, Download } from 'lucide-react';
 import Pagination from '../../../Pagination/pagination';
@@ -33,17 +33,17 @@ const Appointment = () => {
       setAppointments(response.data.items || []);
       setTotalPages(response.data.totalPages || 1);
     } catch (e) {
-      toast.error(e.response?.data?.message || 'Failed to fetch appointments');
+      notify.error(e.response?.data?.message || 'Failed to fetch appointments');
     }
   };
 
   const updateStatus = async (id, status) => {
     try {
       await axios.patch(`/appointment/${id}/status`, { status });
-      toast.success(`Appointment marked as ${status}`);
+      notify.success(`Appointment marked as ${status}`);
       getAppointments();
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     }
   };
 
@@ -58,17 +58,16 @@ const Appointment = () => {
 
   return (
     <div className="admin-page-container">
-      <ToastContainer />
       <div className="admin-page-header">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Calendar size={28} style={{ color: 'var(--primary)' }} />
+        <div className="flex-row-center">
+          <Calendar size={28} className="icon-primary" />
           <h2>All Appointments</h2>
         </div>
         <button
           className="admin-export-btn"
           onClick={() =>
             exportCsv('/export/appointments.csv', 'appointments.csv').catch(e =>
-              toast.error(e.response?.data?.message || 'Export failed')
+              notify.error(e.response?.data?.message || 'Export failed')
             )
           }
         >
@@ -120,27 +119,33 @@ const Appointment = () => {
                 <td>
                   {['Pending', 'Booked'].includes(item.status) && (
                     <button
+                      type="button"
                       className="action-icon-btn confirm"
                       onClick={() => updateStatus(item._id, 'Confirmed')}
                       title="Confirm"
+                      aria-label="Confirm appointment"
                     >
                       <CheckCircle2 size={16} />
                     </button>
                   )}
                   {['Confirmed'].includes(item.status) && (
                     <button
+                      type="button"
                       className="action-icon-btn noshow"
                       onClick={() => updateStatus(item._id, 'No-show')}
                       title="No-show"
+                      aria-label="Mark as no-show"
                     >
                       <UserX size={16} />
                     </button>
                   )}
                   {['Pending', 'Confirmed', 'Booked'].includes(item.status) && (
                     <button
+                      type="button"
                       className="action-icon-btn cancel"
                       onClick={() => updateStatus(item._id, 'Cancelled')}
                       title="Cancel"
+                      aria-label="Cancel appointment"
                     >
                       <XCircle size={16} />
                     </button>

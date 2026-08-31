@@ -1,9 +1,5 @@
 .doctorDashboard-container {
-  padding: 40px;
-  background: var(--bg);
   min-height: 100vh;
-  max-width: 1200px;
-  margin: 0 auto;
 }
 
 .dashboard-header {
@@ -35,7 +31,6 @@
 
 .summary-card {
   background: var(--bg-card);
-  padding: 24px;
   border-radius: 16px;
   box-shadow: var(--shadow);
   border: 1px solid var(--border);
@@ -93,40 +88,6 @@
 
 .admin-table tbody tr:last-child td {
   border-bottom: none;
-}
-
-.status-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.status-completed {
-  background: var(--success-soft-bg);
-  color: var(--success-soft-text);
-}
-
-.status-pending {
-  background: var(--primary-soft);
-  color: var(--primary);
-}
-
-.status-confirmed {
-  background: var(--primary-soft);
-  color: var(--primary);
-}
-
-.status-cancelled {
-  background: var(--danger-soft-bg);
-  color: var(--danger-soft-text);
-}
-
-.status-no-show {
-  background: var(--warning-soft-bg);
-  color: var(--warning-soft-text);
 }
 
 .confirm-slot-btn {

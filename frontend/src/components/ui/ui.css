@@ -1,0 +1,56 @@
+.ui-skeleton {
+  background: linear-gradient(90deg, var(--surface-alt, #e5e7eb) 25%, var(--border, #d1d5db) 50%, var(--surface-alt, #e5e7eb) 75%);
+  background-size: 200% 100%;
+  animation: ui-skeleton-shimmer 1.4s infinite;
+  border-radius: 6px;
+}
+
+@keyframes ui-skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.ui-skeleton-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 12px;
+  padding: 10px 0;
+}
+
+.ui-table-skeleton {
+  padding: 20px;
+}
+
+.ui-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 48px 20px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.ui-empty-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-alt, #f3f4f6);
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.ui-empty-state h3 {
+  margin: 0;
+  font-size: 18px;
+  color: var(--text);
+}
+
+.ui-empty-state p {
+  margin: 0;
+  font-size: 14px;
+}

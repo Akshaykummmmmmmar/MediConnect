@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import axios from '../../../../utils/axios';
-import { ToastContainer, toast } from 'react-toastify';
+import notify from '../../../../utils/toast';
+import html2pdf from 'html2pdf.js-forked';
 import { Receipt, Calendar, User, CreditCard, CheckCircle2, Download } from 'lucide-react';
 import Pagination from '../../../Pagination/pagination';
+import { TableSkeleton } from '../../../ui/ui';
 import './patientInvoices.css';
 
 const PatientInvoices = () => {
@@ -22,7 +24,7 @@ const PatientInvoices = () => {
       setInvoices(res.data.items || []);
       setTotalPages(res.data.totalPages || 1);
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     } finally {
       setLoading(false);
     }
@@ -35,29 +37,29 @@ const PatientInvoices = () => {
   const payInvoice = async id => {
     try {
       await axios.patch(`/invoices/pay/${id}`, { paymentMethod: payMethod });
-      toast.success('Payment successful!');
+      notify.success('Payment successful!');
       setSelectedInvoice(null);
       getInvoices();
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     }
   };
 
   const downloadInvoice = () => {
     if (!selectedInvoice) return;
-    const content = document.getElementById('invoice-print-area');
-    const blob = new Blob([content.innerText], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${selectedInvoice.invoiceNumber}.txt`;
-    a.click();
-    URL.revokeObjectURL(url);
+    const element = document.getElementById('invoice-print-area');
+    const options = {
+      margin: 10,
+      filename: `${selectedInvoice.invoiceNumber || 'Invoice'}_MediConnect.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    };
+    html2pdf().set(options).from(element).save();
   };
 
   return (
     <div className="patient-invoices-container">
-      <ToastContainer position="top-right" autoClose={3000} />
 
       <div className="page-header">
         <div>
@@ -71,7 +73,7 @@ const PatientInvoices = () => {
       </div>
 
       {loading ? (
-        <div className="loading-state">Loading invoices...</div>
+        <TableSkeleton rows={4} cols={1} />
       ) : invoices.length > 0 ? (
         <>
           <div className="invoice-grid">
@@ -127,7 +129,7 @@ const PatientInvoices = () => {
               <div className="invoice-brand">MediConnect</div>
               <div className="invoice-meta-grid">
                 <div>
-                  <p><strong>Patient:</strong> Dr. {selectedInvoice.doctor?.user?.name || '—'}</p>
+                  <p><strong>Doctor:</strong> Dr. {selectedInvoice.doctor?.user?.name || '—'}</p>
                   <p><strong>Date:</strong> {selectedInvoice.createdAt?.split('T')[0]}</p>
                 </div>
                 <div>
@@ -177,7 +179,7 @@ const PatientInvoices = () => {
             )}
 
             <button className="invoice-download-btn" onClick={downloadInvoice}>
-              <Download size={15} /> Download (txt)
+              <Download size={15} /> Download (PDF)
             </button>
           </div>
         </div>

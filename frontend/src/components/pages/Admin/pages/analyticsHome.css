@@ -1,5 +1,5 @@
 .analytics-container {
-  padding: 24px;
+  min-height: 100vh;
 }
 
 .analytics-cards {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import notify from '../../../../utils/toast';
 import axios from '../../../../utils/axios';
 import {
   Users,
@@ -23,7 +23,7 @@ const AnalyticsHome = () => {
         const res = await axios.get('/analytics/overview');
         setData(res.data);
       } catch (e) {
-        toast.error(e.response?.data?.message || e.message);
+        notify.error(e.response?.data?.message || e.message);
       } finally {
         setLoading(false);
       }
@@ -40,7 +40,6 @@ const AnalyticsHome = () => {
 
   return (
     <div className="analytics-container">
-      <ToastContainer position="top-right" autoClose={3000} />
 
       <div className="dashboard-header">
         <div>

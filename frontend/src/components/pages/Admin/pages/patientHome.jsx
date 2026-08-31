@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from '../../../../utils/axios';
-import { ToastContainer, toast } from 'react-toastify';
+import notify from '../../../../utils/toast';
 import { Users, Download } from 'lucide-react';
 import Pagination from '../../../Pagination/pagination';
 import { exportCsv } from '../../../../utils/exportCsv';
@@ -17,7 +17,7 @@ const Patients = () => {
       setPatients(response.data.items || []);
       setTotalPages(response.data.totalPages || 1);
     } catch (e) {
-      toast.error(e.response?.data?.message || 'Failed to fetch patients');
+      notify.error(e.response?.data?.message || 'Failed to fetch patients');
     }
   };
 
@@ -27,17 +27,16 @@ const Patients = () => {
 
   return (
     <div className="admin-page-container">
-      <ToastContainer />
       <div className="admin-page-header">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Users size={28} style={{ color: 'var(--primary)' }} />
+        <div className="flex-row-center">
+          <Users size={28} className="icon-primary" />
           <h2>Patients Directory</h2>
         </div>
         <button
           className="admin-export-btn"
           onClick={() =>
             exportCsv('/export/patients.csv', 'patients.csv').catch(e =>
-              toast.error(e.response?.data?.message || 'Export failed')
+              notify.error(e.response?.data?.message || 'Export failed')
             )
           }
         >

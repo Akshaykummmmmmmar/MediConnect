@@ -3,19 +3,31 @@ const Doctor = require('../database/models/docterSchema');
 const User = require('../database/models/userSchema');
 const Prescription = require('../database/models/prescriptionSchema');
 const checkToken = require('../middleware/checkToken');
-const { sendNotification } = require('../helpers');
+const { sendNotification, logActivity } = require('../helpers');
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /post/prescriptions:
+ *   post:
+ *     summary: Create a prescription for a patient (doctor only)
+ *     tags: [Prescriptions]
+ */
 router.post(
   '/post/prescriptions',
-  checkToken(['doctor', 'patient']),
+  checkToken(['doctor']),
   async (req, res) => {
     try {
+      const { patient, doctor, appointment } = req.body;
+      if (!patient || !doctor) {
+        return res.status(400).json({ message: 'Patient and doctor are required' });
+      }
+
       const newPrescription = await Prescription.create(req.body);
 
-      const patient = await User.findById(req.body.patient);
-      if (patient) {
+      const patientUser = await User.findById(patient);
+      if (patientUser) {
         await sendNotification({
           user: patient._id,
           title: 'New Prescription',
@@ -24,6 +36,13 @@ router.post(
           relatedId: newPrescription._id,
         });
       }
+
+      await logActivity({
+        user: req.user?.id,
+        role: 'doctor',
+        action: 'PRESCRIPTION_POSTED',
+        details: `Prescription posted for patient ${patientUser?.name || patient}`,
+      });
 
       res.status(201).json({
         success: true,
@@ -36,6 +55,13 @@ router.post(
   }
 );
 
+/**
+ * @swagger
+ * /get/prescriptions/patients/{id}:
+ *   get:
+ *     summary: List a patient's prescriptions
+ *     tags: [Prescriptions]
+ */
 router.get(
   '/get/prescriptions/patients/:id',
   checkToken(['patient', 'doctor']),

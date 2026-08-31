@@ -9,10 +9,11 @@ body {
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background: var(--bg);
   color: var(--text);
   -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
 }
 
 :root {
@@ -51,42 +52,506 @@ body {
   --sidebar-active-border: #4f9cf5;
   --sidebar-divider: rgba(255, 255, 255, 0.08);
   --sidebar-muted: #93a5bd;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 22px;
+  /* Home page tokens */
+  --home-bg: #f4f8ff;
+  --home-nav-bg: rgba(255, 255, 255, 0.85);
+  --home-nav-border: #e6ecf3;
+  --home-logo-color: #1f3b58;
+  --home-text: #1f3b58;
+  --home-text-secondary: #5a6b7d;
+  --home-text-muted: #6b7c90;
+  --home-surface: #ffffff;
+  --home-border: #e6ecf3;
+  --home-surface-shadow: rgba(31, 59, 88, 0.06);
+  --home-card-shadow: rgba(31, 59, 88, 0.2);
+  --home-accent: #2563eb;
+  --home-accent-hover: #1d4ed8;
+  --home-accent-soft: #e3ecfd;
+  --home-hero-gradient: linear-gradient(180deg, var(--home-bg) 0%, var(--home-surface) 54%, var(--home-bg) 100%);
+  --home-card-bg: #ffffff;
+  /* Auth page tokens */
+  --auth-bg: #ffffff;
+  --auth-card-bg: #ffffff;
+  --auth-card-border: #e6ecf3;
+  --auth-card-shadow: rgba(31, 59, 88, 0.1);
+  --auth-input-bg: #fbfcfe;
+  --auth-input-border: #d5deeb;
+  --auth-input-focus-bg: #ffffff;
+  --auth-text: #1f3b58;
+  --auth-text-secondary: #6b7c90;
+  --auth-label: #33475b;
+  --auth-sidebar-gradient: linear-gradient(160deg, #1f3b58 0%, #2563eb 100%);
+  --auth-main-gradient: linear-gradient(180deg, #eef4fb 0%, #ffffff 100%);
+  --auth-back-bg: rgba(255, 255, 255, 0.9);
+  --auth-back-shadow: rgba(0, 0, 0, 0.12);
+  /* Icon backgrounds */
+  --icon-blue-bg: #e0f2fe;
+  --icon-blue-text: #0ea5e9;
+  --icon-green-bg: #f0fdf4;
+  --icon-green-text: #22c55e;
+  --icon-purple-bg: #faf5ff;
+  --icon-purple-text: #a855f7;
+  --icon-emerald-bg: #ecfdf5;
+  --icon-emerald-text: #10b981;
+  --icon-yellow-bg: #fef9c3;
+  --icon-yellow-text: #eab308;
 }
 
 [data-theme='dark'] {
-  --bg: #0f172a;
-  --bg-card: #1e293b;
-  --bg-subtle: #172033;
-  --bg-hover: #243349;
-  --bg-active: #27406b;
-  --text: #e2e8f0;
-  --text-body: #cbd5e1;
-  --text-muted: #94a3b8;
-  --border: #334155;
-  --border-strong: #475569;
+  --bg: #080e1a;
+  --bg-card: #111927;
+  --bg-subtle: #0d1420;
+  --bg-hover: #182436;
+  --bg-active: #1f3460;
+  --text: #d6e0ed;
+  --text-body: #b0bfce;
+  --text-muted: #6e7f94;
+  --border: #1e2d42;
+  --border-strong: #2d4055;
   --primary: #3b82f6;
   --primary-hover: #2563eb;
-  --primary-soft: rgba(59, 130, 246, 0.16);
+  --primary-soft: rgba(59, 130, 246, 0.12);
   --danger: #f87171;
   --danger-hover: #ef4444;
   --success: #34d399;
   --success-hover: #10b981;
   --warning: #fbbf24;
-  --success-soft-bg: rgba(52, 211, 153, 0.15);
+  --success-soft-bg: rgba(52, 211, 153, 0.1);
   --success-soft-text: #6ee7b7;
-  --warning-soft-bg: rgba(251, 191, 36, 0.15);
+  --warning-soft-bg: rgba(251, 191, 36, 0.1);
   --warning-soft-text: #fcd34d;
-  --danger-soft-bg: rgba(248, 113, 113, 0.15);
+  --danger-soft-bg: rgba(248, 113, 113, 0.1);
   --danger-soft-text: #fca5a5;
-  --table-head-bg: #0f172a;
-  --table-head-text: #e2e8f0;
-  --shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
-  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.45);
-  --sidebar-bg-grad: linear-gradient(180deg, #122a4d 0%, #0a1730 100%);
-  --sidebar-text: #9fb0c4;
+  --table-head-bg: #080e1a;
+  --table-head-text: #d6e0ed;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.6);
+  --sidebar-bg-grad: linear-gradient(180deg, #0d1f3a 0%, #060f20 100%);
+  --sidebar-text: #7f93ad;
   --sidebar-text-hover: #ffffff;
-  --sidebar-active-bg: rgba(255, 255, 255, 0.1);
+  --sidebar-active-bg: rgba(255, 255, 255, 0.08);
   --sidebar-active-border: #60a5fa;
-  --sidebar-divider: rgba(255, 255, 255, 0.08);
-  --sidebar-muted: #7c8da6;
+  --sidebar-divider: rgba(255, 255, 255, 0.06);
+  --sidebar-muted: #5e7290;
+  /* Home page tokens - dark */
+  --home-bg: #080e1a;
+  --home-nav-bg: rgba(8, 14, 26, 0.92);
+  --home-nav-border: #1e2d42;
+  --home-logo-color: #d6e0ed;
+  --home-text: #d6e0ed;
+  --home-text-secondary: #6e7f94;
+  --home-text-muted: #6e7f94;
+  --home-surface: #111927;
+  --home-border: #1e2d42;
+  --home-surface-shadow: rgba(0, 0, 0, 0.3);
+  --home-card-shadow: rgba(0, 0, 0, 0.4);
+  --home-accent: #3b82f6;
+  --home-accent-hover: #2563eb;
+  --home-accent-soft: rgba(59, 130, 246, 0.12);
+  --home-hero-gradient: linear-gradient(180deg, var(--home-bg) 0%, var(--home-surface) 54%, var(--home-bg) 100%);
+  --home-card-bg: #111927;
+  /* Auth page tokens - dark */
+  --auth-bg: #080e1a;
+  --auth-card-bg: #111927;
+  --auth-card-border: #1e2d42;
+  --auth-card-shadow: rgba(0, 0, 0, 0.4);
+  --auth-input-bg: #0d1420;
+  --auth-input-border: #1e2d42;
+  --auth-input-focus-bg: #111927;
+  --auth-text: #d6e0ed;
+  --auth-text-secondary: #6e7f94;
+  --auth-label: #b0bfce;
+  --auth-sidebar-gradient: linear-gradient(160deg, #080e1a 0%, #1e40af 100%);
+  --auth-main-gradient: linear-gradient(180deg, #080e1a 0%, #111927 100%);
+  --auth-back-bg: rgba(8, 14, 26, 0.92);
+  --auth-back-shadow: rgba(0, 0, 0, 0.4);
+  /* Icon backgrounds - dark */
+  --icon-blue-bg: rgba(14, 165, 233, 0.1);
+  --icon-blue-text: #38bdf8;
+  --icon-green-bg: rgba(34, 197, 94, 0.1);
+  --icon-green-text: #4ade80;
+  --icon-purple-bg: rgba(168, 85, 247, 0.1);
+  --icon-purple-text: #c084fc;
+  --icon-emerald-bg: rgba(16, 185, 129, 0.1);
+  --icon-emerald-text: #34d399;
+  --icon-yellow-bg: rgba(234, 179, 8, 0.1);
+  --icon-yellow-text: #facc15;
+}
+
+/* Skip to content link for keyboard users */
+.skip-to-content {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  z-index: 9999;
+  padding: 12px 24px;
+  background: var(--primary);
+  color: #ffffff;
+  font-weight: 600;
+  border-radius: 0 0 8px 8px;
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+
+.skip-to-content:focus {
+  top: 0;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Shared status badges */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-completed,
+.status-active,
+.status-available {
+  background: var(--success-soft-bg);
+  color: var(--success-soft-text);
+}
+
+.status-confirmed,
+.status-upcoming {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.status-pending,
+.status-no-show {
+  background: var(--warning-soft-bg);
+  color: var(--warning-soft-text);
+}
+
+.status-cancelled,
+.status-inactive,
+.status-unavailable {
+  background: var(--danger-soft-bg);
+  color: var(--danger-soft-text);
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--primary) 30%, transparent);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--primary-soft);
+  color: var(--text);
+}
+
+/* Form validation states */
+.auth-field input[aria-invalid="true"],
+.auth-field input.invalid {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 12%, transparent);
+}
+
+.auth-field .field-error {
+  font-size: 12px;
+  color: var(--danger);
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.auth-field input.valid {
+  border-color: var(--success);
+}
+
+/* Shared dashboard polish.  These selectors are intentionally scoped to the
+   authenticated layout so public pages keep their own visual identity. */
+.admin-main :is(.adminDashboard-container, .doctorDashboard-container, .patientsDashboard-container) {
+  padding: 24px clamp(16px, 2vw, 32px) 32px;
+}
+
+.admin-main .dashboard-header {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 18px;
+  padding: 18px 22px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(circle at 100% 0, color-mix(in srgb, var(--primary) 15%, transparent), transparent 34%),
+    var(--bg-card);
+  box-shadow: var(--shadow);
+}
+
+.admin-main .dashboard-header::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), #2dd4bf);
+}
+
+.admin-main .dashboard-header h1 {
+  font-size: clamp(1.3rem, 2vw, 1.55rem);
+  letter-spacing: -0.045em;
+}
+
+.admin-main .dashboard-header p {
+  max-width: 58ch;
+}
+
+.admin-main .header-badge {
+  padding: 8px 12px;
+  border: 1px solid color-mix(in srgb, var(--primary) 18%, var(--border));
+  border-radius: 999px;
+}
+
+.admin-main .stats-cards {
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.admin-main .stat-card {
+  min-height: 96px;
+  padding: 16px 18px;
+  border-radius: var(--radius-md);
+  box-shadow: none;
+}
+
+.admin-main .stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.admin-main .stat-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 15px;
+}
+
+.admin-main .stat-info h3 {
+  font-size: 1.25rem;
+  letter-spacing: -0.035em;
+}
+
+.admin-main :is(.recent-activities-section, .upcoming-appointments-section, .quick-actions-section) {
+  border-radius: var(--radius-md);
+  box-shadow: none;
+}
+
+.admin-main .section-header h2,
+.admin-main .quick-actions-section h2 {
+  letter-spacing: -0.02em;
+}
+
+.admin-main :is(.activity-item, .appointment-item) {
+  border: 1px solid transparent;
+  border-radius: 14px;
+}
+
+.admin-main :is(.activity-item, .appointment-item):hover {
+  border-color: var(--border);
+}
+
+.admin-main .action-btn {
+  min-height: 40px;
+  border-radius: 12px;
+}
+
+.admin-main .action-btn.primary {
+  background: linear-gradient(135deg, var(--primary), #0f85d9);
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--primary) 25%, transparent);
+}
+
+.admin-main .action-btn.primary:hover {
+  box-shadow: 0 12px 22px color-mix(in srgb, var(--primary) 34%, transparent);
+}
+
+/* ---- MediConnect 2.0 density pass: medium type + tighter section spacing ---- */
+
+/* Main page containers */
+.admin-main :is(
+  .admin-page-container,
+  .add-page-container,
+  .myappointments-page-container,
+  .prescriptions-page-container,
+  .booking-page-container,
+  .profile-page-wrapper,
+  .doctorProfile-page,
+  .analytics-container,
+  .invoice-home-container,
+  .logs-home-container,
+  .patient-invoices-container,
+  .medical-records-container,
+  .doctor-availability-container
+) {
+  padding: 24px clamp(16px, 2vw, 32px) 32px;
+}
+
+/* Page headers */
+.admin-main :is(.admin-page-header, .back-header, .page-header, .booking-header) {
+  margin-bottom: 18px;
+}
+
+.admin-main :is(
+  .admin-page-header h2,
+  .back-header h2,
+  .page-header h1,
+  .booking-header h1,
+  .prescriptions-list-view h1,
+  .doctor-basic h2
+) {
+  font-size: 20px;
+}
+
+.admin-main :is(.page-header p, .booking-header p, .prescriptions-list-view p) {
+  font-size: 13px;
+}
+
+/* Content grids & sections */
+.admin-main :is(.dashboard-content-grid, .booking-layout, .profile-content-grid) {
+  gap: 20px;
+}
+
+.admin-main :is(
+  .recent-activities-section,
+  .upcoming-appointments-section,
+  .quick-actions-section,
+  .appointments-card,
+  .add-form-card,
+  .modern-consultation-card,
+  .booking-steps-card,
+  .profile-info-section
+) {
+  padding: 20px;
+}
+
+.admin-main .booking-steps-card {
+  gap: 24px;
+}
+
+.admin-main :is(.section-header, .card-main-info) {
+  margin-bottom: 16px;
+}
+
+.admin-main :is(.section-header h2, .quick-actions-section h2, .section-title) {
+  font-size: 16px;
+}
+
+.admin-main .profile-header-card {
+  margin-bottom: 20px;
+}
+
+.admin-main .profile-main-info {
+  padding: 0 24px 20px;
+}
+
+/* Summary / stat cards */
+.admin-main :is(.stats-cards, .medicine-summary-cards, .summary-container) {
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.admin-main :is(.med-summary-card, .summary-card, .selected-doctor-card, .booking-summary-card) {
+  padding: 16px;
+}
+
+.admin-main :is(.summary-card p, .med-summary-card p, .invoice-amount) {
+  font-size: 20px;
+}
+
+.admin-main .availability-card {
+  padding: 18px;
+}
+
+.admin-main .availability-section {
+  margin-bottom: 20px;
+}
+
+.admin-main .doctorProfile-header {
+  padding: 24px 22px;
+}
+
+.admin-main .profile-banner {
+  height: 96px;
+}
+
+/* Tables */
+.admin-main :is(.admin-table th, .custom-table th) {
+  padding: 10px 14px;
+  font-size: 12px;
+}
+
+.admin-main :is(.admin-table td, .custom-table td) {
+  padding: 10px 14px;
+  font-size: 13px;
+}
+
+.admin-main :is(.admin-table-container, .appointments-card) {
+  border-radius: 12px;
+  position: relative;
+}
+
+/* Table scroll indicator */
+.admin-main .admin-table-container::after,
+.admin-main .appointments-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 24px;
+  background: linear-gradient(to right, transparent, var(--bg-card));
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.admin-main .admin-table-container:has(.admin-table[style*="overflow"])::after,
+.admin-main .admin-table-container:hover::after {
+  opacity: 1;
+}
+
+@media (max-width: 720px) {
+  .admin-main :is(.adminDashboard-container, .doctorDashboard-container, .patientsDashboard-container) {
+    padding: 20px 16px 36px;
+  }
+
+  .admin-main .dashboard-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
+    padding: 22px;
+  }
+
+  .admin-main .dashboard-content-grid {
+    gap: 18px;
+  }
+
+  .admin-main :is(.recent-activities-section, .upcoming-appointments-section, .quick-actions-section) {
+    padding: 20px;
+  }
 }

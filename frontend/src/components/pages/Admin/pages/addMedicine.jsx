@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axios from '../../../../utils/axios';
-import { ToastContainer, toast } from 'react-toastify';
+import notify from '../../../../utils/toast';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Pill } from 'lucide-react';
 import './addMedicine.css';
@@ -27,13 +27,13 @@ const AddMedicine = () => {
       !medicineData.expiryDate ||
       !medicineData.price
     ) {
-      toast.error('Please fill all fields', { autoClose: 1500 });
+      notify.error('Please fill all fields', { autoClose: 1500 });
       return;
     }
 
     try {
       await axios.post('/add/medicine', medicineData);
-      toast.success('Medicine added successfully');
+      notify.success('Medicine added successfully');
       setMedicineData({
         name: '',
         description: '',
@@ -41,15 +41,14 @@ const AddMedicine = () => {
         expiryDate: '',
         price: ''
       });
-      setTimeout(() => navigate('/admin/viewMedicine'), 1500);
+      setTimeout(() => navigate('/admin/medicines'), 1500);
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     }
   };
 
   return (
     <div className="add-page-container">
-      <ToastContainer />
       <div className="back-header">
         <button className="back-btn" onClick={() => navigate(-1)}>
           <ArrowLeft size={20} />
@@ -59,7 +58,7 @@ const AddMedicine = () => {
 
       <div className="add-form-card">
         <div className="add-form-illustration">
-          <Pill size={64} style={{ color: 'var(--primary)', marginBottom: '20px' }} />
+          <Pill size={64} className="icon-primary" style={{ marginBottom: '20px' }} />
           <h3>Inventory Management</h3>
           <p>Add new medicine details to update the hospital pharmacy inventory.</p>
         </div>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import notify from '../../../../utils/toast';
 import axios from '../../../../utils/axios';
 import { Calendar, CheckCircle2, ClipboardPlus, FileQuestion } from 'lucide-react';
 import './appointmentToday.css';
@@ -35,7 +35,7 @@ const AppointmentToday = () => {
   };
 
   const getAppointments = async () => {
-    if (!doctorId) return toast.error('Doctor not found');
+    if (!doctorId) return notify.error('Doctor not found');
 
     try {
       const response = await axios.get(`/doctor/${doctorId}?limit=200`);
@@ -45,17 +45,17 @@ const AppointmentToday = () => {
       );
       setAppointments(todayAppointments);
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     }
   };
 
   const confirmAppointment = async id => {
     try {
       await axios.patch(`/appointment/${id}/status`, { status: 'Confirmed' });
-      toast.success('Appointment confirmed');
+      notify.success('Appointment confirmed');
       getAppointments();
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     }
   };
 
@@ -66,6 +66,7 @@ const AppointmentToday = () => {
       const data = {
         patient: selectedAppointment.patient?._id,
         doctor: doctorId,
+        appointment: appointmentId,
         findings: prescription.findings,
         diagnosis: prescription.diagnosis,
         medicines: [
@@ -84,10 +85,10 @@ const AppointmentToday = () => {
         status: 'Completed',
       });
       
-      toast.success('Prescription added and appointment completed');
+      notify.success('Prescription added and appointment completed');
       getAppointments();
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     }
   };
 
@@ -119,7 +120,6 @@ const AppointmentToday = () => {
 
   return (
     <div className="doctorDashboard-container">
-      <ToastContainer />
       
       {openMain && (
         <>
@@ -173,7 +173,7 @@ const AppointmentToday = () => {
                       </span>
                     </td>
                     <td>
-                      <div style={{ display: 'inline-flex', gap: '8px' }}>
+                      <div className="flex-row" style={{ display: 'inline-flex' }}>
                         {['Pending', 'Booked'].includes(item.status) && (
                           <button
                             className="confirm-slot-btn"
@@ -202,7 +202,7 @@ const AppointmentToday = () => {
             </table>
             
             {appointments.length === 0 && (
-              <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>
+              <div className="empty-state-placeholder">
                 No appointments scheduled for today.
               </div>
             )}

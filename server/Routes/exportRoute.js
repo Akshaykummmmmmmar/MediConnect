@@ -87,6 +87,7 @@ router.get('/export/medicines.csv', checkToken(['admin']), async (req, res) => {
       Name: m.name,
       Description: m.description,
       Manufacturer: m.manufacturer,
+      Quantity: m.quantity,
       'Expiry Date': m.expiryDate ? new Date(m.expiryDate).toISOString() : '',
       Price: m.price,
     }));

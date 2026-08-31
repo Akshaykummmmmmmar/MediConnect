@@ -1,6 +1,6 @@
 import axios from '../../../../utils/axios';
 import { useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import notify from '../../../../utils/toast';
 import { Building2 } from 'lucide-react';
 import './departmentHome.css';
 
@@ -12,7 +12,7 @@ const Department = () => {
       const response = await axios.get('/department/get');
       setDepartment(response.data);
     } catch (e) {
-      toast.error(e.response?.data?.message || 'Failed to fetch departments');
+      notify.error(e.response?.data?.message || 'Failed to fetch departments');
     }
   };
 
@@ -22,10 +22,9 @@ const Department = () => {
 
   return (
     <div className="admin-page-container">
-      <ToastContainer />
       <div className="admin-page-header">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Building2 size={28} style={{ color: 'var(--primary)' }} />
+        <div className="flex-row-center">
+          <Building2 size={28} className="icon-primary" />
           <h2>Departments</h2>
         </div>
       </div>

@@ -1,9 +1,5 @@
 .admin-page-container {
-  padding: 40px;
-  background: var(--bg);
   min-height: 100vh;
-  max-width: 1200px;
-  margin: 0 auto;
 }
 
 .admin-page-header {
@@ -57,25 +53,6 @@
 
 .admin-table tbody tr:last-child td {
   border-bottom: none;
-}
-
-.status-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.status-active {
-  background: var(--success-soft-bg);
-  color: var(--success-soft-text);
-}
-
-.status-inactive {
-  background: #fee2e2;
-  color: #ef4444;
 }
 
 .empty-state-message {

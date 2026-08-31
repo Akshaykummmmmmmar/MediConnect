@@ -17,16 +17,19 @@ import './patient.css';
 const Patient = () => {
   const menu = [
     { to: '/patient', end: true, icon: LayoutDashboard, label: 'Dashboard' },
-    { to: 'patient/appointments/dash', end: true, icon: CalendarPlus, label: 'Appointments' },
-    { to: 'patient/myappointments/dash', end: true, icon: CalendarCheck, label: 'My Appointments' },
-    { to: 'patient/prescriptions/dash', end: true, icon: FileText, label: 'Prescriptions' },
-    { to: 'patient/records/dash', end: true, icon: FolderOpen, label: 'Medical Records' },
-    { to: 'patient/invoices/dash', end: true, icon: Receipt, label: 'Invoices' },
-    { to: 'patient/profile/dash', end: true, icon: UserCircle, label: 'Profile' },
+    { to: 'appointments', end: true, icon: CalendarPlus, label: 'Book Appointment' },
+    { to: 'my-appointments', end: true, icon: CalendarCheck, label: 'My Appointments' },
+    { to: 'prescriptions', end: true, icon: FileText, label: 'Prescriptions' },
+    { to: 'records', end: true, icon: FolderOpen, label: 'Medical Records' },
+    { to: 'invoices', end: true, icon: Receipt, label: 'Invoices' },
+    { to: 'profile', end: true, icon: UserCircle, label: 'Profile' },
   ];
 
   return (
     <div className="admin-container">
+      <a href="#main-content" className="skip-to-content">
+        Skip to main content
+      </a>
       <div className="admin-sidebar">
         <div>
           <div className="sidebar-brand">
@@ -65,7 +68,7 @@ const Patient = () => {
         </div>
       </div>
 
-      <div className="admin-main">
+      <div className="admin-main" id="main-content">
         <Outlet />
       </div>
     </div>

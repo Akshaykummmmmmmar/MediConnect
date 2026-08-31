@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import notify from '../../../utils/toast';
 import { CircleArrowLeft, Stethoscope, ShieldCheck, KeyRound } from 'lucide-react';
 import axios from '../../../utils/axios';
 import './verifyOtp.css';
@@ -14,33 +14,32 @@ const VerifyOtp = () => {
   const [loading, setLoading] = useState(false);
 
   const onVerify = async () => {
-    if (!email) return toast.error('Email is required', { autoClose: 1000 });
-    if (!otp || otp.length !== 6) return toast.error('Enter the 6-digit OTP', { autoClose: 1000 });
+    if (!email) return notify.error('Email is required', { autoClose: 1000 });
+    if (!otp || otp.length !== 6) return notify.error('Enter the 6-digit OTP', { autoClose: 1000 });
     try {
       setLoading(true);
       await axios.post('/verify-otp', { email, otp });
-      toast.success('Email verified! You can now login.');
+      notify.success('Email verified! You can now login.');
       setTimeout(() => navigate('/login'), 1200);
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     } finally {
       setLoading(false);
     }
   };
 
   const onResend = async () => {
-    if (!email) return toast.error('Email is required', { autoClose: 1000 });
+    if (!email) return notify.error('Email is required', { autoClose: 1000 });
     try {
       const res = await axios.post('/resend-otp', { email });
-      toast.success(`New OTP sent${res.data.otp ? `: ${res.data.otp}` : ''}`);
+      notify.success(`New OTP sent${res.data.otp ? `: ${res.data.otp}` : ''}`);
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     }
   };
 
   return (
     <div className="login-page">
-      <ToastContainer />
       <CircleArrowLeft className="auth-back" onClick={() => navigate('/')} />
 
       <div className="auth-sidebar">

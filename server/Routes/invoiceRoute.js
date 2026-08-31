@@ -50,7 +50,7 @@ router.post('/invoices', checkToken(['admin', 'doctor']), async (req, res) => {
     const patientUser = await User.findById(patient);
     if (patientUser) {
       await sendNotification({
-        user: patient._id,
+        user: patientUser._id,
         title: 'New Invoice',
         message: `An invoice of ₹${total} has been generated. Invoice No: ${invoiceNumber}.`,
         type: 'billing',
@@ -59,7 +59,8 @@ router.post('/invoices', checkToken(['admin', 'doctor']), async (req, res) => {
     }
 
     await logActivity({
-      role: 'admin',
+      user: req.user?.id,
+      role: req.user?.role || 'admin',
       action: 'INVOICE_CREATED',
       details: `Invoice ${invoiceNumber} for ₹${total} was created`,
     });

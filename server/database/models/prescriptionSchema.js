@@ -14,6 +14,11 @@ const prescriptionSchema = new mongoose.Schema(
       required: true,
     },
 
+    appointment: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Appointment',
+    },
+
     findings: {
       type: String,
     },
@@ -40,6 +45,10 @@ const prescriptionSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+prescriptionSchema.index({ patient: 1, createdAt: -1 });
+prescriptionSchema.index({ doctor: 1, createdAt: -1 });
+prescriptionSchema.index({ appointment: 1 });
 
 const prescription = mongoose.model('Prescription', prescriptionSchema);
 
