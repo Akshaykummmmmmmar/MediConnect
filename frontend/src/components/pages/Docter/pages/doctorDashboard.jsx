@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../../../../utils/axios';
-import { toast } from 'react-toastify';
+import notify from '../../../../utils/toast';
 import { 
   Users, 
   Calendar,
@@ -53,9 +53,9 @@ const DoctorDashboard = () => {
       }
     } catch (e) {
       if (e.response?.data?.message) {
-        toast.error(e.response.data.message);
+        notify.error(e.response.data.message);
       } else {
-        toast.error(e.message);
+        notify.error(e.message);
       }
     } finally {
       setLoading(false);

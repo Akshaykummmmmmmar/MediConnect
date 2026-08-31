@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+import notify from '../../../../utils/toast';
 import axios from '../../../../utils/axios';
 import { ListCollapse, CheckCircle2, UserX } from 'lucide-react';
 import Pagination from '../../../Pagination/pagination';
@@ -28,24 +28,24 @@ const DoctorAppointments = () => {
   const [confirmModal, setConfirmModal] = useState(null);
 
   const getAppointments = async () => {
-    if (!doctorId) return toast.error('Doctor not found');
+    if (!doctorId) return notify.error('Doctor not found');
     try {
       const response = await axios.get(`/doctor/${doctorId}?page=${page}&limit=10`);
       setAppointments(response.data.items || []);
       setTotalPages(response.data.totalPages || 1);
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     }
   };
 
   const updateStatus = async (id, status) => {
     try {
       await axios.patch(`/appointment/${id}/status`, { status });
-      toast.success(`Appointment marked as ${status}`);
+      notify.success(`Appointment marked as ${status}`);
       setConfirmModal(null);
       getAppointments();
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     }
   };
 

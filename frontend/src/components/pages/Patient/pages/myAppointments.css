@@ -134,15 +134,7 @@
   color: var(--primary);
 }
 
-/* Status Badge */
-.status-badge {
-  display: inline-flex;
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-}
+/* Status Badge - uses global .status-badge from index.css */
 
 .action-btns-group {
   display: inline-flex;

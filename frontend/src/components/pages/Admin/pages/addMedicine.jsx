@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axios from '../../../../utils/axios';
-import { toast } from 'react-toastify';
+import notify from '../../../../utils/toast';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Pill } from 'lucide-react';
 import './addMedicine.css';
@@ -27,13 +27,13 @@ const AddMedicine = () => {
       !medicineData.expiryDate ||
       !medicineData.price
     ) {
-      toast.error('Please fill all fields', { autoClose: 1500 });
+      notify.error('Please fill all fields', { autoClose: 1500 });
       return;
     }
 
     try {
       await axios.post('/add/medicine', medicineData);
-      toast.success('Medicine added successfully');
+      notify.success('Medicine added successfully');
       setMedicineData({
         name: '',
         description: '',
@@ -43,7 +43,7 @@ const AddMedicine = () => {
       });
       setTimeout(() => navigate('/admin/medicines'), 1500);
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     }
   };
 

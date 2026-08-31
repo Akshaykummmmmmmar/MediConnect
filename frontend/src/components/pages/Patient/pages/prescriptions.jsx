@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+import notify from '../../../../utils/toast';
 import html2pdf from 'html2pdf.js-forked';
 import axios from '../../../../utils/axios';
 import { 
@@ -43,7 +43,7 @@ const Prescriptions = () => {
       const response = await axios.get(`/get/prescriptions/patients/${patientId}`);
       setPrescriptions(response.data || []);
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     } finally {
       setLoading(false);
     }

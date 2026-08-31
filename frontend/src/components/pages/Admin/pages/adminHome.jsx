@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../../../../utils/axios';
-import { toast } from 'react-toastify';
+import notify from '../../../../utils/toast';
 import { 
   Users, 
   Activity, 
@@ -76,7 +76,7 @@ const AdminHome = () => {
       setPatientCount(response.data.patients);
       setAppointmentCount(response.data.appointments);
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     }
   };
 
@@ -85,7 +85,7 @@ const AdminHome = () => {
       const response = await axios.get('/activity-logs?page=1&limit=4');
       setActivities(response.data.items || []);
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     }
   };
 

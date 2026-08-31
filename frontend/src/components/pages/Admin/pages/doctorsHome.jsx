@@ -1,5 +1,5 @@
 import axios from '../../../../utils/axios';
-import { toast } from 'react-toastify';
+import notify from '../../../../utils/toast';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Plus, Trash2, AlertTriangle, Star, Download } from 'lucide-react';
@@ -23,7 +23,7 @@ const DoctorDash = () => {
       setDoctor(response.data.items || []);
       setTotalPages(response.data.totalPages || 1);
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     }
   };
 
@@ -31,9 +31,9 @@ const DoctorDash = () => {
     try {
       await axios.delete(`/doctor/delete/${id}`);
       getDoctors();
-      toast.success('Doctor deleted successfully');
+      notify.success('Doctor deleted successfully');
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     }
   };
 
@@ -51,7 +51,7 @@ const DoctorDash = () => {
             className="admin-export-btn"
             onClick={() =>
               exportCsv('/export/doctors.csv', 'doctors.csv').catch(e =>
-                toast.error(e.response?.data?.message || 'Export failed')
+                notify.error(e.response?.data?.message || 'Export failed')
               )
             }
           >

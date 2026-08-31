@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+import notify from '../../../../utils/toast';
 import axios from '../../../../utils/axios';
 import {
   CalendarRange,
@@ -48,13 +48,13 @@ const DoctorCalendar = () => {
   const [loading, setLoading] = useState(true);
 
   const getAppointments = async () => {
-    if (!doctorId) return toast.error('Doctor not found');
+    if (!doctorId) return notify.error('Doctor not found');
     try {
       setLoading(true);
       const response = await axios.get(`/doctor/${doctorId}?limit=200`);
       setAppointments(response.data.items || []);
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     } finally {
       setLoading(false);
     }
@@ -73,10 +73,10 @@ const DoctorCalendar = () => {
   const updateStatus = async (id, status) => {
     try {
       await axios.patch(`/appointment/${id}/status`, { status });
-      toast.success(`Appointment marked as ${status}`);
+      notify.success(`Appointment marked as ${status}`);
       getAppointments();
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     }
   };
 

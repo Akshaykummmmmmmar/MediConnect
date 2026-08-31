@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from '../../../../utils/axios';
-import { toast } from 'react-toastify';
+import notify from '../../../../utils/toast';
 import { Users, Download } from 'lucide-react';
 import Pagination from '../../../Pagination/pagination';
 import { exportCsv } from '../../../../utils/exportCsv';
@@ -17,7 +17,7 @@ const Patients = () => {
       setPatients(response.data.items || []);
       setTotalPages(response.data.totalPages || 1);
     } catch (e) {
-      toast.error(e.response?.data?.message || 'Failed to fetch patients');
+      notify.error(e.response?.data?.message || 'Failed to fetch patients');
     }
   };
 
@@ -36,7 +36,7 @@ const Patients = () => {
           className="admin-export-btn"
           onClick={() =>
             exportCsv('/export/patients.csv', 'patients.csv').catch(e =>
-              toast.error(e.response?.data?.message || 'Export failed')
+              notify.error(e.response?.data?.message || 'Export failed')
             )
           }
         >

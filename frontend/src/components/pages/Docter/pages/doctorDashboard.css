@@ -1,5 +1,5 @@
 .doctorDashboard-container {
-  min-height: 100vh;
+  min-height: auto;
 }
 
 /* Header Section */
@@ -45,7 +45,6 @@
 
 .stat-card {
   background: var(--bg-card);
-  min-height: 100vh;
   border-radius: 16px;
   box-shadow: var(--shadow);
   display: flex;
@@ -72,10 +71,10 @@
   justify-content: center;
 }
 
-.patient-icon { background: #e0f2fe; color: #0ea5e9; }
-.appointment-icon { background: #faf5ff; color: #a855f7; }
-.today-icon { background: #ecfdf5; color: #10b981; }
-.rating-icon { background: #fef9c3; color: #eab308; }
+.patient-icon { background: var(--icon-blue-bg); color: var(--icon-blue-text); }
+.appointment-icon { background: var(--icon-purple-bg); color: var(--icon-purple-text); }
+.today-icon { background: var(--icon-emerald-bg); color: var(--icon-emerald-text); }
+.rating-icon { background: var(--icon-yellow-bg); color: var(--icon-yellow-text); }
 
 .stat-info h3 {
   font-size: 26px;
@@ -173,7 +172,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  box-shadow: var(--shadow);
   color: var(--primary);
 }
 

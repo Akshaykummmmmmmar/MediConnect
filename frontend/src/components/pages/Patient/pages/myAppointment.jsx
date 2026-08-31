@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from '../../../../utils/axios';
-import { toast } from 'react-toastify';
+import notify from '../../../../utils/toast';
 import { 
   Calendar, 
   Clock, 
@@ -51,11 +51,11 @@ const MyAppointments = () => {
   const onCancelAppointment = async id => {
     try {
       await axios.delete(`/cancel/${id}`);
-      toast.success('Appointment cancelled successfully');
+      notify.success('Appointment cancelled successfully');
       setAppointments(appointments.filter(item => item._id !== id));
       openModal(false);
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     }
   };
 
@@ -67,7 +67,7 @@ const MyAppointments = () => {
   };
 
   const submitRating = async () => {
-    if (rating < 1) return toast.warning('Please select a rating');
+    if (rating < 1) return notify.warning('Please select a rating');
     try {
       await axios.post('/ratings', {
         doctor: rateAppointment.doctor?._id,
@@ -76,11 +76,11 @@ const MyAppointments = () => {
         rating,
         review,
       });
-      toast.success('Thank you for your feedback!');
+      notify.success('Thank you for your feedback!');
       setRatingModal(false);
       setRateAppointment(null);
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     }
   };
 
@@ -92,7 +92,7 @@ const MyAppointments = () => {
       setTotal(res.data.total || 0);
       setTotalPages(res.data.totalPages || 1);
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     } finally {
       setLoading(false);
     }

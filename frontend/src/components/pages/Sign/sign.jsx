@@ -1,5 +1,5 @@
 import { CircleArrowLeft, Stethoscope, ShieldCheck } from 'lucide-react';
-import { toast } from 'react-toastify';
+import notify from '../../../utils/toast';
 import { useNavigate } from 'react-router-dom';
 import { useRef } from 'react';
 import { Link } from 'react-router-dom';
@@ -80,27 +80,27 @@ const Sign = () => {
       !password ||
       !confirmPassword
     ) {
-      toast.error('Please fill all fields', { autoClose: 1000 });
+      notify.error('Please fill all fields', { autoClose: 1000 });
       return;
     }
     if (password !== confirmPassword) {
-      toast.error("Passwords don't match", { autoClose: 1000 });
+      notify.error("Passwords don't match", { autoClose: 1000 });
       return;
     }
     const errors = validateRegister(newUser);
     if (errors.length > 0) {
-      toast.error(errors[0], { autoClose: 1500 });
+      notify.error(errors[0], { autoClose: 1500 });
       return;
     }
     try {
       const res = await axios.post('/signUp/register', newUser);
-      toast.success(res.data.message || 'OTP sent to your email');
+      notify.success(res.data.message || 'OTP sent to your email');
       setTimeout(
         () => navigate(`/verify-otp?email=${encodeURIComponent(res.data.email)}`),
         1200
       );
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     }
   };
 
@@ -115,7 +115,7 @@ const Sign = () => {
         </div>
         <img
           src="Screenshot 2026-02-24 161808.png"
-          alt=""
+          alt="MediConnect secure healthcare platform"
           className="auth-img"
         />
         <div className="auth-sidebar-copy">

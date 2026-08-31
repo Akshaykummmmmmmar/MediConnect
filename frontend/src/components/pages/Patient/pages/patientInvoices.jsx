@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from '../../../../utils/axios';
-import { toast } from 'react-toastify';
+import notify from '../../../../utils/toast';
 import html2pdf from 'html2pdf.js-forked';
 import { Receipt, Calendar, User, CreditCard, CheckCircle2, Download } from 'lucide-react';
 import Pagination from '../../../Pagination/pagination';
@@ -24,7 +24,7 @@ const PatientInvoices = () => {
       setInvoices(res.data.items || []);
       setTotalPages(res.data.totalPages || 1);
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     } finally {
       setLoading(false);
     }
@@ -37,11 +37,11 @@ const PatientInvoices = () => {
   const payInvoice = async id => {
     try {
       await axios.patch(`/invoices/pay/${id}`, { paymentMethod: payMethod });
-      toast.success('Payment successful!');
+      notify.success('Payment successful!');
       setSelectedInvoice(null);
       getInvoices();
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     }
   };
 

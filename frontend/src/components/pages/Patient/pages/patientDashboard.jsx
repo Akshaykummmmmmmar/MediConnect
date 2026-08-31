@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../../../../utils/axios';
+import notify from '../../../../utils/toast';
 import { 
   Calendar, 
   FileText, 
@@ -40,7 +41,7 @@ const PatientsDashboard = () => {
       // Filter upcoming appointments (simulated logic: first 3)
       setUpcoming(appointments.slice(0, 3));
     } catch (error) {
-      console.error("Error fetching dashboard data:", error);
+      notify.error(error.response?.data?.message || error.message);
     } finally {
       setLoading(false);
     }

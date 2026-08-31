@@ -25,6 +25,9 @@ const Doctor = () => {
 
   return (
     <div className="admin-container">
+      <a href="#main-content" className="skip-to-content">
+        Skip to main content
+      </a>
       <div className="admin-sidebar">
         <div>
           <div className="sidebar-brand">
@@ -63,7 +66,7 @@ const Doctor = () => {
         </div>
       </div>
 
-      <div className="admin-main">
+      <div className="admin-main" id="main-content">
         <Outlet />
       </div>
     </div>

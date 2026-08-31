@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from '../../../../utils/axios';
-import { toast } from 'react-toastify';
+import notify from '../../../../utils/toast';
 import { 
   User, 
   Calendar as CalendarIcon, 
@@ -10,7 +10,11 @@ import {
   ChevronRight,
   Search,
   Star,
-  IndianRupee
+  IndianRupee,
+  CreditCard,
+  Smartphone,
+  Banknote,
+  ShieldCheck
 } from 'lucide-react';
 import './patientsAppoinments.css';
 
@@ -20,6 +24,8 @@ const BookAppointments = () => {
     date: '',
     slot: '',
   });
+
+  const [paymentMethod, setPaymentMethod] = useState('');
 
   const [doctorsList, setDoctorList] = useState([]);
   const [availableDates, setAvailableDates] = useState([]);
@@ -59,7 +65,12 @@ const BookAppointments = () => {
 
   const bookAppointment = async () => {
     if (!appointment.doctor || !appointment.date || !appointment.slot) {
-      toast.warning('Please complete all selections');
+      notify.warning('Please complete all selections');
+      return;
+    }
+
+    if (!paymentMethod) {
+      notify.warning('Please select a payment method');
       return;
     }
 
@@ -70,13 +81,15 @@ const BookAppointments = () => {
         patientId: patientId,
         date: appointment.date,
         time: appointment.slot,
+        paymentMethod,
       });
-      toast.success('Appointment booked successfully!');
+      notify.success('Appointment booked and payment received!');
       setAppointment({ doctor: '', date: '', slot: '' });
+      setPaymentMethod('');
       setBookedSlots({});
       setAvailableTimes([]);
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     } finally {
       setLoading(false);
     }
@@ -99,7 +112,7 @@ const BookAppointments = () => {
       setBookedSlots(res.data.booked || {});
     } catch (e) {
       console.error('Error fetching slots:', e);
-      toast.error(e.response?.data?.message || 'Could not load slots');
+      notify.error(e.response?.data?.message || 'Could not load slots');
     } finally {
       setSlotsLoading(false);
     }
@@ -269,12 +282,53 @@ const BookAppointments = () => {
             </div>
           </div>
 
+          {/* Step 4: Payment */}
+          <div className="booking-step">
+            <div className="step-number">04</div>
+            <div className="step-content">
+              <label><IndianRupee size={18} /> Payment Method</label>
+              {appointment.doctor && appointment.slot ? (
+                <>
+                  <div className="payment-options-grid">
+                    {[
+                      { id: 'Card', label: 'Card', icon: <CreditCard size={20} /> },
+                      { id: 'UPI', label: 'UPI', icon: <Smartphone size={20} /> },
+                      { id: 'Cash', label: 'Cash', icon: <Banknote size={20} /> },
+                      { id: 'Insurance', label: 'Insurance', icon: <ShieldCheck size={20} /> },
+                    ].map(opt => (
+                      <button
+                        key={opt.id}
+                        type="button"
+                        className={`payment-option ${paymentMethod === opt.id ? 'active' : ''}`}
+                        onClick={() => setPaymentMethod(opt.id)}
+                      >
+                        {opt.icon}
+                        <span>{opt.label}</span>
+                        {paymentMethod === opt.id && (
+                          <CheckCircle size={16} className="payment-check" />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="payment-amount-note">
+                    <IndianRupee size={16} />
+                    {selectedDoctor?.consultationFee
+                      ? `You will pay ₹${selectedDoctor.consultationFee} for this consultation.`
+                      : 'No consultation fee set.'}
+                  </div>
+                </>
+              ) : (
+                <p className="no-slots">Select a doctor, date and time slot first.</p>
+              )}
+            </div>
+          </div>
+
           <button 
             className="confirm-booking-btn" 
             onClick={bookAppointment}
-            disabled={loading || !appointment.slot}
+            disabled={loading || !appointment.slot || !paymentMethod}
           >
-            {loading ? 'Processing...' : 'Confirm Appointment'}
+            {loading ? 'Processing...' : `Pay ₹${selectedDoctor?.consultationFee || '0'} & Confirm`}
             {!loading && <ChevronRight size={20} />}
           </button>
         </div>

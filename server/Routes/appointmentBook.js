@@ -2,6 +2,7 @@ const express = require('express');
 const Appointment = require('../database/models/appointmentSchema');
 const Doctor = require('../database/models/docterSchema');
 const User = require('../database/models/userSchema');
+const Invoice = require('../database/models/invoiceSchema');
 const checkToken = require('../middleware/checkToken');
 const { sendNotification, logActivity } = require('../helpers');
 
@@ -59,12 +60,20 @@ router.post(
   checkToken(['patient', 'admin']),
   async (req, res) => {
     try {
-      const { doctorId, patientId, date, time } = req.body;
+      const { doctorId, patientId, date, time, paymentMethod } = req.body;
 
       if (!doctorId || !patientId || !date || !time) {
         return res.json({
           success: false,
           message: 'All fields are required',
+        });
+      }
+
+      const validMethods = ['Cash', 'Card', 'UPI', 'Insurance'];
+      if (paymentMethod && !validMethods.includes(paymentMethod)) {
+        return res.json({
+          success: false,
+          message: 'Invalid payment method',
         });
       }
 
@@ -118,15 +127,48 @@ router.post(
         return res.json({ success: false, message: 'Patient not found' });
       }
 
+      const feeAmount = Number(doctor.consultationFee) || 0;
+      const paid = Boolean(paymentMethod);
+
       const appointment = new Appointment({
         doctor: doctorId,
         patient: patientId,
         date: date,
         time: time,
         status: 'Pending',
+        feeAmount,
+        paymentStatus: paid ? 'Paid' : 'Pending',
+        paymentMethod: paid ? paymentMethod : '',
       });
 
       await appointment.save();
+
+      let invoice = null;
+      if (paid && feeAmount > 0) {
+        const count = await Invoice.countDocuments();
+        const invoiceNumber = `INV-${String(Date.now()).slice(-8)}-${count + 1}`;
+
+        invoice = await Invoice.create({
+          invoiceNumber,
+          appointment: appointment._id,
+          patient: patientId,
+          doctor: doctorId,
+          items: [{ description: `Consultation fee - Dr. ${doctor.user ? '' : ''}${doctor.specialization || 'Doctor'}`, amount: feeAmount }],
+          subtotal: feeAmount,
+          tax: 0,
+          total: feeAmount,
+          status: 'Paid',
+          paymentMethod,
+        });
+
+        await sendNotification({
+          user: patientId,
+          title: 'Payment Successful',
+          message: `Payment of ₹${feeAmount} for your appointment on ${date} at ${time} was successful. Invoice ${invoiceNumber} generated.`,
+          type: 'billing',
+          relatedId: invoice._id,
+        });
+      }
 
       await sendNotification({
         user: patientId,
@@ -154,10 +196,20 @@ router.post(
         details: `${patient.name} booked an appointment for ${date} at ${time}`,
       });
 
+      if (paid && invoice) {
+        await logActivity({
+          user: patientId,
+          role: 'patient',
+          action: 'PAYMENT_MADE',
+          details: `Invoice ${invoice.invoiceNumber} of ₹${feeAmount} was paid for the appointment`,
+        });
+      }
+
       res.json({
         success: true,
-        message: 'Appointment booked successfully',
+        message: paid ? 'Appointment booked and payment received' : 'Appointment booked successfully',
         appointment,
+        invoice,
       });
     } catch (e) {
       return res.status(500).json({

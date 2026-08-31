@@ -1,5 +1,5 @@
 import axios from '../../../../utils/axios';
-import { toast } from 'react-toastify';
+import notify from '../../../../utils/toast';
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, UserPlus } from 'lucide-react';
@@ -55,18 +55,18 @@ const AddDoctor = () => {
       !newDoctor.department ||
       !newDoctor.consultationFee
     ) {
-      toast.error('Please fill all fields', { autoClose: 1500 });
+      notify.error('Please fill all fields', { autoClose: 1500 });
       return;
     }
     
     if (newDoctor.password !== newDoctor.confirmPassword) {
-      toast.error("Passwords don't match!", { autoClose: 1500 });
+      notify.error("Passwords don't match!", { autoClose: 1500 });
       return;
     }
 
     try {
       await axios.post('/adddoctor', newDoctor);
-      toast.success('Doctor added successfully');
+      notify.success('Doctor added successfully');
       setNewDoctor({
         name: '',
         email: '',
@@ -81,7 +81,7 @@ const AddDoctor = () => {
       });
       setTimeout(() => navigate('/admin/doctors'), 1500);
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     }
   };
 
@@ -90,7 +90,7 @@ const AddDoctor = () => {
       const response = await axios.get('/department/get');
       setDepartments(response.data);
     } catch (e) {
-      toast.error(e.message);
+      notify.error(e.message);
     }
   };
 

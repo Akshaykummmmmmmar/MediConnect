@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
+import { Toaster } from 'sonner';
 import PrivateRoute from './components/PrivateRoute/privateRoute';
 import './App.css';
 
@@ -53,14 +53,11 @@ const Loading = () => (
 const App = () => {
   return (
     <Suspense fallback={<Loading />}>
-      <ToastContainer
+      <Toaster
         position="top-right"
-        autoClose={3000}
-        newestOnTop
-        closeOnClick
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
+        richColors
+        closeButton
+        duration={2500}
         limit={3}
       />
       <Routes>

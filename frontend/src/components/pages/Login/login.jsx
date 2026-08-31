@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { CircleArrowLeft, Stethoscope, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState, useRef } from 'react';
-import { toast } from 'react-toastify';
+import notify from '../../../utils/toast';
 import axios from '../../../utils/axios';
 import './login.css';
 
@@ -33,14 +33,14 @@ const Login = () => {
 
   const onLoginClick = async () => {
     if (!user.email || !user.password) {
-      toast.error('Please fill all fields', { autoClose: 1000 });
+      notify.error('Please fill all fields', { autoClose: 1000 });
       return;
     }
     try {
       const response = await axios.post('/login', user);
 
       if (response.data.needsOtp) {
-        toast.info('Please verify your email first');
+        notify.info('Please verify your email first');
         navigate(`/verify-otp?email=${encodeURIComponent(response.data.email)}`);
         return;
       }
@@ -70,8 +70,6 @@ const Login = () => {
           'specialization',
           response.data.doctor.specialization
         );
-        console.log(doctorId);
-        console.log(response.data.doctor);
       } else if (role === 'patient') {
         localStorage.setItem('age', response.data.patient.age);
         localStorage.setItem('address', response.data.patient.address);
@@ -80,9 +78,8 @@ const Login = () => {
         navigate('/patient');
       }
 
-      console.log(response.data);
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     }
   };
 
@@ -97,7 +94,7 @@ const Login = () => {
         </div>
         <img
           src="Gemini_Generated_Image_1psbey1psbey1psb.png"
-          alt=""
+          alt="MediConnect hospital management dashboard preview"
           className="auth-img"
         />
         <div className="auth-sidebar-copy">
@@ -117,18 +114,24 @@ const Login = () => {
           <h1>Welcome Back</h1>
           <p className="auth-subtitle">Log in to your MediConnect account</p>
           <div className="auth-field">
-            <label htmlFor="">Email</label>
+            <label htmlFor="login-email">Email</label>
             <input
-              type="text"
+              id="login-email"
+              type="email"
+              required
+              autoComplete="email"
               autoFocus
               onKeyDown={e => handleKeyDown(e, passwordRef)}
               onChange={e => onChange(e, 'email')}
             />
           </div>
           <div className="auth-field">
-            <label htmlFor="">Password</label>
+            <label htmlFor="login-password">Password</label>
             <input
+              id="login-password"
               type="password"
+              required
+              autoComplete="current-password"
               ref={passwordRef}
               onKeyDown={e => {
                 if (e.key === 'Enter') onLoginClick();

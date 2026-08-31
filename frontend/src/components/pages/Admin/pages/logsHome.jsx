@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+import notify from '../../../../utils/toast';
 import axios from '../../../../utils/axios';
 import { ScrollText, User, Clock } from 'lucide-react';
 import Pagination from '../../../Pagination/pagination';
@@ -30,7 +30,7 @@ const LogsHome = () => {
         setLogs(res.data.items || []);
         setTotalPages(res.data.totalPages || 1);
       } catch (e) {
-        toast.error(e.response?.data?.message || e.message);
+        notify.error(e.response?.data?.message || e.message);
       } finally {
         setLoading(false);
       }

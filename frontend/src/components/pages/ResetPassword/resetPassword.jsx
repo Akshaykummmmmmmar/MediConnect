@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import notify from '../../../utils/toast';
 import { CircleArrowLeft, Stethoscope, ShieldCheck, KeyRound } from 'lucide-react';
 import axios from '../../../utils/axios';
 import { isStrongPassword } from '../../../utils/validation';
@@ -15,18 +15,18 @@ const ResetPassword = () => {
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async () => {
-    if (!token) return toast.error('Reset token is required', { autoClose: 1000 });
+    if (!token) return notify.error('Reset token is required', { autoClose: 1000 });
     if (!isStrongPassword(password))
-      return toast.error('Password must be at least 6 characters', { autoClose: 1200 });
+      return notify.error('Password must be at least 6 characters', { autoClose: 1200 });
     if (password !== confirmPassword)
-      return toast.error("Passwords don't match", { autoClose: 1200 });
+      return notify.error("Passwords don't match", { autoClose: 1200 });
     try {
       setLoading(true);
       await axios.post('/reset-password', { token, password, confirmPassword });
-      toast.success('Password reset successfully. Please login.');
+      notify.success('Password reset successfully. Please login.');
       setTimeout(() => navigate('/login'), 1500);
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     } finally {
       setLoading(false);
     }

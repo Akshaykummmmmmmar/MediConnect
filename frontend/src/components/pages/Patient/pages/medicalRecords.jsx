@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from '../../../../utils/axios';
-import { toast } from 'react-toastify';
+import notify from '../../../../utils/toast';
 import {
   FolderOpen,
   Stethoscope,
@@ -36,7 +36,7 @@ const MedicalRecords = () => {
       const res = await axios.get(`/medical-records/patient/${patientId}`);
       setRecords(res.data || []);
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     } finally {
       setLoading(false);
     }

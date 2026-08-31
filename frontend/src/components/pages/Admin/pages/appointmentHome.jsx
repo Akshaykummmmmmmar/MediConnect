@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+import notify from '../../../../utils/toast';
 import axios from '../../../../utils/axios';
 import { Calendar, CheckCircle2, UserX, XCircle, Download } from 'lucide-react';
 import Pagination from '../../../Pagination/pagination';
@@ -33,17 +33,17 @@ const Appointment = () => {
       setAppointments(response.data.items || []);
       setTotalPages(response.data.totalPages || 1);
     } catch (e) {
-      toast.error(e.response?.data?.message || 'Failed to fetch appointments');
+      notify.error(e.response?.data?.message || 'Failed to fetch appointments');
     }
   };
 
   const updateStatus = async (id, status) => {
     try {
       await axios.patch(`/appointment/${id}/status`, { status });
-      toast.success(`Appointment marked as ${status}`);
+      notify.success(`Appointment marked as ${status}`);
       getAppointments();
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     }
   };
 
@@ -67,7 +67,7 @@ const Appointment = () => {
           className="admin-export-btn"
           onClick={() =>
             exportCsv('/export/appointments.csv', 'appointments.csv').catch(e =>
-              toast.error(e.response?.data?.message || 'Export failed')
+              notify.error(e.response?.data?.message || 'Export failed')
             )
           }
         >

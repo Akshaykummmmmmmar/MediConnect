@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import notify from '../../../utils/toast';
 import { CircleArrowLeft, Stethoscope, ShieldCheck, MailWarning } from 'lucide-react';
 import axios from '../../../utils/axios';
 import { isEmail } from '../../../utils/validation';
@@ -12,14 +12,14 @@ const ForgotPassword = () => {
   const [resetToken, setResetToken] = useState('');
 
   const onSubmit = async () => {
-    if (!isEmail(email)) return toast.error('Enter a valid email address', { autoClose: 1200 });
+    if (!isEmail(email)) return notify.error('Enter a valid email address', { autoClose: 1200 });
     try {
       setLoading(true);
       const res = await axios.post('/forgot-password', { email });
       setResetToken(res.data.resetToken);
-      toast.success(res.data.message);
+      notify.success(res.data.message);
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     } finally {
       setLoading(false);
     }

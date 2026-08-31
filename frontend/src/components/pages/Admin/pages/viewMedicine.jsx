@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../../../../utils/axios';
-import { toast } from 'react-toastify';
+import notify from '../../../../utils/toast';
 import { Pill, Plus, Download, AlertTriangle, Trash2, PackagePlus } from 'lucide-react';
 import Pagination from '../../../Pagination/pagination';
 import { exportCsv } from '../../../../utils/exportCsv';
@@ -40,7 +40,7 @@ const ViewMedicine = () => {
       setTotal(listRes.data.total || 0);
       setAlerts(alertRes.data || { lowStock: [], expiringSoon: [], expired: [] });
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Failed to fetch medicines');
+      notify.error(error.response?.data?.message || 'Failed to fetch medicines');
     } finally {
       setLoading(false);
     }
@@ -58,15 +58,15 @@ const ViewMedicine = () => {
   const saveStock = async () => {
     if (!stockModal) return;
     const qty = Number(stockQty);
-    if (Number.isNaN(qty) || qty < 0) return toast.error('Enter a valid quantity');
+    if (Number.isNaN(qty) || qty < 0) return notify.error('Enter a valid quantity');
     try {
       setSaving(true);
       await axios.patch(`/medicine/update/${stockModal._id}`, { quantity: qty });
-      toast.success('Stock updated');
+      notify.success('Stock updated');
       setStockModal(null);
       getMedicines();
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     } finally {
       setSaving(false);
     }
@@ -76,10 +76,10 @@ const ViewMedicine = () => {
     if (!window.confirm(`Delete "${med.name}" from inventory?`)) return;
     try {
       await axios.delete(`/medicine/delete/${med._id}`);
-      toast.success('Medicine deleted');
+      notify.success('Medicine deleted');
       getMedicines();
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     }
   };
 
@@ -99,7 +99,7 @@ const ViewMedicine = () => {
             className="admin-export-btn"
             onClick={() =>
               exportCsv('/export/medicines.csv', 'medicines.csv').catch(e =>
-                toast.error(e.response?.data?.message || 'Export failed')
+                notify.error(e.response?.data?.message || 'Export failed')
               )
             }
           >

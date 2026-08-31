@@ -1,6 +1,6 @@
 import axios from '../../../../utils/axios';
 import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+import notify from '../../../../utils/toast';
 import { Building2 } from 'lucide-react';
 import './departmentHome.css';
 
@@ -12,7 +12,7 @@ const Department = () => {
       const response = await axios.get('/department/get');
       setDepartment(response.data);
     } catch (e) {
-      toast.error(e.response?.data?.message || 'Failed to fetch departments');
+      notify.error(e.response?.data?.message || 'Failed to fetch departments');
     }
   };
 
