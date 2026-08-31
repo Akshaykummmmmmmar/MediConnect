@@ -18,7 +18,7 @@ const paginate = (array, page = 1, limit = 10) => {
   };
 };
 
-router.get('/get/patients', async (req, res) => {
+router.get('/get/patients', checkToken(['admin', 'doctor']), async (req, res) => {
   try {
     const { page, limit, search } = req.query;
 
@@ -40,7 +40,7 @@ router.get('/get/patients', async (req, res) => {
   }
 });
 
-router.get('/patient/profile/:id', async (req, res) => {
+router.get('/patient/profile/:id', checkToken(['admin', 'doctor', 'patient']), async (req, res) => {
   try {
     const user = await User.findById(req.params.id, '-password');
     const patient = await Patient.findOne({ user: req.params.id });

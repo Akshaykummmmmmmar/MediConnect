@@ -1,6 +1,5 @@
 .doctor-availability-container {
-  padding: 24px;
-  max-width: 760px;
+  min-height: 100vh;
 }
 
 .availability-card {

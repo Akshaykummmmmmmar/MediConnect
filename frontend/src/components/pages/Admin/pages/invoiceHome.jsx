@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import notify from '../../../../utils/toast';
 import axios from '../../../../utils/axios';
 import { Receipt, User, Stethoscope, CreditCard } from 'lucide-react';
 import Pagination from '../../../Pagination/pagination';
@@ -19,7 +19,7 @@ const InvoiceHome = () => {
       setInvoices(res.data.items || []);
       setTotalPages(res.data.totalPages || 1);
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     } finally {
       setLoading(false);
     }
@@ -37,16 +37,15 @@ const InvoiceHome = () => {
   const markPaid = async id => {
     try {
       await axios.patch(`/invoices/pay/${id}`, { paymentMethod: 'Cash' });
-      toast.success('Invoice marked as paid');
+      notify.success('Invoice marked as paid');
       getInvoices();
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     }
   };
 
   return (
     <div className="invoice-home-container">
-      <ToastContainer position="top-right" autoClose={3000} />
 
       <div className="dashboard-header">
         <div>

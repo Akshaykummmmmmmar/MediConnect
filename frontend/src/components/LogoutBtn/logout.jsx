@@ -1,11 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { LogOut } from 'lucide-react';
+import { disconnectSocket } from '../../utils/socket';
 import './logout.css';
 
 const Logout = () => {
   const navigate = useNavigate();
   const onClick = () => {
-    localStorage.removeItem('token');
+    disconnectSocket();
+    localStorage.clear();
     navigate('/');
   };
   return (

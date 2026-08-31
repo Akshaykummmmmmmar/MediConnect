@@ -116,6 +116,17 @@
   background: var(--bg);
   color: var(--text);
   transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+}
+
+/* Standardize every page inside the main area: fill the full width with
+   uniform padding. Higher specificity than each page's own root rule so
+   per-page max-width centering (760px/900px/1200px...) is overridden. */
+.admin-main > div {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: clamp(24px, 2.5vw, 32px);
 }
 
 @media (max-width: 900px) {
@@ -207,6 +218,22 @@
   }
 
   .sidebar-bottom {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    padding: 8px 10px;
+    border-top: 1px solid var(--sidebar-divider);
+    border-left: none;
+    width: 100%;
+  }
+
+  .sidebar-bottom > * {
+    flex: 1;
+  }
+
+  .sidebar-bottom .theme-toggle span,
+  .sidebar-bottom .logout-btn span,
+  .sidebar-bottom .notification-bell-btn + * {
     display: none;
   }
 
@@ -214,4 +241,43 @@
     width: 100%;
     margin-left: 0;
   }
+}
+
+/* ---- Shared utility classes (replaces common inline styles) ---- */
+.flex-row-center {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.flex-row {
+  display: flex;
+  gap: 10px;
+}
+
+.icon-primary {
+  color: var(--primary);
+}
+
+.icon-muted {
+  color: var(--text-muted);
+}
+
+.text-muted-sm {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.empty-state-placeholder {
+  padding: 40px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.loading-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  color: var(--text-muted);
 }

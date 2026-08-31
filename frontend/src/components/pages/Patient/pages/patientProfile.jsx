@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import notify from '../../../../utils/toast';
 import axios from '../../../../utils/axios';
 import {
   User,
@@ -39,22 +39,22 @@ const PatientProfile = () => {
 
   const changePassword = async () => {
     if (!passwordForm.oldPassword || !passwordForm.newPassword || !passwordForm.confirmPassword) {
-      return toast.error('All fields are required');
+      return notify.error('All fields are required');
     }
     if (passwordForm.newPassword.length < 6) {
-      return toast.error('New password must be at least 6 characters');
+      return notify.error('New password must be at least 6 characters');
     }
     if (passwordForm.newPassword !== passwordForm.confirmPassword) {
-      return toast.error("New passwords don't match");
+      return notify.error("New passwords don't match");
     }
     try {
       setChangingPassword(true);
       await axios.patch('/change-password', passwordForm);
-      toast.success('Password changed successfully');
+      notify.success('Password changed successfully');
       setShowPasswordModal(false);
       setPasswordForm({ oldPassword: '', newPassword: '', confirmPassword: '' });
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     } finally {
       setChangingPassword(false);
     }
@@ -62,7 +62,6 @@ const PatientProfile = () => {
 
   return (
     <div className="profile-page-wrapper">
-      <ToastContainer position="top-right" autoClose={3000} />
       <div className="profile-header-card">
         <div className="profile-banner"></div>
         <div className="profile-main-info">

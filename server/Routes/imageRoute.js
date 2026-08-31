@@ -1,25 +1,49 @@
 const express = require('express');
 const multer = require('multer');
+const path = require('path');
 const uniqid = require('uniqid');
 const checkToken = require('../middleware/checkToken');
 
 const router = express.Router();
+
+const ALLOWED_MIMES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+const MAX_SIZE = 2 * 1024 * 1024; // 2MB
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'public/');
   },
   filename: (req, file, cb) => {
-    cb(null, uniqid() + '_' + file.originalname);
+    const ext = path.extname(file.originalname) || '.jpg';
+    cb(null, uniqid() + ext.toLowerCase());
   },
 });
 
-const upload = multer({ storage: storage });
+const fileFilter = (req, file, cb) => {
+  if (!ALLOWED_MIMES.includes(file.mimetype)) {
+    return cb(new Error('Only image files (JPEG, PNG, WEBP, GIF) are allowed'));
+  }
+  cb(null, true);
+};
 
-router.post('/image-upload', upload.single('image'), (req, res) => {
-  res.status(201).json({
-    message: 'Image uploaded',
-    url: `http://localhost:4000/${req.file.filename}`,
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: MAX_SIZE },
+  fileFilter,
+});
+
+router.post('/image-upload', checkToken(['admin', 'doctor']), (req, res) => {
+  upload.single('image')(req, res, err => {
+    if (err) {
+      return res.status(400).json({ message: err.message });
+    }
+    if (!req.file) {
+      return res.status(400).json({ message: 'No image uploaded' });
+    }
+    res.status(201).json({
+      message: 'Image uploaded',
+      url: `${req.protocol}://${req.get('host')}/${req.file.filename}`,
+    });
   });
 });
 

@@ -1,6 +1,4 @@
 .doctorProfile-page {
-  padding: 40px;
-  background: var(--bg);
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -340,10 +338,10 @@
 }
 
 .change-password-body {
-  padding: 24px;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  padding: 24px;
 }
 
 .password-field {

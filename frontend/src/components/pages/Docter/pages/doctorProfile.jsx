@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import notify from '../../../../utils/toast';
 import axios from '../../../../utils/axios';
 import { UserRound, Mail, Briefcase, IndianRupee, Star, Edit3, Save, X, Stethoscope, Lock } from 'lucide-react';
 import './doctorProfile.css';
@@ -32,22 +32,22 @@ const DoctorProfile = () => {
 
   const changePassword = async () => {
     if (!passwordForm.oldPassword || !passwordForm.newPassword || !passwordForm.confirmPassword) {
-      return toast.error('All fields are required');
+      return notify.error('All fields are required');
     }
     if (passwordForm.newPassword.length < 6) {
-      return toast.error('New password must be at least 6 characters');
+      return notify.error('New password must be at least 6 characters');
     }
     if (passwordForm.newPassword !== passwordForm.confirmPassword) {
-      return toast.error("New passwords don't match");
+      return notify.error("New passwords don't match");
     }
     try {
       setChangingPassword(true);
       await axios.patch('/change-password', passwordForm);
-      toast.success('Password changed successfully');
+      notify.success('Password changed successfully');
       setShowPasswordModal(false);
       setPasswordForm({ oldPassword: '', newPassword: '', confirmPassword: '' });
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     } finally {
       setChangingPassword(false);
     }
@@ -79,7 +79,7 @@ const DoctorProfile = () => {
         } catch { /* ratings optional */ }
       }
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     }
   };
 
@@ -90,7 +90,7 @@ const DoctorProfile = () => {
   const saveProfile = async () => {
     try {
       const id = profile?._id;
-      if (!id) return toast.error('Doctor not found');
+      if (!id) return notify.error('Doctor not found');
       await axios.patch(`/doctor/update/${id}`, {
         about: form.about,
         qualifications: form.qualifications.split(',').map(q => q.trim()).filter(Boolean),
@@ -98,17 +98,16 @@ const DoctorProfile = () => {
         consultationFee: Number(form.consultationFee),
         specialization: form.specialization,
       });
-      toast.success('Profile updated successfully');
+      notify.success('Profile updated successfully');
       setEditing(false);
       fetchProfile();
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     }
   };
 
   return (
     <div className="doctorProfile-page">
-      <ToastContainer position="top-right" autoClose={3000} />
 
       {!profile ? (
         <div className="loading-state">Loading profile...</div>
@@ -190,7 +189,7 @@ const DoctorProfile = () => {
               <div className="profile-field">
                 <span className="profile-field-label">Email Address</span>
                 <span className="profile-field-value">
-                  <Mail size={18} style={{ color: 'var(--text-muted)' }} />
+                  <Mail size={18} className="icon-muted" />
                   {localStorage.getItem('userEmail')}
                 </span>
               </div>
@@ -198,7 +197,7 @@ const DoctorProfile = () => {
               <div className="profile-field">
                 <span className="profile-field-label">Experience</span>
                 <span className="profile-field-value">
-                  <Briefcase size={18} style={{ color: 'var(--text-muted)' }} />
+                  <Briefcase size={18} className="icon-muted" />
                   {profile.experience} Years
                 </span>
               </div>
@@ -206,7 +205,7 @@ const DoctorProfile = () => {
               <div className="profile-field">
                 <span className="profile-field-label">Consultation Fee</span>
                 <span className="profile-field-value">
-                  <IndianRupee size={18} style={{ color: 'var(--text-muted)' }} />
+                  <IndianRupee size={18} className="icon-muted" />
                   {profile.consultationFee}
                 </span>
               </div>
@@ -215,7 +214,7 @@ const DoctorProfile = () => {
                 <div className="profile-field">
                   <span className="profile-field-label">Qualifications</span>
                   <span className="profile-field-value">
-                    <Stethoscope size={18} style={{ color: 'var(--text-muted)' }} />
+                    <Stethoscope size={18} className="icon-muted" />
                     {profile.qualifications.join(', ')}
                   </span>
                 </div>

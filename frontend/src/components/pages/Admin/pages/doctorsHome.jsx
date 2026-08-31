@@ -1,5 +1,5 @@
 import axios from '../../../../utils/axios';
-import { ToastContainer, toast } from 'react-toastify';
+import notify from '../../../../utils/toast';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Plus, Trash2, AlertTriangle, Star, Download } from 'lucide-react';
@@ -23,7 +23,7 @@ const DoctorDash = () => {
       setDoctor(response.data.items || []);
       setTotalPages(response.data.totalPages || 1);
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     }
   };
 
@@ -31,9 +31,9 @@ const DoctorDash = () => {
     try {
       await axios.delete(`/doctor/delete/${id}`);
       getDoctors();
-      toast.success('Doctor deleted successfully');
+      notify.success('Doctor deleted successfully');
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     }
   };
 
@@ -43,16 +43,15 @@ const DoctorDash = () => {
 
   return (
     <div className="admin-page-container">
-      <ToastContainer />
       
       <div className="admin-page-header">
         <h2>Doctors Management</h2>
-        <div style={{ display: 'flex', gap: '10px' }}>
+        <div className="flex-row">
           <button
             className="admin-export-btn"
             onClick={() =>
               exportCsv('/export/doctors.csv', 'doctors.csv').catch(e =>
-                toast.error(e.response?.data?.message || 'Export failed')
+                notify.error(e.response?.data?.message || 'Export failed')
               )
             }
           >
@@ -61,7 +60,7 @@ const DoctorDash = () => {
           </button>
           <button
             className="admin-add-btn"
-            onClick={() => navigate('/admin/add/doctor')}
+            onClick={() => navigate('/admin/doctors/add')}
           >
             <Plus size={18} />
             Add Doctor
@@ -98,7 +97,7 @@ const DoctorDash = () => {
                   <td>₹{item.consultationFee}</td>
                   <td>
                     <div>{workingDays}</div>
-                    <small style={{ color: 'var(--text-muted)' }}>
+                    <small className="text-muted-sm">
                       {item.availability?.startTime} - {item.availability?.endTime}
                     </small>
                   </td>
@@ -130,7 +129,7 @@ const DoctorDash = () => {
         </table>
         
         {doctor.length === 0 && (
-          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>
+          <div className="empty-state-placeholder">
             No doctors found. Add a new doctor to see them here.
           </div>
         )}

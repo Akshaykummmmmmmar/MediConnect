@@ -58,7 +58,7 @@ router.post('/ratings', checkToken(['patient']), async (req, res) => {
   }
 });
 
-router.get('/ratings/doctor/:id', async (req, res) => {
+router.get('/ratings/doctor/:id', checkToken(['admin', 'doctor', 'patient']), async (req, res) => {
   try {
     const ratings = await Rating.find({ doctor: req.params.id })
       .populate('patient', 'name')

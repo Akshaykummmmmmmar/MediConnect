@@ -19,18 +19,21 @@ import './admin.css';
 const Admin = () => {
   const menu = [
     { to: '/admin', end: true, icon: LayoutDashboard, label: 'Dashboard' },
-    { to: 'department/dash', end: true, icon: Building2, label: 'Departments' },
-    { to: 'doctor/dash', end: true, icon: Stethoscope, label: 'Doctors' },
-    { to: 'patient/dash', end: true, icon: Users, label: 'Patients' },
-    { to: 'appointment/dash', end: true, icon: CalendarCheck, label: 'Appointments' },
-    { to: 'medicines/dash', end: true, icon: Pill, label: 'Medicines' },
-    { to: 'analytics/dash', end: true, icon: BarChart3, label: 'Analytics' },
-    { to: 'invoices/dash', end: true, icon: Receipt, label: 'Invoices' },
-    { to: 'logs/dash', end: true, icon: ScrollText, label: 'Activity Logs' },
+    { to: 'departments', end: true, icon: Building2, label: 'Departments' },
+    { to: 'doctors', end: true, icon: Stethoscope, label: 'Doctors' },
+    { to: 'patients', end: true, icon: Users, label: 'Patients' },
+    { to: 'appointments', end: true, icon: CalendarCheck, label: 'Appointments' },
+    { to: 'medicines', end: true, icon: Pill, label: 'Medicines' },
+    { to: 'analytics', end: true, icon: BarChart3, label: 'Analytics' },
+    { to: 'invoices', end: true, icon: Receipt, label: 'Invoices' },
+    { to: 'logs', end: true, icon: ScrollText, label: 'Activity Logs' },
   ];
 
   return (
     <div className="admin-container">
+      <a href="#main-content" className="skip-to-content">
+        Skip to main content
+      </a>
       <div className="admin-sidebar">
         <div>
           <div className="sidebar-brand">
@@ -68,7 +71,7 @@ const Admin = () => {
           <Logout />
         </div>
       </div>
-      <div className="admin-main">
+      <div className="admin-main" id="main-content">
         <Outlet />
       </div>
     </div>

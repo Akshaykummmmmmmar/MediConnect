@@ -21,9 +21,31 @@ const appointmentSchema = mongoose.Schema(
       enum: ['Pending', 'Confirmed', 'Completed', 'Cancelled', 'No-show', 'Booked'],
       default: 'Pending',
     },
+
+    feeAmount: {
+      type: Number,
+      default: 0,
+    },
+
+    paymentStatus: {
+      type: String,
+      enum: ['Pending', 'Paid'],
+      default: 'Pending',
+    },
+
+    paymentMethod: {
+      type: String,
+      enum: ['Cash', 'Card', 'UPI', 'Insurance', ''],
+      default: '',
+    },
   },
   { timestamps: true }
 );
+
+appointmentSchema.index({ date: 1, time: 1 });
+appointmentSchema.index({ doctor: 1, date: 1 });
+appointmentSchema.index({ patient: 1, date: 1 });
+appointmentSchema.index({ status: 1 });
 
 const Appointment = mongoose.model('Appointment', appointmentSchema);
 

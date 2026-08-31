@@ -6,6 +6,7 @@ import {
   LayoutDashboard,
   CalendarCheck,
   CalendarClock,
+  CalendarRange,
   UserCircle,
   Clock3,
   Activity,
@@ -15,14 +16,18 @@ import './docter.css';
 const Doctor = () => {
   const menu = [
     { to: '/doctor', end: true, icon: LayoutDashboard, label: 'Dashboard' },
-    { to: 'doctor/appointments/', end: true, icon: CalendarCheck, label: 'Appointments' },
-    { to: 'doctor/appointment/today', end: true, icon: CalendarClock, label: "Today's Appointments" },
-    { to: 'doctor/availability/dash', end: true, icon: Clock3, label: 'My Availability' },
-    { to: 'doctor/profile/dash', end: true, icon: UserCircle, label: 'Profile' },
+    { to: 'appointments', end: true, icon: CalendarCheck, label: 'Appointments' },
+    { to: 'calendar', end: true, icon: CalendarRange, label: 'Calendar' },
+    { to: 'today', end: true, icon: CalendarClock, label: "Today's Appointments" },
+    { to: 'availability', end: true, icon: Clock3, label: 'My Availability' },
+    { to: 'profile', end: true, icon: UserCircle, label: 'Profile' },
   ];
 
   return (
     <div className="admin-container">
+      <a href="#main-content" className="skip-to-content">
+        Skip to main content
+      </a>
       <div className="admin-sidebar">
         <div>
           <div className="sidebar-brand">
@@ -61,7 +66,7 @@ const Doctor = () => {
         </div>
       </div>
 
-      <div className="admin-main">
+      <div className="admin-main" id="main-content">
         <Outlet />
       </div>
     </div>

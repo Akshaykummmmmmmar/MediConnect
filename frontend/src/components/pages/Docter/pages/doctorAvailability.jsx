@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import notify from '../../../../utils/toast';
 import axios from '../../../../utils/axios';
 import { Clock3, CalendarDays, Save } from 'lucide-react';
 import './doctorAvailability.css';
@@ -47,7 +47,7 @@ const DoctorAvailability = () => {
           });
         }
       } catch (e) {
-        toast.error(e.response?.data?.message || e.message);
+        notify.error(e.response?.data?.message || e.message);
       } finally {
         setLoading(false);
       }
@@ -66,10 +66,10 @@ const DoctorAvailability = () => {
 
   const saveAvailability = async () => {
     if (form.workingDays.length === 0) {
-      return toast.error('Select at least one working day');
+      return notify.error('Select at least one working day');
     }
     if (form.endTime <= form.startTime) {
-      return toast.error('End time must be after start time');
+      return notify.error('End time must be after start time');
     }
     try {
       setSaving(true);
@@ -77,14 +77,14 @@ const DoctorAvailability = () => {
       if (!doctorIdToUpdate) {
         const res = await axios.get(`/doctor/byUser/${userId}`);
         const id = res.data.doctor?._id || res.data._id;
-        if (!id) return toast.error('Doctor not found');
+        if (!id) return notify.error('Doctor not found');
         await axios.patch(`/doctor/update/${id}`, { availability: form });
       } else {
         await axios.patch(`/doctor/update/${doctorIdToUpdate}`, { availability: form });
       }
-      toast.success('Availability updated successfully');
+      notify.success('Availability updated successfully');
     } catch (e) {
-      toast.error(e.response?.data?.message || e.message);
+      notify.error(e.response?.data?.message || e.message);
     } finally {
       setSaving(false);
     }
@@ -92,7 +92,6 @@ const DoctorAvailability = () => {
 
   return (
     <div className="doctor-availability-container">
-      <ToastContainer position="top-right" autoClose={3000} />
 
       <div className="dashboard-header">
         <div>

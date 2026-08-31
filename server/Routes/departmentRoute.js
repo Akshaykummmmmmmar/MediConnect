@@ -5,7 +5,7 @@ const checkToken = require('../middleware/checkToken');
 
 const router = express.Router();
 
-router.post('/add/department', async (req, res) => {
+router.post('/add/department', checkToken(['admin']), async (req, res) => {
   try {
     const { name, description } = req.body;
 

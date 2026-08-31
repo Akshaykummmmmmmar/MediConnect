@@ -58,6 +58,17 @@
   flex-direction: column;
 }
 
+@media (max-width: 540px) {
+  .notification-panel {
+    position: fixed;
+    bottom: auto;
+    top: 80px;
+    right: 16px;
+    left: auto;
+    width: min(340px, calc(100vw - 32px));
+  }
+}
+
 .notification-panel-header {
   display: flex;
   align-items: center;
