@@ -189,7 +189,7 @@ const DoctorProfile = () => {
               <div className="profile-field">
                 <span className="profile-field-label">Email Address</span>
                 <span className="profile-field-value">
-                  <Mail size={18} style={{ color: 'var(--text-muted)' }} />
+                  <Mail size={18} className="icon-muted" />
                   {localStorage.getItem('userEmail')}
                 </span>
               </div>
@@ -197,7 +197,7 @@ const DoctorProfile = () => {
               <div className="profile-field">
                 <span className="profile-field-label">Experience</span>
                 <span className="profile-field-value">
-                  <Briefcase size={18} style={{ color: 'var(--text-muted)' }} />
+                  <Briefcase size={18} className="icon-muted" />
                   {profile.experience} Years
                 </span>
               </div>
@@ -205,7 +205,7 @@ const DoctorProfile = () => {
               <div className="profile-field">
                 <span className="profile-field-label">Consultation Fee</span>
                 <span className="profile-field-value">
-                  <IndianRupee size={18} style={{ color: 'var(--text-muted)' }} />
+                  <IndianRupee size={18} className="icon-muted" />
                   {profile.consultationFee}
                 </span>
               </div>
@@ -214,7 +214,7 @@ const DoctorProfile = () => {
                 <div className="profile-field">
                   <span className="profile-field-label">Qualifications</span>
                   <span className="profile-field-value">
-                    <Stethoscope size={18} style={{ color: 'var(--text-muted)' }} />
+                    <Stethoscope size={18} className="icon-muted" />
                     {profile.qualifications.join(', ')}
                   </span>
                 </div>

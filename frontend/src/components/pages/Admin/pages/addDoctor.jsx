@@ -109,7 +109,7 @@ const AddDoctor = () => {
 
       <div className="add-form-card">
         <div className="add-form-illustration">
-          <UserPlus size={64} style={{ color: 'var(--primary)', marginBottom: '20px' }} />
+          <UserPlus size={64} className="icon-primary" style={{ marginBottom: '20px' }} />
           <h3>Doctor Onboarding</h3>
           <p>Please enter the doctor's details to create their profile and grant them access to the portal.</p>
         </div>

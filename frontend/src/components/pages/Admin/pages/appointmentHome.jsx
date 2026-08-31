@@ -59,8 +59,8 @@ const Appointment = () => {
   return (
     <div className="admin-page-container">
       <div className="admin-page-header">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Calendar size={28} style={{ color: 'var(--primary)' }} />
+        <div className="flex-row-center">
+          <Calendar size={28} className="icon-primary" />
           <h2>All Appointments</h2>
         </div>
         <button

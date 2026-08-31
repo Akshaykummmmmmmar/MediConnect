@@ -45,7 +45,7 @@ const MedicalRecords = lazy(() => import('./components/pages/Patient/pages/medic
 const PatientInvoices = lazy(() => import('./components/pages/Patient/pages/patientInvoices'));
 
 const Loading = () => (
-  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh', color: 'var(--text-muted)' }}>
+  <div className="loading-placeholder">
     Loading...
   </div>
 );

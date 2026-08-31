@@ -58,7 +58,7 @@ const AddMedicine = () => {
 
       <div className="add-form-card">
         <div className="add-form-illustration">
-          <Pill size={64} style={{ color: 'var(--primary)', marginBottom: '20px' }} />
+          <Pill size={64} className="icon-primary" style={{ marginBottom: '20px' }} />
           <h3>Inventory Management</h3>
           <p>Add new medicine details to update the hospital pharmacy inventory.</p>
         </div>

@@ -90,11 +90,11 @@ const ViewMedicine = () => {
   return (
     <div className="admin-page-container">
       <div className="admin-page-header">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <Pill size={28} style={{ color: 'var(--primary)' }} />
+        <div className="flex-row-center">
+          <Pill size={28} className="icon-primary" />
           <h2>Pharmacy Inventory</h2>
         </div>
-        <div style={{ display: 'flex', gap: '10px' }}>
+        <div className="flex-row">
           <button
             className="admin-export-btn"
             onClick={() =>
@@ -167,7 +167,7 @@ const ViewMedicine = () => {
                   <td>
                     <strong>{med.name}</strong>
                     {med.description && (
-                      <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>
+                      <div className="text-muted-sm">
                         {med.description}
                       </div>
                     )}
@@ -185,7 +185,7 @@ const ViewMedicine = () => {
                     </span>
                   </td>
                   <td>
-                    <div style={{ display: 'inline-flex', gap: '6px' }}>
+                    <div className="flex-row" style={{ display: 'inline-flex' }}>
                       <button
                         className="inventory-action-btn"
                         title="Update stock"

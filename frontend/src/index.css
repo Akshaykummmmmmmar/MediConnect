@@ -101,83 +101,83 @@ body {
 }
 
 [data-theme='dark'] {
-  --bg: #0f172a;
-  --bg-card: #1e293b;
-  --bg-subtle: #172033;
-  --bg-hover: #243349;
-  --bg-active: #27406b;
-  --text: #e2e8f0;
-  --text-body: #cbd5e1;
-  --text-muted: #94a3b8;
-  --border: #334155;
-  --border-strong: #475569;
+  --bg: #080e1a;
+  --bg-card: #111927;
+  --bg-subtle: #0d1420;
+  --bg-hover: #182436;
+  --bg-active: #1f3460;
+  --text: #d6e0ed;
+  --text-body: #b0bfce;
+  --text-muted: #6e7f94;
+  --border: #1e2d42;
+  --border-strong: #2d4055;
   --primary: #3b82f6;
   --primary-hover: #2563eb;
-  --primary-soft: rgba(59, 130, 246, 0.16);
+  --primary-soft: rgba(59, 130, 246, 0.12);
   --danger: #f87171;
   --danger-hover: #ef4444;
   --success: #34d399;
   --success-hover: #10b981;
   --warning: #fbbf24;
-  --success-soft-bg: rgba(52, 211, 153, 0.15);
+  --success-soft-bg: rgba(52, 211, 153, 0.1);
   --success-soft-text: #6ee7b7;
-  --warning-soft-bg: rgba(251, 191, 36, 0.15);
+  --warning-soft-bg: rgba(251, 191, 36, 0.1);
   --warning-soft-text: #fcd34d;
-  --danger-soft-bg: rgba(248, 113, 113, 0.15);
+  --danger-soft-bg: rgba(248, 113, 113, 0.1);
   --danger-soft-text: #fca5a5;
-  --table-head-bg: #0f172a;
-  --table-head-text: #e2e8f0;
-  --shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
-  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.45);
-  --sidebar-bg-grad: linear-gradient(180deg, #122a4d 0%, #0a1730 100%);
-  --sidebar-text: #9fb0c4;
+  --table-head-bg: #080e1a;
+  --table-head-text: #d6e0ed;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.6);
+  --sidebar-bg-grad: linear-gradient(180deg, #0d1f3a 0%, #060f20 100%);
+  --sidebar-text: #7f93ad;
   --sidebar-text-hover: #ffffff;
-  --sidebar-active-bg: rgba(255, 255, 255, 0.1);
+  --sidebar-active-bg: rgba(255, 255, 255, 0.08);
   --sidebar-active-border: #60a5fa;
-  --sidebar-divider: rgba(255, 255, 255, 0.08);
-  --sidebar-muted: #7c8da6;
+  --sidebar-divider: rgba(255, 255, 255, 0.06);
+  --sidebar-muted: #5e7290;
   /* Home page tokens - dark */
-  --home-bg: #0f172a;
-  --home-nav-bg: rgba(15, 23, 42, 0.9);
-  --home-nav-border: #334155;
-  --home-logo-color: #e2e8f0;
-  --home-text: #e2e8f0;
-  --home-text-secondary: #94a3b8;
-  --home-text-muted: #94a3b8;
-  --home-surface: #1e293b;
-  --home-border: #334155;
-  --home-surface-shadow: rgba(0, 0, 0, 0.2);
-  --home-card-shadow: rgba(0, 0, 0, 0.3);
+  --home-bg: #080e1a;
+  --home-nav-bg: rgba(8, 14, 26, 0.92);
+  --home-nav-border: #1e2d42;
+  --home-logo-color: #d6e0ed;
+  --home-text: #d6e0ed;
+  --home-text-secondary: #6e7f94;
+  --home-text-muted: #6e7f94;
+  --home-surface: #111927;
+  --home-border: #1e2d42;
+  --home-surface-shadow: rgba(0, 0, 0, 0.3);
+  --home-card-shadow: rgba(0, 0, 0, 0.4);
   --home-accent: #3b82f6;
   --home-accent-hover: #2563eb;
-  --home-accent-soft: rgba(59, 130, 246, 0.16);
+  --home-accent-soft: rgba(59, 130, 246, 0.12);
   --home-hero-gradient: linear-gradient(180deg, var(--home-bg) 0%, var(--home-surface) 54%, var(--home-bg) 100%);
-  --home-card-bg: #1e293b;
+  --home-card-bg: #111927;
   /* Auth page tokens - dark */
-  --auth-bg: #0f172a;
-  --auth-card-bg: #1e293b;
-  --auth-card-border: #334155;
-  --auth-card-shadow: rgba(0, 0, 0, 0.3);
-  --auth-input-bg: #172033;
-  --auth-input-border: #334155;
-  --auth-input-focus-bg: #1e293b;
-  --auth-text: #e2e8f0;
-  --auth-text-secondary: #94a3b8;
-  --auth-label: #cbd5e1;
-  --auth-sidebar-gradient: linear-gradient(160deg, #0f172a 0%, #1e40af 100%);
-  --auth-main-gradient: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
-  --auth-back-bg: rgba(15, 23, 42, 0.9);
-  --auth-back-shadow: rgba(0, 0, 0, 0.3);
+  --auth-bg: #080e1a;
+  --auth-card-bg: #111927;
+  --auth-card-border: #1e2d42;
+  --auth-card-shadow: rgba(0, 0, 0, 0.4);
+  --auth-input-bg: #0d1420;
+  --auth-input-border: #1e2d42;
+  --auth-input-focus-bg: #111927;
+  --auth-text: #d6e0ed;
+  --auth-text-secondary: #6e7f94;
+  --auth-label: #b0bfce;
+  --auth-sidebar-gradient: linear-gradient(160deg, #080e1a 0%, #1e40af 100%);
+  --auth-main-gradient: linear-gradient(180deg, #080e1a 0%, #111927 100%);
+  --auth-back-bg: rgba(8, 14, 26, 0.92);
+  --auth-back-shadow: rgba(0, 0, 0, 0.4);
   /* Icon backgrounds - dark */
-  --icon-blue-bg: rgba(14, 165, 233, 0.15);
+  --icon-blue-bg: rgba(14, 165, 233, 0.1);
   --icon-blue-text: #38bdf8;
-  --icon-green-bg: rgba(34, 197, 94, 0.15);
+  --icon-green-bg: rgba(34, 197, 94, 0.1);
   --icon-green-text: #4ade80;
-  --icon-purple-bg: rgba(168, 85, 247, 0.15);
+  --icon-purple-bg: rgba(168, 85, 247, 0.1);
   --icon-purple-text: #c084fc;
-  --icon-emerald-bg: rgba(16, 185, 129, 0.15);
+  --icon-emerald-bg: rgba(16, 185, 129, 0.1);
   --icon-emerald-text: #34d399;
-  --icon-yellow-bg: rgba(234, 179, 8, 0.15);
+  --icon-yellow-bg: rgba(234, 179, 8, 0.1);
   --icon-yellow-text: #facc15;
 }
 
@@ -290,7 +290,6 @@ textarea:focus-visible {
 /* Shared dashboard polish.  These selectors are intentionally scoped to the
    authenticated layout so public pages keep their own visual identity. */
 .admin-main :is(.adminDashboard-container, .doctorDashboard-container, .patientsDashboard-container) {
-  max-width: 1120px;
   padding: 24px clamp(16px, 2vw, 32px) 32px;
 }
 
@@ -410,7 +409,6 @@ textarea:focus-visible {
   .doctor-availability-container
 ) {
   padding: 24px clamp(16px, 2vw, 32px) 32px;
-  max-width: 1120px;
 }
 
 /* Page headers */

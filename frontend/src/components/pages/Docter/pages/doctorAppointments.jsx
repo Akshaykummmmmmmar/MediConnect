@@ -115,7 +115,7 @@ const DoctorAppointments = () => {
         </table>
         
         {appointments.length === 0 && (
-          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>
+          <div className="empty-state-placeholder">
             No appointments found in your history.
           </div>
         )}

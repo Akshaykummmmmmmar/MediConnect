@@ -173,7 +173,7 @@ const AppointmentToday = () => {
                       </span>
                     </td>
                     <td>
-                      <div style={{ display: 'inline-flex', gap: '8px' }}>
+                      <div className="flex-row" style={{ display: 'inline-flex' }}>
                         {['Pending', 'Booked'].includes(item.status) && (
                           <button
                             className="confirm-slot-btn"
@@ -202,7 +202,7 @@ const AppointmentToday = () => {
             </table>
             
             {appointments.length === 0 && (
-              <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>
+              <div className="empty-state-placeholder">
                 No appointments scheduled for today.
               </div>
             )}

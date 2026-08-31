@@ -303,20 +303,20 @@
   display: flex;
   gap: 12px;
   padding: 16px;
-  background: #fffbeb;
+  background: var(--warning-soft-bg);
   border-radius: 12px;
-  border: 1px solid #fef3c7;
+  border: 1px solid color-mix(in srgb, var(--warning) 20%, transparent);
 }
 
 .booking-info-box p {
   margin: 0;
   font-size: 13px;
-  color: #92400e;
+  color: var(--warning-soft-text);
   line-height: 1.5;
 }
 
 .booking-info-box svg {
-  color: #d97706;
+  color: var(--warning);
   flex-shrink: 0;
 }
 
