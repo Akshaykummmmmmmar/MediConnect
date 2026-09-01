@@ -2,6 +2,8 @@ import { Outlet, NavLink } from 'react-router-dom';
 import Logout from '../../LogoutBtn/logout';
 import ThemeToggle from '../../ThemeToggle/themeToggle';
 import NotificationBell from '../../NotificationBell/notificationBell';
+import Breadcrumbs from '../../Breadcrumbs/breadcrumbs';
+import CommandPalette from '../../CommandPalette/commandPalette';
 import {
   LayoutDashboard,
   CalendarCheck,
@@ -67,8 +69,10 @@ const Doctor = () => {
       </div>
 
       <div className="admin-main" id="main-content">
+        <Breadcrumbs />
         <Outlet />
       </div>
+      <CommandPalette />
     </div>
   );
 };

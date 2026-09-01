@@ -1,0 +1,51 @@
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 16px;
+  font-size: 13px;
+}
+
+.admin-main > .breadcrumbs {
+  padding: clamp(20px, 2vw, 24px) clamp(16px, 2vw, 32px) 0;
+}
+
+
+.breadcrumb-segment {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.breadcrumb-chevron {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+.breadcrumb-crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 3px 8px;
+  border-radius: 6px;
+  transition: color 0.15s ease, background 0.15s ease;
+  font-weight: 500;
+}
+
+.breadcrumb-crumb:hover {
+  color: var(--primary);
+  background: var(--bg-hover);
+}
+
+.breadcrumb-crumb.current {
+  color: var(--text);
+  font-weight: 600;
+  cursor: default;
+}
+
+.breadcrumb-home:hover {
+  color: var(--primary);
+}

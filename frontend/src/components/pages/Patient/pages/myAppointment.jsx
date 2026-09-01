@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from '../../../../utils/axios';
 import notify from '../../../../utils/toast';
 import { 
@@ -9,7 +10,8 @@ import {
   AlertTriangle,
   ChevronRight,
   Star,
-  CalendarCheck
+  CalendarCheck,
+  RotateCcw
 } from 'lucide-react';
 import Pagination from '../../../Pagination/pagination';
 import './myAppointments.css';
@@ -30,6 +32,7 @@ const statusClass = status => {
 };
 
 const MyAppointments = () => {
+  const navigate = useNavigate();
   const [appointments, setAppointments] = useState([]);
   const [modal, openModal] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
@@ -47,6 +50,12 @@ const MyAppointments = () => {
   const patientId = localStorage.getItem('userId');
 
   const canCancel = status => ['Pending', 'Confirmed', 'Booked'].includes(status);
+
+  const rebook = item => {
+    const doctorId = item.doctor?._id;
+    if (!doctorId) return notify.error('Doctor not found for rebooking');
+    navigate(`/patient/appointments?doctor=${doctorId}`);
+  };
 
   const onCancelAppointment = async id => {
     try {
@@ -158,14 +167,24 @@ const MyAppointments = () => {
                       <td className="text-right">
                         <div className="action-btns-group">
                           {item.status === 'Completed' && (
-                            <button
-                              className="rate-action-btn"
-                              onClick={() => openRate(item)}
-                              title="Rate this doctor"
-                            >
-                              <Star size={16} />
-                              Rate
-                            </button>
+                            <>
+                              <button
+                                className="rate-action-btn"
+                                onClick={() => openRate(item)}
+                                title="Rate this doctor"
+                              >
+                                <Star size={16} />
+                                Rate
+                              </button>
+                              <button
+                                className="rebook-action-btn"
+                                onClick={() => rebook(item)}
+                                title="Book a new appointment with this doctor"
+                              >
+                                <RotateCcw size={16} />
+                                Book Again
+                              </button>
+                            </>
                           )}
                           {canCancel(item.status) && (
                             <button

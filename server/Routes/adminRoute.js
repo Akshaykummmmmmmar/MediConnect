@@ -472,11 +472,18 @@ router.delete('/doctor/delete/:id', checkToken(['admin']), async (req, res) => {
  */
 router.get('/analytics/overview', checkToken(['admin']), async (req, res) => {
   try {
+    const { from, to } = req.query;
+    const dateMatch = {};
+    if (from) dateMatch.$gte = new Date(from);
+    if (to) dateMatch.$lte = new Date(to);
+    const invoiceQuery = {};
+    if (from || to) invoiceQuery.createdAt = dateMatch;
+
     const [doctors, patients, appointments, invoices, ratings] = await Promise.all([
       Doctor.countDocuments(),
       User.countDocuments({ role: 'patient' }),
       Appointment.countDocuments(),
-      Invoice.find(),
+      Invoice.find(from || to ? invoiceQuery : {}),
       require('../database/models/ratingSchema').find(),
     ]);
 

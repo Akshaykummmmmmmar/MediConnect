@@ -2,6 +2,103 @@
   min-height: 100vh;
 }
 
+.analytics-range-filter {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.range-filter-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-body);
+}
+
+.range-filter-label svg {
+  color: var(--primary);
+}
+
+.range-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.range-inputs input {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-subtle);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.range-inputs input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.range-sep {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.range-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.range-apply-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.range-apply-btn:hover {
+  background: var(--primary-hover);
+}
+
+.range-clear-btn {
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-subtle);
+  color: var(--text);
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.range-clear-btn:hover {
+  background: var(--bg-hover);
+}
+
+.range-active-note {
+  font-size: 12px;
+  color: var(--primary);
+  background: var(--primary-soft);
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
 .analytics-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));

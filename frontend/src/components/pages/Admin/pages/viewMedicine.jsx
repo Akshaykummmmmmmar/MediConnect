@@ -6,6 +6,7 @@ import { Pill, Plus, Download, AlertTriangle, Trash2, PackagePlus } from 'lucide
 import Pagination from '../../../Pagination/pagination';
 import { exportCsv } from '../../../../utils/exportCsv';
 import { TableSkeleton, EmptyState } from '../../../ui/ui';
+import ConfirmDialog from '../../../ui/ConfirmDialog';
 import './viewMedicine.css';
 
 const stockClass = (qty, threshold) => {

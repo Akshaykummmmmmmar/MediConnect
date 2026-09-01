@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import axios from '../../../../utils/axios';
 import notify from '../../../../utils/toast';
 import { 
@@ -19,8 +20,10 @@ import {
 import './patientsAppoinments.css';
 
 const BookAppointments = () => {
+  const [searchParams] = useSearchParams();
+  const preSelectedDoctor = searchParams.get('doctor') || '';
   const [appointment, setAppointment] = useState({
-    doctor: '',
+    doctor: preSelectedDoctor,
     date: '',
     slot: '',
   });
