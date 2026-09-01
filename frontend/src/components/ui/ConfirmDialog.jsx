@@ -18,8 +18,8 @@ const ConfirmDialog = ({
   const Icon = icon || (variant === 'danger' ? AlertTriangle : CheckCircle2);
 
   return (
-    <div className="confirm-overlay" role="dialog" aria-modal="true" aria-label={title}>
-      <div className="confirm-card">
+    <div className="confirm-overlay" role="dialog" aria-modal="true" aria-label={title} onClick={onCancel}>
+      <div className="confirm-card" onClick={e => e.stopPropagation()}>
         <div className={`confirm-icon ${variant}`}>
           <Icon size={30} />
         </div>
