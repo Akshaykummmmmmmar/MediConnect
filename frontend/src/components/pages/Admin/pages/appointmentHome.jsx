@@ -6,6 +6,12 @@ import Pagination from '../../../Pagination/pagination';
 import { exportCsv } from '../../../../utils/exportCsv';
 import './appointmentHome.css';
 
+const today = () => {
+  const date = new Date();
+  const offset = date.getTimezoneOffset();
+  return new Date(date.getTime() - offset * 60 * 1000).toISOString().slice(0, 10);
+};
+
 const statusClass = status => {
   switch (status) {
     case 'Completed':
@@ -26,10 +32,13 @@ const Appointment = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [statusFilter, setStatusFilter] = useState('All');
+  const [selectedDate, setSelectedDate] = useState(today);
 
   const getAppointments = async () => {
     try {
-      const response = await axios.get(`/get/all/appointments?page=${page}&limit=10&status=${statusFilter}`);
+      const response = await axios.get(
+        `/get/all/appointments?page=${page}&limit=10&status=${statusFilter}&date=${selectedDate}`
+      );
       setAppointments(response.data.items || []);
       setTotalPages(response.data.totalPages || 1);
     } catch (e) {
@@ -48,13 +57,18 @@ const Appointment = () => {
   };
 
   useEffect(() => {
-    setPage(1);
     getAppointments();
-  }, [statusFilter]);
+  }, [page, statusFilter, selectedDate]);
 
-  useEffect(() => {
-    getAppointments();
-  }, [page]);
+  const changeStatus = status => {
+    setPage(1);
+    setStatusFilter(status);
+  };
+
+  const changeDate = event => {
+    setPage(1);
+    setSelectedDate(event.target.value);
+  };
 
   return (
     <div className="admin-page-container">
@@ -77,11 +91,21 @@ const Appointment = () => {
       </div>
 
       <div className="filter-row">
+        <label className="appointment-date-picker">
+          <Calendar size={16} aria-hidden="true" />
+          <span>Date</span>
+          <input
+            type="date"
+            value={selectedDate}
+            onChange={changeDate}
+            aria-label="Select appointment date"
+          />
+        </label>
         {['All', 'Pending', 'Confirmed', 'Completed', 'Cancelled', 'No-show'].map(s => (
           <button
             key={s}
             className={`filter-chip ${statusFilter === s ? 'active' : ''}`}
-            onClick={() => setStatusFilter(s)}
+            onClick={() => changeStatus(s)}
           >
             {s}
           </button>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import notify from '../../../../utils/toast';
 import axios from '../../../../utils/axios';
-import { UserRound, Mail, Briefcase, IndianRupee, Star, Edit3, Save, X, Stethoscope, Lock } from 'lucide-react';
+import { UserRound, Mail, Briefcase, IndianRupee, Star, Edit3, Save, X, Stethoscope, Lock, Building2, BadgeCheck, Clock3, CalendarDays } from 'lucide-react';
 import './doctorProfile.css';
 
 const DoctorProfile = () => {
@@ -24,6 +24,12 @@ const DoctorProfile = () => {
     confirmPassword: '',
   });
   const [changingPassword, setChangingPassword] = useState(false);
+  const qualifications = profile?.qualifications
+    ? (Array.isArray(profile.qualifications) ? profile.qualifications : profile.qualifications.split(',')).map(item => item.trim()).filter(Boolean)
+    : [];
+  const workingDays = (profile?.availability?.workingDays || [1, 2, 3, 4, 5, 6])
+    .map(day => ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][day])
+    .join(', ');
 
   const openPasswordModal = () => {
     setPasswordForm({ oldPassword: '', newPassword: '', confirmPassword: '' });
@@ -120,7 +126,8 @@ const DoctorProfile = () => {
 
             <div className="doctor-basic">
               <h2>Dr. {localStorage.getItem('name')}</h2>
-              <p>{profile.specialization} Specialist</p>
+              <p>{profile.specialization || 'Medical'} Specialist</p>
+              <span className="doctor-department"><Building2 size={14} /> {profile.department?.name || 'Department not assigned'}</span>
               <div className="rating-chip">
                 <Star size={15} fill="currentColor" />
                 <span>{rating.average ? rating.average.toFixed(1) : '—'}</span>
@@ -185,47 +192,33 @@ const DoctorProfile = () => {
               </div>
             </div>
           ) : (
-            <div className="doctor-details">
-              <div className="profile-field">
-                <span className="profile-field-label">Email Address</span>
-                <span className="profile-field-value">
-                  <Mail size={18} className="icon-muted" />
-                  {localStorage.getItem('userEmail')}
-                </span>
-              </div>
-
-              <div className="profile-field">
-                <span className="profile-field-label">Experience</span>
-                <span className="profile-field-value">
-                  <Briefcase size={18} className="icon-muted" />
-                  {profile.experience} Years
-                </span>
-              </div>
-
-              <div className="profile-field">
-                <span className="profile-field-label">Consultation Fee</span>
-                <span className="profile-field-value">
-                  <IndianRupee size={18} className="icon-muted" />
-                  {profile.consultationFee}
-                </span>
-              </div>
-
-              {profile.qualifications?.length > 0 && (
-                <div className="profile-field">
-                  <span className="profile-field-label">Qualifications</span>
-                  <span className="profile-field-value">
-                    <Stethoscope size={18} className="icon-muted" />
-                    {profile.qualifications.join(', ')}
-                  </span>
+            <div className="doctor-profile-content">
+              <section className="doctor-profile-section doctor-profile-overview">
+                <h3>Professional overview</h3>
+                <div className="doctor-stat-grid">
+                  <ProfileStat icon={Briefcase} label="Clinical experience" value={`${profile.experience || 0} years`} />
+                  <ProfileStat icon={IndianRupee} label="Consultation fee" value={`₹${profile.consultationFee || 0}`} />
+                  <ProfileStat icon={BadgeCheck} label="Medical license" value={profile.licenseNumber || 'Not recorded'} />
+                  <ProfileStat icon={Mail} label="Email address" value={localStorage.getItem('userEmail') || 'Not recorded'} />
                 </div>
-              )}
+              </section>
 
-              {profile.about && (
-                <div className="profile-field">
-                  <span className="profile-field-label">About</span>
-                  <span className="profile-field-value about-text">{profile.about}</span>
+              <section className="doctor-profile-section">
+                <h3>Qualifications &amp; specialty</h3>
+                <div className="doctor-qualification-list">
+                  {qualifications.length ? qualifications.map(item => <span key={item}><BadgeCheck size={14} />{item}</span>) : <p>Qualifications have not been added yet.</p>}
                 </div>
-              )}
+                {profile.about && <p className="doctor-about"><Stethoscope size={17} />{profile.about}</p>}
+              </section>
+
+              <section className="doctor-profile-section doctor-availability-section">
+                <h3>Clinical availability</h3>
+                <div className="availability-grid">
+                  <ProfileStat icon={CalendarDays} label="Working days" value={workingDays} />
+                  <ProfileStat icon={Clock3} label="Consultation hours" value={`${profile.availability?.startTime || '09:00'} – ${profile.availability?.endTime || '16:00'}`} />
+                  <ProfileStat icon={Clock3} label="Appointment slot" value={`${profile.availability?.slotDuration || 60} minutes`} />
+                </div>
+              </section>
             </div>
           )}
         </div>
@@ -309,5 +302,9 @@ const DoctorProfile = () => {
     </div>
   );
 };
+
+const ProfileStat = ({ icon: Icon, label, value }) => (
+  <div className="doctor-profile-stat"><Icon size={18} /><div><span>{label}</span><strong>{value}</strong></div></div>
+);
 
 export default DoctorProfile;

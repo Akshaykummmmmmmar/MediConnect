@@ -1,5 +1,11 @@
 import { useNavigate } from 'react-router-dom';
-import { CircleArrowLeft, Stethoscope, ShieldCheck } from 'lucide-react';
+import {
+  CircleArrowLeft,
+  Stethoscope,
+  ShieldCheck,
+  Mail,
+  LockKeyhole,
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState, useRef } from 'react';
 import notify from '../../../utils/toast';
@@ -38,13 +44,11 @@ const Login = () => {
     }
     try {
       const response = await axios.post('/login', user);
-
       if (response.data.needsOtp) {
         notify.info('Please verify your email first');
         navigate(`/verify-otp?email=${encodeURIComponent(response.data.email)}`);
         return;
       }
-
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('userId', response.data._id);
       localStorage.setItem('userEmail', response.data.email);
@@ -77,7 +81,6 @@ const Login = () => {
 
         navigate('/patient');
       }
-
     } catch (e) {
       notify.error(e.response?.data?.message || e.message);
     }
@@ -115,29 +118,37 @@ const Login = () => {
           <p className="auth-subtitle">Log in to your MediConnect account</p>
           <div className="auth-field">
             <label htmlFor="login-email">Email</label>
-            <input
-              id="login-email"
-              type="email"
-              required
-              autoComplete="email"
-              autoFocus
-              onKeyDown={e => handleKeyDown(e, passwordRef)}
-              onChange={e => onChange(e, 'email')}
-            />
+            <div className="auth-input-wrap">
+              <Mail className="auth-input-icon" size={18} aria-hidden="true" />
+              <input
+                id="login-email"
+                type="email"
+                placeholder="you@example.com"
+                required
+                autoComplete="email"
+                autoFocus
+                onKeyDown={e => handleKeyDown(e, passwordRef)}
+                onChange={e => onChange(e, 'email')}
+              />
+            </div>
           </div>
           <div className="auth-field">
             <label htmlFor="login-password">Password</label>
-            <input
-              id="login-password"
-              type="password"
-              required
-              autoComplete="current-password"
-              ref={passwordRef}
-              onKeyDown={e => {
-                if (e.key === 'Enter') onLoginClick();
-              }}
-              onChange={e => onChange(e, 'password')}
-            />
+            <div className="auth-input-wrap">
+              <LockKeyhole className="auth-input-icon" size={18} aria-hidden="true" />
+              <input
+                id="login-password"
+                type="password"
+                placeholder="Enter your password"
+                required
+                autoComplete="current-password"
+                ref={passwordRef}
+                onKeyDown={e => {
+                  if (e.key === 'Enter') onLoginClick();
+                }}
+                onChange={e => onChange(e, 'password')}
+              />
+            </div>
           </div>
           <button className="auth-btn" onClick={onLoginClick}>
             Login
