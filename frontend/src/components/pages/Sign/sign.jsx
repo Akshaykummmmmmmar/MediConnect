@@ -1,4 +1,15 @@
-import { CircleArrowLeft, Stethoscope, ShieldCheck } from 'lucide-react';
+import {
+  CircleArrowLeft,
+  Stethoscope,
+  ShieldCheck,
+  UserRound,
+  HeartPulse,
+  CalendarDays,
+  UsersRound,
+  Mail,
+  Phone,
+  LockKeyhole,
+} from 'lucide-react';
 import notify from '../../../utils/toast';
 import { useNavigate } from 'react-router-dom';
 import { useRef } from 'react';
@@ -59,6 +70,7 @@ const Sign = () => {
   const onChange = (e, field) => {
     setNewUser({ ...newUser, [field]: e.target.value });
   };
+
   const onSignUpClick = async () => {
     const {
       name,
@@ -143,96 +155,127 @@ const Sign = () => {
           <div className="auth-form-grid">
             <div className="auth-field">
               <label htmlFor="name">Full Name</label>
-              <input
-                type="text"
-                id="name"
-                required
-                autoFocus
-                onKeyDown={e => handleKeyDown(e, emergencyContactRef)}
-                onChange={e => onChange(e, 'name')}
-              />
+              <div className="auth-input-wrap">
+                <UserRound className="auth-input-icon" size={17} aria-hidden="true" />
+                <input
+                  type="text"
+                  id="name"
+                  placeholder="Your full name"
+                  required
+                  autoFocus
+                  onKeyDown={e => handleKeyDown(e, emergencyContactRef)}
+                  onChange={e => onChange(e, 'name')}
+                />
+              </div>
             </div>
             <div className="auth-field">
               <label htmlFor="emergency">Emergency Contact</label>
-              <input
-                type="text"
-                id="emergency"
-                required
-                ref={emergencyContactRef}
-                onKeyDown={e => handleKeyDown(e, ageRef)}
-                onChange={e => onChange(e, 'emergencyContact')}
-              />
+              <div className="auth-input-wrap">
+                <HeartPulse className="auth-input-icon" size={17} aria-hidden="true" />
+                <input
+                  type="text"
+                  id="emergency"
+                  placeholder="Emergency contact name"
+                  required
+                  ref={emergencyContactRef}
+                  onKeyDown={e => handleKeyDown(e, ageRef)}
+                  onChange={e => onChange(e, 'emergencyContact')}
+                />
+              </div>
             </div>
             <div className="auth-field">
               <label htmlFor="age">Age</label>
-              <input
-                type="number"
-                id="age"
-                required
-                ref={ageRef}
-                onKeyDown={e => handleKeyDown(e, genderRef)}
-                onChange={e => onChange(e, 'age')}
-              />
+              <div className="auth-input-wrap">
+                <CalendarDays className="auth-input-icon" size={17} aria-hidden="true" />
+                <input
+                  type="number"
+                  id="age"
+                  placeholder="Your age"
+                  required
+                  ref={ageRef}
+                  onKeyDown={e => handleKeyDown(e, genderRef)}
+                  onChange={e => onChange(e, 'age')}
+                />
+              </div>
             </div>
             <div className="auth-field">
               <label htmlFor="gender">Gender</label>
-              <select
-                id="gender"
-                ref={genderRef}
-                required
-                onKeyDown={e => handleKeyDown(e, emailref)}
-                onChange={e => onChange(e, 'gender')}
-              >
-                <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-              </select>
+              <div className="auth-input-wrap">
+                <UsersRound className="auth-input-icon" size={17} aria-hidden="true" />
+                <select
+                  id="gender"
+                  ref={genderRef}
+                  required
+                  onKeyDown={e => handleKeyDown(e, emailref)}
+                  onChange={e => onChange(e, 'gender')}
+                >
+                  <option value="">Select gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </div>
             </div>
             <div className="auth-field">
               <label htmlFor="email">Email</label>
-              <input
-                type="email"
-                id="email"
-                required
-                ref={emailref}
-                onKeyDown={e => handleKeyDown(e, contactref)}
-                onChange={e => onChange(e, 'email')}
-              />
+              <div className="auth-input-wrap">
+                <Mail className="auth-input-icon" size={17} aria-hidden="true" />
+                <input
+                  type="email"
+                  id="email"
+                  placeholder="you@example.com"
+                  required
+                  ref={emailref}
+                  onKeyDown={e => handleKeyDown(e, contactref)}
+                  onChange={e => onChange(e, 'email')}
+                />
+              </div>
             </div>
             <div className="auth-field">
               <label htmlFor="contact-number">Contact Number</label>
-              <input
-                type="tel"
-                id="contact-number"
-                pattern="[0-9]{10}"
-                ref={contactref}
-                onKeyDown={e => handleKeyDown(e, passwordref)}
-                onChange={e => onChange(e, 'contactNumber')}
-              />
+              <div className="auth-input-wrap">
+                <Phone className="auth-input-icon" size={17} aria-hidden="true" />
+                <input
+                  type="tel"
+                  id="contact-number"
+                  placeholder="10-digit mobile number"
+                  pattern="[0-9]{10}"
+                  ref={contactref}
+                  onKeyDown={e => handleKeyDown(e, passwordref)}
+                  onChange={e => onChange(e, 'contactNumber')}
+                />
+              </div>
             </div>
             <div className="auth-field">
               <label htmlFor="password">Password</label>
-              <input
-                type="password"
-                id="password"
-                required
-                ref={passwordref}
-                onKeyDown={e => handleKeyDown(e, confirmref)}
-                onChange={e => onChange(e, 'password')}
-              />
+              <div className="auth-input-wrap">
+                <LockKeyhole className="auth-input-icon" size={17} aria-hidden="true" />
+                <input
+                  type="password"
+                  id="password"
+                  placeholder="Create a password"
+                  required
+                  ref={passwordref}
+                  onKeyDown={e => handleKeyDown(e, confirmref)}
+                  onChange={e => onChange(e, 'password')}
+                />
+              </div>
             </div>
             <div className="auth-field">
               <label htmlFor="confirm-password">Confirm Password</label>
-              <input
-                type="password"
-                id="confirm-password"
-                required
-                ref={confirmref}
-                onKeyDown={e => {
-                  if (e.key === 'Enter') onSignUpClick();
-                }}
-                onChange={e => onChange(e, 'confirmPassword')}
-              />
+              <div className="auth-input-wrap">
+                <LockKeyhole className="auth-input-icon" size={17} aria-hidden="true" />
+                <input
+                  type="password"
+                  id="confirm-password"
+                  placeholder="Repeat your password"
+                  required
+                  ref={confirmref}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter') onSignUpClick();
+                  }}
+                  onChange={e => onChange(e, 'confirmPassword')}
+                />
+              </div>
             </div>
           </div>
 

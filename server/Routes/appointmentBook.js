@@ -286,9 +286,10 @@ router.get(
 
 router.get('/get/all/appointments', checkToken(['admin']), async (req, res) => {
   try {
-    const { page, limit, status } = req.query;
+    const { page, limit, status, date } = req.query;
     const filter = {};
     if (status && status !== 'All') filter.status = status;
+    if (date) filter.date = date;
 
     const allAppointments = await Appointment.find(filter)
       .populate('patient', 'name email contactNumber')

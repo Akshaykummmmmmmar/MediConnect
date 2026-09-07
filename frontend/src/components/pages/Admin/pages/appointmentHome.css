@@ -19,6 +19,32 @@
   flex-wrap: wrap;
 }
 
+.appointment-date-picker {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 11px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--bg-card);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.appointment-date-picker svg {
+  color: var(--primary);
+}
+
+.appointment-date-picker input {
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+}
+
 .filter-chip {
   padding: 8px 18px;
   border-radius: 20px;

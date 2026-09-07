@@ -52,10 +52,14 @@
 
 .auth-card-signup .auth-field input,
 .auth-card-signup .auth-field select {
-  padding: 9px 12px;
+  padding: 9px 34px 9px 38px;
   font-size: 14px;
   font-family: inherit;
   border-radius: 10px;
+}
+
+.auth-card-signup .auth-input-icon {
+  left: 12px;
 }
 
 .auth-card-signup .auth-btn {
