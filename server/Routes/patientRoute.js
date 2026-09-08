@@ -4,6 +4,12 @@ const Patient = require('../database/models/patientSchema');
 const Appointment = require('../database/models/appointmentSchema');
 const router = express.Router();
 const checkToken = require('../middleware/checkToken');
+const {
+  getDoctorIdForUser,
+  hasDoctorPatientRelationship,
+  forbid,
+} = require('../accessControl');
+const { isObjectId } = require('../validate');
 
 const paginate = (array, page = 1, limit = 10) => {
   const p = Number(page) || 1;
@@ -23,7 +29,18 @@ router.get('/get/patients', checkToken(['admin', 'doctor']), async (req, res) =>
   try {
     const { page, limit, search } = req.query;
 
+    let patientIds = null;
+    if (req.user.role === 'doctor') {
+      const myDoctorId = await getDoctorIdForUser(req.user.id);
+      if (!myDoctorId) return forbid(res);
+      const docs = await Appointment.find({ doctor: myDoctorId }).distinct('patient');
+      patientIds = new Set(docs.map(id => id.toString()));
+    }
+
     let patients = await User.find({ role: 'patient' }, '-password').lean();
+    if (patientIds) {
+      patients = patients.filter(p => patientIds.has(p._id.toString()));
+    }
     if (search) {
       const s = search.toLowerCase();
       patients = patients.filter(
@@ -35,8 +52,8 @@ router.get('/get/patients', checkToken(['admin', 'doctor']), async (req, res) =>
     }
 
     const result = paginate(patients, page, limit);
-    const patientIds = result.items.map(patient => patient._id);
-    const appointments = await Appointment.find({ patient: { $in: patientIds } })
+    const pagePatientIds = result.items.map(patient => patient._id);
+    const appointments = await Appointment.find({ patient: { $in: pagePatientIds } })
       .populate({ path: 'doctor', populate: { path: 'user', select: 'name' } })
       .sort({ date: -1, time: -1 })
       .lean();
@@ -88,6 +105,21 @@ router.get('/get/patients', checkToken(['admin', 'doctor']), async (req, res) =>
 
 router.get('/patient/profile/:id', checkToken(['admin', 'doctor', 'patient']), async (req, res) => {
   try {
+    if (!isObjectId(req.params.id)) {
+      return res.status(400).json({ message: 'Invalid patient id' });
+    }
+
+    if (req.user.role === 'patient' && req.user.id !== req.params.id) {
+      return forbid(res);
+    }
+
+    if (req.user.role === 'doctor') {
+      const myDoctorId = await getDoctorIdForUser(req.user.id);
+      if (!myDoctorId || !(await hasDoctorPatientRelationship(myDoctorId, req.params.id))) {
+        return forbid(res);
+      }
+    }
+
     const user = await User.findById(req.params.id, '-password');
     const patient = await Patient.findOne({ user: req.params.id });
     if (!user) return res.status(404).json({ message: 'Patient not found' });

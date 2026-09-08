@@ -1,8 +1,18 @@
 import { useEffect, useState } from 'react';
 import notify from '../../../../utils/toast';
 import axios from '../../../../utils/axios';
-import { Calendar, CheckCircle2, ClipboardPlus, FileQuestion } from 'lucide-react';
+import { Calendar, CheckCircle2, ClipboardPlus, FileQuestion, BookmarkPlus, Bookmark } from 'lucide-react';
 import './appointmentToday.css';
+
+const STORAGE_KEY = 'mediconnect_rx_templates';
+
+const loadTemplates = () => {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+  } catch {
+    return [];
+  }
+};
 
 const AppointmentToday = () => {
   const doctorId = localStorage.getItem('doctorId');
@@ -11,6 +21,7 @@ const AppointmentToday = () => {
   const [confrimModal, setConfirmModal] = useState(false);
   const [appointments, setAppointments] = useState([]);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [templates, setTemplates] = useState(loadTemplates());
   
   const [prescription, setPrescription] = useState({
     findings: '',
@@ -21,6 +32,42 @@ const AppointmentToday = () => {
     advice: '',
     followUp: '',
   });
+
+  const saveTemplates = list => {
+    setTemplates(list);
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+    } catch { /* storage may be unavailable */ }
+  };
+
+  const saveAsTemplate = () => {
+    if (!prescription.diagnosis && !prescription.findings && !prescription.medicineName) {
+      return notify.warning('Fill the prescription before saving a template');
+    }
+    const template = {
+      id: Date.now(),
+      name: prescription.diagnosis || 'Untitled Template',
+      ...prescription,
+    };
+    saveTemplates([...templates, template]);
+    notify.success('Prescription saved as template');
+  };
+
+  const applyTemplate = tpl => {
+    setPrescription({
+      findings: tpl.findings || '',
+      diagnosis: tpl.diagnosis || '',
+      medicineName: tpl.medicineName || '',
+      dosage: tpl.dosage || '',
+      duration: tpl.duration || '',
+      advice: tpl.advice || '',
+      followUp: '',
+    });
+  };
+
+  const deleteTemplate = id => {
+    saveTemplates(templates.filter(t => t.id !== id));
+  };
 
   const onBtnClick = appointment => {
     setSelectedAppointment(appointment);
@@ -224,6 +271,38 @@ const AppointmentToday = () => {
                 <p><strong>Age:</strong> {selectedAppointment.age} yrs | <strong>Date:</strong> {selectedAppointment.date}</p>
               </div>
             )}
+
+            {templates.length > 0 && (
+              <div className="template-block">
+                <div className="template-header">
+                  <span><Bookmark size={14} /> Quick Templates</span>
+                  <small>{templates.length} saved</small>
+                </div>
+                <div className="template-chips">
+                  {templates.map(tpl => (
+                    <span key={tpl.id} className="template-chip">
+                      <button type="button" className="template-chip-main" onClick={() => applyTemplate(tpl)}>
+                        {tpl.name}
+                      </button>
+                      <button
+                        type="button"
+                        className="template-chip-del"
+                        title="Delete template"
+                        onClick={() => deleteTemplate(tpl.id)}
+                      >
+                        ✕
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="template-save-row">
+              <button type="button" className="template-save-btn" onClick={saveAsTemplate}>
+                <BookmarkPlus size={15} /> Save as Template
+              </button>
+            </div>
 
             <h3>Symptoms / Findings</h3>
             <textarea

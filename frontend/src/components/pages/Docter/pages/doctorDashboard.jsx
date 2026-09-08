@@ -48,7 +48,7 @@ const DoctorDashboard = () => {
       try {
         const rateRes = await axios.get(`/ratings/doctor/${doctorId}`);
         setAvgRating(rateRes.data.average || 0);
-      } catch (e) {
+      } catch {
         setAvgRating(0);
       }
     } catch (e) {

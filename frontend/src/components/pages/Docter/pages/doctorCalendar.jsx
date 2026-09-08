@@ -126,7 +126,7 @@ const DoctorCalendar = () => {
         <div className="loading-state">Loading calendar...</div>
       ) : (
         <div className="calendar-grid">
-          {days.map((day, idx) => {
+          {days.map((day) => {
             const key = toISODate(day);
             const dayAppointments = (appointmentsByDate[key] || []).sort((a, b) =>
               a.time.localeCompare(b.time)

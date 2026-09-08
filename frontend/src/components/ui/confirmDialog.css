@@ -1,0 +1,121 @@
+.confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+}
+
+.confirm-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
+  max-width: 420px;
+  width: 100%;
+  padding: 28px;
+  text-align: center;
+}
+
+.confirm-icon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirm-icon.danger {
+  background: var(--danger-soft-bg);
+  color: var(--danger);
+}
+
+.confirm-icon.success {
+  background: var(--success-soft-bg);
+  color: var(--success);
+}
+
+.confirm-icon.warning {
+  background: var(--warning-soft-bg);
+  color: var(--warning);
+}
+
+.confirm-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 10px 0;
+}
+
+.confirm-card p {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin: 0 0 24px 0;
+  line-height: 1.5;
+}
+
+.confirm-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.confirm-btn {
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+  border: 1px solid var(--border);
+}
+
+.confirm-btn.cancel {
+  background: var(--bg-subtle);
+  color: var(--text);
+}
+
+.confirm-btn.cancel:hover {
+  background: var(--bg-hover);
+}
+
+.confirm-btn.danger {
+  background: var(--danger);
+  color: #fff;
+  border-color: var(--danger);
+}
+
+.confirm-btn.danger:hover {
+  background: var(--danger-hover);
+}
+
+.confirm-btn.success {
+  background: var(--success);
+  color: #fff;
+  border-color: var(--success);
+}
+
+.confirm-btn.success:hover {
+  background: var(--success-hover);
+}
+
+.confirm-btn.warning {
+  background: var(--warning);
+  color: #fff;
+  border-color: var(--warning);
+}
+
+.confirm-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

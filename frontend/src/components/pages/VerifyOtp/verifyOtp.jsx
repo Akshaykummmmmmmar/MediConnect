@@ -31,8 +31,8 @@ const VerifyOtp = () => {
   const onResend = async () => {
     if (!email) return notify.error('Email is required', { autoClose: 1000 });
     try {
-      const res = await axios.post('/resend-otp', { email });
-      notify.success(`New OTP sent${res.data.otp ? `: ${res.data.otp}` : ''}`);
+      await axios.post('/resend-otp', { email });
+      notify.success('A new OTP has been sent to your email');
     } catch (e) {
       notify.error(e.response?.data?.message || e.message);
     }

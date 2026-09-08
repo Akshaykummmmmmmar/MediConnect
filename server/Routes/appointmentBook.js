@@ -5,6 +5,13 @@ const User = require('../database/models/userSchema');
 const Invoice = require('../database/models/invoiceSchema');
 const checkToken = require('../middleware/checkToken');
 const { sendNotification, logActivity } = require('../helpers');
+const {
+  getDoctorIdForUser,
+  hasDoctorPatientRelationship,
+  isAdmin,
+  forbid,
+} = require('../accessControl');
+const { isObjectId, isDateString, isValidTime } = require('../validate');
 
 const router = express.Router();
 
@@ -67,6 +74,22 @@ router.post(
           success: false,
           message: 'All fields are required',
         });
+      }
+
+      if (!isObjectId(doctorId) || !isObjectId(patientId)) {
+        return res.json({ success: false, message: 'Invalid doctor or patient id' });
+      }
+
+      if (!isDateString(date)) {
+        return res.json({ success: false, message: 'Invalid date format' });
+      }
+
+      if (!isValidTime(time)) {
+        return res.json({ success: false, message: 'Invalid appointment time' });
+      }
+
+      if (!isAdmin(req) && req.user.id !== patientId) {
+        return forbid(res);
       }
 
       const validMethods = ['Cash', 'Card', 'UPI', 'Insurance'];
@@ -312,6 +335,18 @@ router.get('/get/all/appointments', checkToken(['admin']), async (req, res) => {
 router.get('/doctor/:id', checkToken(['admin', 'doctor']), async (req, res) => {
   try {
     const doctorId = req.params.id;
+
+    if (!isObjectId(doctorId)) {
+      return res.status(400).json({ message: 'Invalid doctor id' });
+    }
+
+    if (req.user.role === 'doctor') {
+      const myDoctorId = await getDoctorIdForUser(req.user.id);
+      if (!myDoctorId || doctorId !== myDoctorId) {
+        return forbid(res);
+      }
+    }
+
     const { page, limit, status } = req.query;
 
     const filter = { doctor: doctorId };
@@ -330,8 +365,25 @@ router.get('/doctor/:id', checkToken(['admin', 'doctor']), async (req, res) => {
 
 router.get('/patient/:id', checkToken(['patient', 'admin', 'doctor']), async (req, res) => {
   try {
+    const patientId = req.params.id;
+
+    if (!isObjectId(patientId)) {
+      return res.status(400).json({ message: 'Invalid patient id' });
+    }
+
+    if (req.user.role === 'patient' && req.user.id !== patientId) {
+      return forbid(res);
+    }
+
+    if (req.user.role === 'doctor') {
+      const myDoctorId = await getDoctorIdForUser(req.user.id);
+      if (!myDoctorId || !(await hasDoctorPatientRelationship(myDoctorId, patientId))) {
+        return forbid(res);
+      }
+    }
+
     const { page, limit, status } = req.query;
-    const filter = { patient: req.params.id };
+    const filter = { patient: patientId };
     if (status && status !== 'All') filter.status = status;
 
     const appointments = await Appointment.find(filter)
@@ -352,8 +404,14 @@ router.get('/patient/:id', checkToken(['patient', 'admin', 'doctor']), async (re
 
 router.delete('/cancel/:id', checkToken(['patient']), async (req, res) => {
   try {
-    const appointment = await Appointment.findByIdAndDelete(req.params.id);
+    const appointment = await Appointment.findById(req.params.id);
     if (!appointment) return res.status(404).json({ message: 'Appointment not found' });
+
+    if (appointment.patient.toString() !== req.user.id) {
+      return forbid(res);
+    }
+
+    await Appointment.findByIdAndDelete(req.params.id);
 
     const patient = await User.findById(appointment.patient);
     if (patient) {
@@ -398,13 +456,25 @@ router.patch('/appointment/:id/status', checkToken(['admin', 'doctor']), async (
       return res.status(400).json({ message: 'Invalid appointment status' });
     }
 
+    if (!isObjectId(req.params.id)) {
+      return res.status(400).json({ message: 'Invalid appointment id' });
+    }
+
+    const existing = await Appointment.findById(req.params.id);
+    if (!existing) return res.status(404).json({ message: 'Appointment not found' });
+
+    if (req.user.role === 'doctor') {
+      const myDoctorId = await getDoctorIdForUser(req.user.id);
+      if (!myDoctorId || existing.doctor.toString() !== myDoctorId) {
+        return forbid(res);
+      }
+    }
+
     const appointment = await Appointment.findByIdAndUpdate(
       req.params.id,
       { status },
       { new: true }
     );
-
-    if (!appointment) return res.status(404).json({ message: 'Appointment not found' });
 
     const patient = await User.findById(appointment.patient);
     const doctor = await Doctor.findById(appointment.doctor).populate('user');
@@ -446,13 +516,25 @@ router.patch('/appointment/:id/status', checkToken(['admin', 'doctor']), async (
 
 router.patch('/appointment/:id', checkToken(['admin', 'doctor']), async (req, res) => {
   try {
+    if (!isObjectId(req.params.id)) {
+      return res.status(400).json({ message: 'Invalid appointment id' });
+    }
+
+    const existing = await Appointment.findById(req.params.id);
+    if (!existing) return res.status(404).json({ message: 'Appointment not found' });
+
+    if (req.user.role === 'doctor') {
+      const myDoctorId = await getDoctorIdForUser(req.user.id);
+      if (!myDoctorId || existing.doctor.toString() !== myDoctorId) {
+        return forbid(res);
+      }
+    }
+
     const appointment = await Appointment.findByIdAndUpdate(
       req.params.id,
       { status: 'Completed' },
       { new: true }
     );
-
-    if (!appointment) return res.status(404).json({ message: 'Appointment not found' });
 
     const patient = await User.findById(appointment.patient);
     if (patient) {

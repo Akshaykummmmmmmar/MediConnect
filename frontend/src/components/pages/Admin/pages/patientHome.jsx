@@ -86,6 +86,9 @@ const PatientDetails = ({ item, summary, formatDate }) => (
   </div>
 );
 
-const Detail = ({ icon: Icon, label, value }) => <div className="patient-info-detail"><Icon size={16} aria-hidden="true" /><div><span>{label}</span><strong>{value || 'Not recorded'}</strong></div></div>;
+const Detail = ({ icon, label, value }) => {
+  const Icon = icon;
+  return <div className="patient-info-detail"><Icon size={16} aria-hidden="true" /><div><span>{label}</span><strong>{value || 'Not recorded'}</strong></div></div>;
+};
 const initials = name => (name || 'Patient').split(' ').filter(Boolean).slice(0, 2).map(part => part[0]).join('').toUpperCase();
 export default Patients;

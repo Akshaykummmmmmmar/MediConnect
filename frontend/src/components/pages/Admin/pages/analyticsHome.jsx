@@ -10,17 +10,27 @@ import {
   IndianRupee,
   TrendingUp,
   AlertCircle,
+  CalendarRange,
 } from 'lucide-react';
 import './analyticsHome.css';
 
 const AnalyticsHome = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [from, setFrom] = useState('');
+  const [to, setTo] = useState('');
+  const [appliedFrom, setAppliedFrom] = useState('');
+  const [appliedTo, setAppliedTo] = useState('');
 
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
-        const res = await axios.get('/analytics/overview');
+        setLoading(true);
+        const params = new URLSearchParams();
+        if (appliedFrom) params.set('from', appliedFrom);
+        if (appliedTo) params.set('to', appliedTo);
+        const qs = params.toString() ? `?${params.toString()}` : '';
+        const res = await axios.get(`/analytics/overview${qs}`);
         setData(res.data);
       } catch (e) {
         notify.error(e.response?.data?.message || e.message);
@@ -29,7 +39,20 @@ const AnalyticsHome = () => {
       }
     };
     fetchAnalytics();
-  }, []);
+  }, [appliedFrom, appliedTo]);
+
+  const applyRange = () => {
+    if (from && to && from > to) return notify.warning('Start date must be before end date');
+    setAppliedFrom(from);
+    setAppliedTo(to);
+  };
+
+  const clearRange = () => {
+    setFrom('');
+    setTo('');
+    setAppliedFrom('');
+    setAppliedTo('');
+  };
 
   if (loading) return <div className="loading-state">Loading analytics...</div>;
   if (!data) return <div className="loading-state">No analytics data available.</div>;
@@ -50,6 +73,40 @@ const AnalyticsHome = () => {
           <TrendingUp size={16} />
           <span>Live Overview</span>
         </div>
+      </div>
+
+      <div className="analytics-range-filter">
+        <div className="range-filter-label">
+          <CalendarRange size={16} /> Date Range
+        </div>
+        <div className="range-inputs">
+          <input
+            type="date"
+            value={from}
+            max={to || undefined}
+            onChange={e => setFrom(e.target.value)}
+            aria-label="From date"
+          />
+          <span className="range-sep">to</span>
+          <input
+            type="date"
+            value={to}
+            min={from || undefined}
+            onChange={e => setTo(e.target.value)}
+            aria-label="To date"
+          />
+        </div>
+        <div className="range-actions">
+          <button className="range-apply-btn" onClick={applyRange}>Apply</button>
+          {(from || to || appliedFrom || appliedTo) && (
+            <button className="range-clear-btn" onClick={clearRange}>Clear</button>
+          )}
+        </div>
+        {(appliedFrom || appliedTo) && (
+          <span className="range-active-note">
+            Showing revenue for {appliedFrom || 'start'} — {appliedTo || 'today'}
+          </span>
+        )}
       </div>
 
       <div className="analytics-cards">

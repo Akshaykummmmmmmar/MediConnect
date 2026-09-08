@@ -9,6 +9,7 @@ const ActivityLog = require('../database/models/activityLogSchema');
 const checkToken = require('../middleware/checkToken');
 const { validateDoctor, isEmail } = require('../validation');
 const { logActivity } = require('../helpers');
+const { forbid } = require('../accessControl');
 
 const router = express.Router();
 
@@ -180,6 +181,10 @@ router.patch('/doctor/update/:id', checkToken(['admin', 'doctor']), async (req, 
     const { id } = req.params;
     const doctor = await Doctor.findById(id);
     if (!doctor) return res.status(404).json({ message: 'Doctor not found' });
+
+    if (req.user.role === 'doctor' && doctor.user.toString() !== req.user.id) {
+      return forbid(res);
+    }
 
     const allowed = [
       'age',
@@ -472,11 +477,18 @@ router.delete('/doctor/delete/:id', checkToken(['admin']), async (req, res) => {
  */
 router.get('/analytics/overview', checkToken(['admin']), async (req, res) => {
   try {
+    const { from, to } = req.query;
+    const dateMatch = {};
+    if (from) dateMatch.$gte = new Date(from);
+    if (to) dateMatch.$lte = new Date(to);
+    const invoiceQuery = {};
+    if (from || to) invoiceQuery.createdAt = dateMatch;
+
     const [doctors, patients, appointments, invoices, ratings] = await Promise.all([
       Doctor.countDocuments(),
       User.countDocuments({ role: 'patient' }),
       Appointment.countDocuments(),
-      Invoice.find(),
+      Invoice.find(from || to ? invoiceQuery : {}),
       require('../database/models/ratingSchema').find(),
     ]);
 

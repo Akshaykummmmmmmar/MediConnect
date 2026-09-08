@@ -15,11 +15,11 @@ const {
   isStrongPassword,
 } = require('../validation');
 const { logActivity } = require('../helpers');
-const { sendEmail, mailEnabled } = require('../emailer');
+const { sendEmail } = require('../emailer');
+
+const { jwtSecret, jwtExpiresIn } = require('../config');
 
 const router = express.Router();
-
-const SECRET_KEY = process.env.JWT_SECRET || 'gghfhergyfgreherhuerhue';
 
 /**
  * @swagger
@@ -109,10 +109,6 @@ router.post('/signUp/register', async (req, res) => {
       message: 'User registered. Please verify your email with the OTP.',
       email,
     };
-    if (!mailEnabled) {
-      response.otp = otp;
-      response.note = 'OTP is returned here for demo purposes. In production it would be emailed.';
-    }
     res.status(200).json(response);
   } catch (e) {
     return res.status(500).json({ message: e.message });
@@ -193,9 +189,6 @@ router.post('/resend-otp', async (req, res) => {
     });
 
     const response = { message: 'New OTP sent', email };
-    if (!mailEnabled) {
-      response.otp = otp;
-    }
     res.status(200).json(response);
   } catch (e) {
     return res.status(500).json({ message: e.message });
@@ -234,8 +227,8 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Password is incorrect' });
     }
 
-    const token = jwt.sign({ id: user._id, role: user.role }, SECRET_KEY, {
-      expiresIn: process.env.JWT_EXPIRES_IN || '7d',
+    const token = jwt.sign({ id: user._id, role: user.role }, jwtSecret, {
+      expiresIn: jwtExpiresIn,
     });
 
     let doctorData = null;
@@ -310,13 +303,9 @@ router.post('/forgot-password', async (req, res) => {
     });
 
     const response = {
-      message: 'Password reset link generated. Use the token below.',
+      message: 'Password reset link sent. If the email exists, a token was emailed to it.',
       email,
     };
-    if (!mailEnabled) {
-      response.resetToken = token;
-      response.note = 'Token is returned here for demo purposes. In production it would be emailed.';
-    }
     res.status(200).json(response);
   } catch (e) {
     return res.status(500).json({ message: e.message });

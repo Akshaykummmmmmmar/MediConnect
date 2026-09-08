@@ -162,6 +162,27 @@
   border-color: var(--primary);
 }
 
+.rebook-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--success-soft-bg);
+  background: var(--success-soft-bg);
+  color: var(--success-soft-text);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.rebook-action-btn:hover {
+  background: var(--success);
+  color: white;
+  border-color: var(--success);
+}
+
 .rating-stars {
   display: flex;
   justify-content: center;
