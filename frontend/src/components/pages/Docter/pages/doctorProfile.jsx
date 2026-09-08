@@ -303,8 +303,11 @@ const DoctorProfile = () => {
   );
 };
 
-const ProfileStat = ({ icon: Icon, label, value }) => (
-  <div className="doctor-profile-stat"><Icon size={18} /><div><span>{label}</span><strong>{value}</strong></div></div>
-);
+const ProfileStat = ({ icon, label, value }) => {
+  const Icon = icon;
+  return (
+    <div className="doctor-profile-stat"><Icon size={18} /><div><span>{label}</span><strong>{value}</strong></div></div>
+  );
+};
 
 export default DoctorProfile;

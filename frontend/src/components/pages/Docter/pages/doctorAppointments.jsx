@@ -84,7 +84,6 @@ const DoctorAppointments = () => {
   }, [page]);
 
   const pendingRows = appointments.filter(a => ['Pending', 'Booked'].includes(a.status));
-  const confirmedRows = appointments.filter(a => a.status === 'Confirmed');
 
   return (
     <div className="doctorDashboard-container">

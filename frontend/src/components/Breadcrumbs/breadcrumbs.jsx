@@ -59,7 +59,7 @@ const Breadcrumbs = () => {
       <Link className="breadcrumb-crumb breadcrumb-home" to={`/${root}`}>
         <LayoutDashboard size={14} /> Home
       </Link>
-      {crumbs.slice(1).map((crumb, idx) => (
+      {crumbs.slice(1).map((crumb) => (
         <span className="breadcrumb-segment" key={crumb.key}>
           <ChevronRight size={14} className="breadcrumb-chevron" />
           {crumb.isLast ? (

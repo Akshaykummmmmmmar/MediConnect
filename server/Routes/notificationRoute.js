@@ -1,14 +1,27 @@
 const express = require('express');
 const Notification = require('../database/models/notificationSchema');
 const checkToken = require('../middleware/checkToken');
+const { forbid } = require('../accessControl');
+const { isObjectId } = require('../validate');
 
 const router = express.Router();
+
+const canAccessUser = (req, userId) =>
+  req.user?.role === 'admin' || req.user?.id === userId;
 
 router.get(
   '/notifications/user/:id',
   checkToken(['admin', 'doctor', 'patient']),
   async (req, res) => {
     try {
+      if (!isObjectId(req.params.id)) {
+        return res.status(400).json({ message: 'Invalid user id' });
+      }
+
+      if (!canAccessUser(req, req.params.id)) {
+        return forbid(res);
+      }
+
       const { page, limit } = req.query;
       const p = Number(page) || 1;
       const l = Number(limit) || 10;
@@ -43,6 +56,14 @@ router.get(
   checkToken(['admin', 'doctor', 'patient']),
   async (req, res) => {
     try {
+      if (!isObjectId(req.params.id)) {
+        return res.status(400).json({ message: 'Invalid user id' });
+      }
+
+      if (!canAccessUser(req, req.params.id)) {
+        return forbid(res);
+      }
+
       const unread = await Notification.countDocuments({
         user: req.params.id,
         read: false,
@@ -59,7 +80,15 @@ router.patch(
   checkToken(['admin', 'doctor', 'patient']),
   async (req, res) => {
     try {
-      await Notification.findByIdAndUpdate(req.params.id, { read: true });
+      const notification = await Notification.findById(req.params.id);
+      if (!notification) return res.status(404).json({ message: 'Notification not found' });
+
+      if (!canAccessUser(req, notification.user.toString())) {
+        return forbid(res);
+      }
+
+      notification.read = true;
+      await notification.save();
       res.status(200).json({ message: 'Notification marked as read' });
     } catch (e) {
       return res.status(500).json({ message: e.message });
@@ -73,6 +102,14 @@ router.patch(
   async (req, res) => {
     try {
       const { userId } = req.body;
+      if (!isObjectId(userId)) {
+        return res.status(400).json({ message: 'Invalid user id' });
+      }
+
+      if (!canAccessUser(req, userId)) {
+        return forbid(res);
+      }
+
       await Notification.updateMany({ user: userId, read: false }, { read: true });
       res.status(200).json({ message: 'All notifications marked as read' });
     } catch (e) {

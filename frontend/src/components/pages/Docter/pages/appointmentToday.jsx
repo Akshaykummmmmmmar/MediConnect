@@ -37,7 +37,7 @@ const AppointmentToday = () => {
     setTemplates(list);
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
-    } catch {}
+    } catch { /* storage may be unavailable */ }
   };
 
   const saveAsTemplate = () => {

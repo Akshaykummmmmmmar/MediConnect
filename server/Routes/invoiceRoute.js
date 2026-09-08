@@ -4,6 +4,12 @@ const Doctor = require('../database/models/docterSchema');
 const User = require('../database/models/userSchema');
 const checkToken = require('../middleware/checkToken');
 const { sendNotification, logActivity } = require('../helpers');
+const {
+  getDoctorIdForUser,
+  hasDoctorPatientRelationship,
+  forbid,
+} = require('../accessControl');
+const { isObjectId } = require('../validate');
 
 const router = express.Router();
 
@@ -27,6 +33,28 @@ router.post('/invoices', checkToken(['admin', 'doctor']), async (req, res) => {
 
     if (!patient || items.length === 0) {
       return res.status(400).json({ message: 'Patient and items are required' });
+    }
+
+    if (!isObjectId(patient)) {
+      return res.status(400).json({ message: 'Invalid patient id' });
+    }
+
+    if (
+      !Array.isArray(items) ||
+      items.length === 0 ||
+      items.some(item => !item || typeof item.description !== 'string')
+    ) {
+      return res.status(400).json({ message: 'Each invoice item needs a description' });
+    }
+
+    if (req.user.role === 'doctor') {
+      const myDoctorId = await getDoctorIdForUser(req.user.id);
+      if (!myDoctorId || !doctor || String(doctor) !== myDoctorId) {
+        return forbid(res);
+      }
+      if (!(await hasDoctorPatientRelationship(myDoctorId, patient))) {
+        return forbid(res);
+      }
     }
 
     const subtotal = items.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
@@ -73,11 +101,28 @@ router.post('/invoices', checkToken(['admin', 'doctor']), async (req, res) => {
 
 router.get(
   '/invoices/patient/:id',
-  checkToken(['patient', 'admin']),
+  checkToken(['patient', 'admin', 'doctor']),
   async (req, res) => {
     try {
+      const patientId = req.params.id;
+
+      if (!isObjectId(patientId)) {
+        return res.status(400).json({ message: 'Invalid patient id' });
+      }
+
+      if (req.user.role === 'patient' && req.user.id !== patientId) {
+        return forbid(res);
+      }
+
+      if (req.user.role === 'doctor') {
+        const myDoctorId = await getDoctorIdForUser(req.user.id);
+        if (!myDoctorId || !(await hasDoctorPatientRelationship(myDoctorId, patientId))) {
+          return forbid(res);
+        }
+      }
+
       const { page, limit } = req.query;
-      const invoices = await Invoice.find({ patient: req.params.id })
+      const invoices = await Invoice.find({ patient: patientId })
         .populate('appointment')
         .populate({
           path: 'doctor',
@@ -116,14 +161,17 @@ router.get('/invoices', checkToken(['admin']), async (req, res) => {
 
 router.patch('/invoices/pay/:id', checkToken(['patient', 'admin']), async (req, res) => {
   try {
-    const { paymentMethod } = req.body;
-    const invoice = await Invoice.findByIdAndUpdate(
-      req.params.id,
-      { status: 'Paid', paymentMethod: paymentMethod || 'Cash' },
-      { new: true }
-    );
-
+    const invoice = await Invoice.findById(req.params.id);
     if (!invoice) return res.status(404).json({ message: 'Invoice not found' });
+
+    if (req.user.role === 'patient' && invoice.patient.toString() !== req.user.id) {
+      return forbid(res);
+    }
+
+    const { paymentMethod } = req.body;
+    invoice.status = 'Paid';
+    if (paymentMethod) invoice.paymentMethod = paymentMethod;
+    await invoice.save();
 
     await sendNotification({
       user: invoice.patient,

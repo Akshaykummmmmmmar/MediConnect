@@ -9,14 +9,12 @@ const ForgotPassword = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
-  const [resetToken, setResetToken] = useState('');
 
   const onSubmit = async () => {
     if (!isEmail(email)) return notify.error('Enter a valid email address', { autoClose: 1200 });
     try {
       setLoading(true);
       const res = await axios.post('/forgot-password', { email });
-      setResetToken(res.data.resetToken);
       notify.success(res.data.message);
     } catch (e) {
       notify.error(e.response?.data?.message || e.message);
@@ -69,19 +67,8 @@ const ForgotPassword = () => {
           </div>
 
           <button className="auth-btn" onClick={onSubmit} disabled={loading}>
-            {loading ? 'Generating...' : 'Generate Reset Token'}
+            {loading ? 'Sending...' : 'Send Reset Link'}
           </button>
-
-          {resetToken && (
-            <div className="reset-token-box">
-              <p>Your reset token (demo — normally emailed):</p>
-              <code>{resetToken}</code>
-              <p>
-                Use it on the{' '}
-                <Link to={`/reset-password?token=${resetToken}`}>reset password</Link> page.
-              </p>
-            </div>
-          )}
 
           <p className="auth-switch">
             Remembered it? <Link to="/login">Login</Link>

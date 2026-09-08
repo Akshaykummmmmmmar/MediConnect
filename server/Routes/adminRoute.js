@@ -9,6 +9,7 @@ const ActivityLog = require('../database/models/activityLogSchema');
 const checkToken = require('../middleware/checkToken');
 const { validateDoctor, isEmail } = require('../validation');
 const { logActivity } = require('../helpers');
+const { forbid } = require('../accessControl');
 
 const router = express.Router();
 
@@ -180,6 +181,10 @@ router.patch('/doctor/update/:id', checkToken(['admin', 'doctor']), async (req, 
     const { id } = req.params;
     const doctor = await Doctor.findById(id);
     if (!doctor) return res.status(404).json({ message: 'Doctor not found' });
+
+    if (req.user.role === 'doctor' && doctor.user.toString() !== req.user.id) {
+      return forbid(res);
+    }
 
     const allowed = [
       'age',

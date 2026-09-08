@@ -40,7 +40,7 @@ const getInitial = () => {
   try {
     const last = localStorage.getItem('lastActiveSection');
     if (last && roleSections[last]) return last;
-  } catch {}
+  } catch { /* ignored */ }
   return localStorage.getItem('role') || 'patient';
 };
 

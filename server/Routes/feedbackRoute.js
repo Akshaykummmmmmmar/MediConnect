@@ -1,9 +1,11 @@
 const express = require('express');
 const Rating = require('../database/models/ratingSchema');
 const Doctor = require('../database/models/docterSchema');
-const User = require('../database/models/userSchema');
+const Appointment = require('../database/models/appointmentSchema');
 const checkToken = require('../middleware/checkToken');
 const { sendNotification, logActivity } = require('../helpers');
+const { forbid } = require('../accessControl');
+const { isObjectId } = require('../validate');
 
 const router = express.Router();
 
@@ -16,6 +18,24 @@ router.post('/ratings', checkToken(['patient']), async (req, res) => {
     }
     if (Number(rating) < 1 || Number(rating) > 5) {
       return res.status(400).json({ message: 'Rating must be between 1 and 5' });
+    }
+    if (!isObjectId(doctor) || !isObjectId(patient)) {
+      return res.status(400).json({ message: 'Invalid doctor or patient id' });
+    }
+    if (patient !== req.user.id) {
+      return forbid(res);
+    }
+    if (appointment && isObjectId(appointment)) {
+      const existingAppointment = await Appointment.findById(appointment);
+      if (
+        !existingAppointment ||
+        existingAppointment.patient.toString() !== patient ||
+        existingAppointment.doctor.toString() !== doctor
+      ) {
+        return res.status(400).json({ message: 'Appointment does not match this doctor and patient' });
+      }
+    } else if (appointment) {
+      return res.status(400).json({ message: 'Invalid appointment id' });
     }
 
     const existing = await Rating.findOne({ doctor, appointment });
@@ -78,6 +98,15 @@ router.get('/ratings/doctor/:id', checkToken(['admin', 'doctor', 'patient']), as
 router.get('/ratings/check', checkToken(['patient']), async (req, res) => {
   try {
     const { appointment } = req.query;
+    if (!isObjectId(appointment)) {
+      return res.status(400).json({ message: 'Invalid appointment id' });
+    }
+
+    const existingAppointment = await Appointment.findById(appointment);
+    if (!existingAppointment || existingAppointment.patient.toString() !== req.user.id) {
+      return forbid(res);
+    }
+
     const rating = await Rating.findOne({ appointment });
     res.status(200).json({ rated: Boolean(rating), rating });
   } catch (e) {

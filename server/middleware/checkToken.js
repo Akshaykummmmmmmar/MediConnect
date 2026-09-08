@@ -1,20 +1,22 @@
 const jwt = require('jsonwebtoken');
-require('dotenv').config();
-
-const SECRET_KEY =
-  process.env.JWT_SECRET || 'gghfhergyfgreherhuerhue';
+const { jwtSecret } = require('../config');
 
 const checkToken = roles => {
   return (req, res, next) => {
     try {
-      const bearToken = req.headers.authorization;
-      if (!bearToken) {
+      const bearerToken = req.headers.authorization;
+      if (!bearerToken) {
         return res
           .status(403)
           .json({ message: 'You are not authorized, please login' });
       }
-      const token = bearToken.split(' ')[1];
-      const decoded = jwt.verify(token, SECRET_KEY);
+      const token = bearerToken.split(' ')[1];
+      if (!token) {
+        return res
+          .status(403)
+          .json({ message: 'You are not authorized, please login' });
+      }
+      const decoded = jwt.verify(token, jwtSecret);
 
       if (!roles.includes(decoded.role)) {
         return res
