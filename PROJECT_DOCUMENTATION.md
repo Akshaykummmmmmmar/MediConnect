@@ -79,6 +79,27 @@ npm run dev          # → http://localhost:5173
 
 The frontend talks to the API at `http://localhost:4000` (hardcoded in `frontend/src/utils/axios.js`). Uploaded images are served statically from `server/public`.
 
+### Enable Google (Gmail) email delivery
+
+Account-verification OTPs and password-reset tokens are already sent through the backend mailer. To deliver them from a Gmail account:
+
+1. Enable **2-Step Verification** on the Gmail account that should send MediConnect emails.
+2. Create an **App Password** at `https://myaccount.google.com/apppasswords` (select **Mail** or a custom name such as `MediConnect`). Google shows the 16-character password once.
+3. Copy `server/.env.example` to `server/.env`, then set the following values. Keep the App Password private; `.env` is ignored by Git.
+
+```env
+MAIL_ENABLED=true
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your-google-account@gmail.com
+SMTP_PASS=your-16-character-google-app-password
+MAIL_FROM=MediConnect <your-google-account@gmail.com>
+```
+
+4. Restart the backend and register a new patient or request a password reset to confirm delivery.
+
+Gmail no longer supports a normal account password for this SMTP connection. If an organization blocks App Passwords, use an approved SMTP provider instead.
+
 > Note: No admin seed script exists. Create the first admin by calling `POST /addAdmin` manually (requires a valid admin JWT), or insert an admin `User` directly in the DB.
 
 ---
